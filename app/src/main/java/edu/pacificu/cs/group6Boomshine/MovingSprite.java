@@ -1,4 +1,4 @@
-package edu.pacificu.cs.boomshine;
+package edu.pacificu.cs.group6Boomshine;
 
 import android.content.Context;
 import android.view.Display;

@@ -1,12 +1,10 @@
-package edu.pacificu.cs.boomshine;
+package edu.pacificu.cs.group6Boomshine;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;

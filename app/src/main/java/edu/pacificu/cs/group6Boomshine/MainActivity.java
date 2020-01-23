@@ -1,11 +1,10 @@
-package edu.pacificu.cs.boomshine;
+package edu.pacificu.cs.group6Boomshine;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Display;
-import android.view.Window;
 import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity
