@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>320</y>
+      <w>390</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>BoomshineGame
+-
+-mTotalScore
+-MAX_ATTMEPTS : final static int 
+-mcCircles : ArrayList&lt;ExplodingBoundedMovingCircle&gt;
+-mLevel : Level
+-mcAttempts : int
+-mCurrLevel : int
+-mExplodingStrategy : ExplodingStrategy
+-mcActiveBalls : ArrayList&lt;ExplodingBoundedMovingCircle&gt;
+-
++Game()
++incrementScore(int) : void
++onDraw(Canvas) : void
++onTouchEvent (Event) : boolean
++setCircles() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>660</x>
+      <y>330</y>
+      <w>210</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>BoomshineLevel
+-
+-mHitsRequired : int
+-mTotalCircles : int
+-mLevelNumber : int
+-mLevelScore : int
+-mCirclesHit : int
+--
++Level (int)
++isLevelPass() : bool
++isLevelFail() : bool
++isGameOver() : bool
++getNumCircles() : int
++incrementCirclesHit() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>670</x>
+      <y>90</y>
+      <w>310</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>BoundedMovingCircle
+-
+-mTopBound : int
+-mBottomBound : int
+-mLeftBound : int
+-mRightBound : int
+-
++BoundedMovingSprite(Context, Display, int,
+          int, int, int, int, int, int, int)
++hitBound () : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>260</x>
+      <y>70</y>
+      <w>360</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>ExplodingBoundedMovingCircle
+-
+-mExpandingSpeed : int
+-mScale : float
+-mRadius : float 
+-
++ExplodingBoundedMovingCircle(Context, Display, int,
+          int, int, int, int, int, int, int, int, float)
++doDraw(Canvas) : void
++expandCircle () : void
++retractCircle () : void
++getRadius() : float
++collide(ExplodingBoundedMovingCircle) : void
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>180</y>
+      <w>80</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>210</x>
+      <y>190</y>
+      <w>70</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>240</x>
+      <y>610</y>
+      <w>370</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>/IExplodingStrategy/
+-
+/+create() : ArrayList&lt;ExplodingBoundedMovingCircle&gt;/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>720</y>
+      <w>360</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>SuperballStrategy
+-
++create() : ArrayList&lt;ExplodingBoundedMovingCircle&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>720</y>
+      <w>370</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>MultiballStrategy
+-
++create() : ArrayList&lt;ExplodingBoundedMovingCircle&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>340</x>
+      <y>660</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>490</x>
+      <y>660</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>140</x>
+      <y>440</y>
+      <w>120</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0;10.0;210.0;100.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>440</y>
+      <w>90</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1030</x>
+      <y>90</y>
+      <w>300</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>MovingSprite
+--
+#mSpeed : int
+#mDx : int
+#mDy : int
+-mAngle : double
+-ANGLE : double final static
+--
++MovingSprite(Context, Display, int, int, int, int)
++setTopCoordinate(int) : void
++setLeftCoordinate(int) : void
++move() : void
++randomDirection() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>970</x>
+      <y>170</y>
+      <w>80</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1040</x>
+      <y>340</y>
+      <w>290</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>FixedSprite
+--
+#mBitmapImage : Bitmap
+#mDisplay : Display
+#mTopCoordinate : int
+#mLeftCoordinate : int
+-mResID : int
+-mWidth : int
+-mHeight : int
+-mContext : Context
+-mCount : int static
+--
++FixedSprite(Context, Display, int, int, int)
++doDraw(Canvas) : void
++getBitmap() : Bitmap
++getResID() : int
++getTopCoordinate() : int
++getLeftCoordinate() : int
++getCount() : int
++getSpriteWidth() : int
++getSpriteHeight() : int
++getDisplayHeight() : int
++getDisplayWidth() : int
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1160</x>
+      <y>280</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
