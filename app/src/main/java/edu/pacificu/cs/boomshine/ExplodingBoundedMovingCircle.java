@@ -1,6 +1,7 @@
 package edu.pacificu.cs.boomshine;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.view.Display;
 
 public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
@@ -14,5 +15,26 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
                                int leftBound, int rightBound, int expandingSpeed, float radius)
   {
     super(context, display, drawable, topCoord, leftCoord, speed, topBound, bottomBound, leftBound, rightBound);
+  }
+
+  @Override
+  public void doDraw(Canvas canvas) {
+
+  }
+
+  public void expandCircle() {
+
+  }
+
+  public void retractCircle() {
+
+  }
+
+  public float getRadius () {
+    return mRadius;
+  }
+
+  public void collide (ExplodingBoundedMovingCircle cOtherCircle) {
+
   }
 }
