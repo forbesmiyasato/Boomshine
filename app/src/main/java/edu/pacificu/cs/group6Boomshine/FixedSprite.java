@@ -187,4 +187,8 @@ public class FixedSprite extends ImageView
   {
     return mContext.getResources ().getDisplayMetrics ().widthPixels;
   }
+
+  public void setmBitmapImage(Bitmap mBitmapImage) {
+    this.mBitmapImage = mBitmapImage;
+  }
 }
