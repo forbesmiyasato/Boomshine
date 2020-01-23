@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Boomshine</string>
     <string name="sAbout">About</string>
+    <string name="sDevLabel">Developers</string>
+    <string name="sForbes">Forbes Miyasato</string>
+    <string name="sThomas">Thomas Robasciotti</string>
+    <string name="sVersionLabel">Version</string>
+    <string name="sVersion">V 0.0.1</string>
 </resources>
