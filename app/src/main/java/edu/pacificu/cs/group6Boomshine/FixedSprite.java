@@ -129,9 +129,9 @@ public class FixedSprite extends ImageView
   }
 
   /**
-   * Retrieves the number of sprites created.
+   * Retrieves the number of movingSprites created.
    *
-   * @return number of sprites
+   * @return number of movingSprites
    *
    * @since 1.0
    */

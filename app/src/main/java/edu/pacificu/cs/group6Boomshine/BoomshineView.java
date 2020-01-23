@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -20,7 +19,7 @@ import java.util.Random;
  * @version 1.0
  */
 public class BoomshineView extends ImageView {
-  ArrayList<ExplodingBoundedMovingCircle> sprites;
+  ArrayList<ExplodingBoundedMovingCircle> movingSprites;
   ArrayList<ExplodingBoundedMovingCircle> explodingSprites;
   private int mHeight;
   private int mWidth;
@@ -28,6 +27,7 @@ public class BoomshineView extends ImageView {
   private boolean firstRender = true;
   private Context mContext;
   private Display mDisplay;
+
   /**
    * Constructor that initializes the values associated with the sprite.
    *
@@ -38,8 +38,8 @@ public class BoomshineView extends ImageView {
   public BoomshineView(Context context, Display display) {
     super(context);
     setFocusable(true); // make sure we get key events
-    sprites = new ArrayList<ExplodingBoundedMovingCircle>();
-    explodingSprites = new ArrayList<ExplodingBoundedMovingCircle>();
+    movingSprites = new ArrayList<>();
+    explodingSprites = new ArrayList<>();
     mContext = context;
     mDisplay = display;
   }
@@ -64,15 +64,15 @@ public class BoomshineView extends ImageView {
       setCircles(1, mHeight, mWidth);
       firstRender = false;
     }
-    for (ExplodingBoundedMovingCircle sprite : sprites) {
-      sprite.move();
-      sprite.hitBound();
-      sprite.doDraw(canvas);
-      for (ExplodingBoundedMovingCircle otherSprite : sprites)
-      {
-        if(!sprite.equals(otherSprite)) {
-          sprite.collide(otherSprite);
-        }
+    for (ExplodingBoundedMovingCircle movingSprite : movingSprites) {
+      movingSprite.move();
+      movingSprite.hitBound();
+      movingSprite.doDraw(canvas);
+      for (ExplodingBoundedMovingCircle explodingSprite : explodingSprites) {
+        explodingSprite.doDraw(canvas);
+        movingSprite.collide(explodingSprite);
+        explodingSprites.add(movingSprite);
+        movingSprites.remove(movingSprite);
       }
     }
     super.onDraw(canvas);
@@ -101,8 +101,7 @@ public class BoomshineView extends ImageView {
         id = R.drawable.ball_yellow;
         break;
     }
-    if (firstClick)
-    {
+    if (firstClick) {
       BitmapFactory.Options dimensions = new BitmapFactory.Options();
       dimensions.inJustDecodeBounds = true;
       Bitmap mBitmap = BitmapFactory.decodeResource(getResources(),
@@ -123,11 +122,14 @@ public class BoomshineView extends ImageView {
     return true;
   }
 
-  void setCircles(int level, int topCoord, int bottomCoord) {
+  void setCircles(int level, int topCoord, int LeftCoord) {
     Random random = new Random();
-
+    ExplodingBoundedMovingCircle cNew = null;
     for (int i = 0; i < level * 5; i++) {
       int randomId = random.nextInt(3);
+      int topBound = random.nextInt(topCoord);
+      int leftBound = random.nextInt(LeftCoord);
+
       int id = 0;
 
       switch (randomId) {
@@ -148,9 +150,9 @@ public class BoomshineView extends ImageView {
       int spriteHeight = dimensions.outHeight;
       int spriteWidth = dimensions.outWidth;
       int speed = new Random().nextInt(20) + 1;
-      ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(mContext, mDisplay,
-              id, topCoord - spriteHeight, bottomCoord - spriteWidth, speed, 0, mHeight, 0, mWidth, 0, 25);
-      sprites.add(cNew);
+      cNew = new ExplodingBoundedMovingCircle(mContext, mDisplay,
+              id, topBound - spriteHeight, leftBound - spriteWidth, speed, 0, mHeight, 0, mWidth, 0, 25);
+      movingSprites.add(cNew);
     }
   }
 }

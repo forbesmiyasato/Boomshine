@@ -29,10 +29,20 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
     Bitmap bitmap = getBitmap();
     long currentTimeMillis = System.currentTimeMillis();
     long fiveSeconds = 5000;
-    int incrementWidth = 20;
+    int incrementWidth = 30;
 
-    while (System.currentTimeMillis() - currentTimeMillis < fiveSeconds) {
-      float aspectRatio = bitmap.getWidth() /
+//    while (System.currentTimeMillis() - currentTimeMillis < fiveSeconds) {
+//      float aspectRatio = bitmap.getWidth() /
+//              (float) bitmap.getHeight();
+//      int width = getDisplayWidth() + incrementWidth;
+//      int height = Math.round(width / aspectRatio);
+//
+//      bitmap = Bitmap.createScaledBitmap(
+//              bitmap, width, height, false);
+//      setmBitmapImage(bitmap);
+////      setLeftCoordinate(getLeftCoordinate() - getSpriteWidth());
+//    }
+     float aspectRatio = bitmap.getWidth() /
               (float) bitmap.getHeight();
       int width = getDisplayWidth() + incrementWidth;
       int height = Math.round(width / aspectRatio);
@@ -40,9 +50,6 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
       bitmap = Bitmap.createScaledBitmap(
               bitmap, width, height, false);
       setmBitmapImage(bitmap);
-      this.invalidate();
-//      setLeftCoordinate(getLeftCoordinate() - getSpriteWidth());
-    }
   }
 
   public void retractCircle() {
@@ -63,6 +70,7 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
     if (Math.pow(dX, SQUARE) + Math.pow(dY, SQUARE) <= Math.pow(dRadius, SQUARE))
     {
       Log.d("collide", "Circles collided");
+      mSpeed = 0;
       expandCircle();
       cOtherCircle.expandCircle();
     }
