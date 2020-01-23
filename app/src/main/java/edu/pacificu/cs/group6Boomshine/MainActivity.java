@@ -2,9 +2,13 @@ package edu.pacificu.cs.group6Boomshine;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity
@@ -24,4 +28,41 @@ public class MainActivity extends AppCompatActivity
     mGraphicsView.setBackgroundColor (Color.BLACK);
     setContentView (mGraphicsView);
   }
+
+  /**
+   * Overrides the super.onCreateOptionsMenu method.Inflates the
+   * options menu contained in res/menu/menu.
+   *
+   * @param menu The menu to inflate into. The items and
+   *             submenus in the XML will be added to this menu.
+   */
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.menu, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected (MenuItem item)
+  {
+    if(item.getItemId() == R.id.menuAbout)
+    {
+        onAbout();
+    }
+    return true;
+  }
+
+  /**
+   * Starts a new About Activity when the user presses the about button.
+   *
+   */
+  public void onAbout ()
+  {
+    startActivity (new Intent(this,
+            About.class));
+  }
+
 }
