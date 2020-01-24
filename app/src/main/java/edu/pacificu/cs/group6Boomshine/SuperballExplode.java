@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Defines the SuperballStrategy class that generates an initial
+ * Defines the SuperballExplode class that generates an initial
  * expanding circle that will expand to twice the size of a
  * normal expanding circle.
  *
@@ -18,7 +18,7 @@ import java.util.Random;
  * @version 1.0
  */
 
-public class SuperballStrategy extends IExplodingStrategy {
+public class SuperballExplode {
 
     private final int EXPANTION_MULTIPLIER = 2;
 
@@ -31,13 +31,12 @@ public class SuperballStrategy extends IExplodingStrategy {
      * @return An ArrayList containing one expanding circle
      */
 
-    @Override
-    public ArrayList<ExplodingBoundedMovingCircle> create(Context context, Display display,
+    public ArrayList<ExplodingBoundedMovingCircle> createSuper(Context context, Display display,
                                                           int drawable, int topCoord,
                                                           int leftCoord, int speed, int topBound,
                                                           int bottomBound, int leftBound,
                                                           int rightBound, int expandingSpeed,
-                                                          float radius) {
+                                                          int radius) {
 
         ArrayList<ExplodingBoundedMovingCircle> cRetList = new ArrayList<>();
 

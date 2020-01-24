@@ -12,10 +12,9 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
-
-import static edu.pacificu.cs.group6Boomshine.FixedSprite.DEFAULT_BALL_RADIUS;
 
 /**
  * Defines the View for displaying the animation.
@@ -26,9 +25,11 @@ import static edu.pacificu.cs.group6Boomshine.FixedSprite.DEFAULT_BALL_RADIUS;
 
 @SuppressLint("AppCompatCustomView")
 public class BoomshineView extends ImageView {
+  static final int DEFAULT_BALL_RADIUS = 30;
   private final int MAX_LEVEL_ATTEMPTS = 3;
   ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
   ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;
+  ExplodingCircleFactory mcFactory;
   private int mHeight;
   private int mWidth;
   private boolean firstClick = true;
@@ -38,7 +39,6 @@ public class BoomshineView extends ImageView {
   private Level mLevel;
   private Paint mPaint;
   private MediaPlayer mcMediaPlayer;
-  private Intent mcGameOverIntent;
   private boolean donePlayingSound = false;
   private int mTotalScore;
   private int mNumAttempts;
@@ -66,8 +66,7 @@ public class BoomshineView extends ImageView {
     mTotalScore = 0;
     mNumAttempts = 0;
     mGameEnd = false;
-
-    mcGameOverIntent = new Intent(mContext, GameOverActivity.class);
+    mcFactory = new ExplodingCircleFactory();
   }
 
   /**
@@ -84,16 +83,6 @@ public class BoomshineView extends ImageView {
       ExplodingBoundedMovingCircle mExplodedCircle = null;
       mHeight = getHeight();
       mWidth = getWidth();
-
-      //Paint Score on screen
-      mPaint.setColor(getResources().getColor(R.color.cWhite));
-      setTextSizeForWidth(mPaint, mWidth / 4, mLevel.getHitInfo());
-      //mPaint.setTextSize(50);
-      canvas.drawText(mLevel.getHitInfo(), 10, mHeight - 50, mPaint);
-      canvas.drawText("Total Score: " + mTotalScore, mWidth - 2 * (mWidth / 3),
-              mHeight - 50, mPaint);
-      canvas.drawText("Attempts: " + (mNumAttempts + 1) + " / " + MAX_LEVEL_ATTEMPTS,
-              mWidth - (mWidth / 4), mHeight - 50, mPaint);
 
       if (firstRender) {
         setCircles(mLevel.getLevelNumber());
@@ -114,7 +103,6 @@ public class BoomshineView extends ImageView {
         for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
           if (movingSprite.collide(explodingSprite)) {
             cCollidedMovingCircle = movingSprite;
-            mLevel.incrememtCirclesHit();
           }
         }
       }
@@ -124,6 +112,7 @@ public class BoomshineView extends ImageView {
       }
       if (cCollidedMovingCircle != null) {
         mExplodingSprites.add(cCollidedMovingCircle);
+        mLevel.incrememtCirclesHit();
         mMovingSprites.remove(cCollidedMovingCircle);
       }
 
@@ -135,12 +124,24 @@ public class BoomshineView extends ImageView {
         }
       }
 
+      //Paint Score on screen
+      mPaint.setColor(getResources().getColor(R.color.cWhite));
+      setTextSizeForWidth(mPaint, mWidth / 4, mLevel.getHitInfo());
+      //mPaint.setTextSize(50);
+      canvas.drawText(mLevel.getHitInfo(), 10, mHeight - 50, mPaint);
+      canvas.drawText("Total Score: " + mTotalScore, mWidth - 2 * (mWidth / 3),
+              mHeight - 50, mPaint);
+      canvas.drawText("Attempts: " + (mNumAttempts + 1) + " / " + MAX_LEVEL_ATTEMPTS,
+              mWidth - (mWidth / 4), mHeight - 50, mPaint);
+
       super.onDraw(canvas);
       invalidate();
     }
     else
     {
-
+      Intent gameOverIntent = new Intent (this.mContext, GameOverActivity.class);
+      gameOverIntent.putExtra ("player_score", mTotalScore);
+      mContext.startActivity(gameOverIntent);
     }
   }
 
@@ -163,11 +164,14 @@ public class BoomshineView extends ImageView {
 
     if (firstClick) {
       color = getRandomColor();
-      ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(getContext(), getDisplay(),
+      /*ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(getContext(), getDisplay(),
               color, (int) event.getY(),
               (int) event.getX(), 0, 0, mHeight,
-              0, mWidth, 0, 25);
-      mExplodingSprites.add(cNew);
+              0, mWidth, 0, 25);*/
+      mExplodingSprites.addAll(mcFactory.create(ExplodingType.ULTIMATE, getContext(), getDisplay(),
+              color, (int) event.getY(),
+              (int) event.getX(), 0, 0, mHeight,
+              0, mWidth, 0, DEFAULT_BALL_RADIUS));
     }
 
     firstClick = false;
@@ -190,7 +194,7 @@ public class BoomshineView extends ImageView {
               color, topBound - DEFAULT_BALL_RADIUS,
               leftBound - DEFAULT_BALL_RADIUS, speed, 0,
               mHeight, 0,
-              mWidth, 0, 25);
+              mWidth, 0, DEFAULT_BALL_RADIUS);
       mMovingSprites.add(cNew);
     }
   }

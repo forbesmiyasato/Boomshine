@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Defines the MultiballStrategy class that generates an additional
+ * Defines the MultiballExplode class that generates an additional
  * initial expanding circle in a random location on the screen.
  *
  * This class extends the abstract IExplodingStrategy class.
@@ -17,7 +17,7 @@ import java.util.Random;
  * @version 1.0
  */
 
-public class MultiballStrategy extends IExplodingStrategy{
+public class MultiballExplode {
 
     /**
      * Overrides the superclass create method.
@@ -28,13 +28,12 @@ public class MultiballStrategy extends IExplodingStrategy{
      * @return An ArrayList containing two expanding circles
      */
 
-    @Override
-    public ArrayList<ExplodingBoundedMovingCircle> create(Context context, Display display,
+    public ArrayList<ExplodingBoundedMovingCircle> createMulti(Context context, Display display,
                                                           int drawable, int topCoord,
                                                           int leftCoord, int speed, int topBound,
                                                           int bottomBound, int leftBound,
                                                           int rightBound, int expandingSpeed,
-                                                          float radius) {
+                                                          int radius) {
 
         ArrayList<ExplodingBoundedMovingCircle> cRetList = new ArrayList<>();
         Random cRandom = new Random();
