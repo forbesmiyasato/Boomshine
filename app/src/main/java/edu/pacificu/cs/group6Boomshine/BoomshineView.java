@@ -37,7 +37,6 @@ public class BoomshineView extends ImageView {
   private Level mLevel;
   private Paint mPaint;
   private MediaPlayer mcMediaPlayer;
-  private Intent mcGameOverIntent;
   private boolean donePlayingSound = false;
   private int mTotalScore;
   private int mNumAttempts;
@@ -65,8 +64,6 @@ public class BoomshineView extends ImageView {
     mTotalScore = 0;
     mNumAttempts = 0;
     mGameEnd = false;
-
-    mcGameOverIntent = new Intent(mContext, GameOverActivity.class);
   }
 
   /**
@@ -83,16 +80,6 @@ public class BoomshineView extends ImageView {
       ExplodingBoundedMovingCircle mExplodedCircle = null;
       mHeight = getHeight();
       mWidth = getWidth();
-
-      //Paint Score on screen
-      mPaint.setColor(getResources().getColor(R.color.cWhite));
-      setTextSizeForWidth(mPaint, mWidth / 4, mLevel.getHitInfo());
-      //mPaint.setTextSize(50);
-      canvas.drawText(mLevel.getHitInfo(), 10, mHeight - 50, mPaint);
-      canvas.drawText("Total Score: " + mTotalScore, mWidth - 2 * (mWidth / 3),
-              mHeight - 50, mPaint);
-      canvas.drawText("Attempts: " + (mNumAttempts + 1) + " / " + MAX_LEVEL_ATTEMPTS,
-              mWidth - (mWidth / 4), mHeight - 50, mPaint);
 
       if (firstRender) {
         setCircles(mLevel.getLevelNumber());
@@ -113,7 +100,6 @@ public class BoomshineView extends ImageView {
         for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
           if (movingSprite.collide(explodingSprite)) {
             cCollidedMovingCircle = movingSprite;
-            mLevel.incrememtCirclesHit();
           }
         }
       }
@@ -123,6 +109,7 @@ public class BoomshineView extends ImageView {
       }
       if (cCollidedMovingCircle != null) {
         mExplodingSprites.add(cCollidedMovingCircle);
+        mLevel.incrememtCirclesHit();
         mMovingSprites.remove(cCollidedMovingCircle);
       }
 
@@ -134,13 +121,24 @@ public class BoomshineView extends ImageView {
         }
       }
 
+      //Paint Score on screen
+      mPaint.setColor(getResources().getColor(R.color.cWhite));
+      setTextSizeForWidth(mPaint, mWidth / 4, mLevel.getHitInfo());
+      //mPaint.setTextSize(50);
+      canvas.drawText(mLevel.getHitInfo(), 10, mHeight - 50, mPaint);
+      canvas.drawText("Total Score: " + mTotalScore, mWidth - 2 * (mWidth / 3),
+              mHeight - 50, mPaint);
+      canvas.drawText("Attempts: " + (mNumAttempts + 1) + " / " + MAX_LEVEL_ATTEMPTS,
+              mWidth - (mWidth / 4), mHeight - 50, mPaint);
+
       super.onDraw(canvas);
       invalidate();
     }
     else
     {
-      mcGameOverIntent.putExtra("player_score", mTotalScore);
-      mContext.startActivity(mcGameOverIntent);
+      Intent gameOverIntent = new Intent (this.mContext, GameOverActivity.class);
+      gameOverIntent.putExtra ("player_score", mTotalScore);
+      mContext.startActivity(gameOverIntent);
     }
   }
 
