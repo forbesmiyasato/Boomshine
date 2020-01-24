@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -53,8 +54,8 @@ public class BoomshineView extends ImageView {
 
   @Override
   public void onDraw(Canvas canvas) {
-    mHeight = canvas.getHeight();
-    mWidth = canvas.getWidth();
+    mHeight = getHeight();
+    mWidth = getWidth();
 //    if (firstClick)
 //    {
 //
@@ -124,10 +125,11 @@ public class BoomshineView extends ImageView {
 
   void setCircles(int level, int topCoord, int LeftCoord) {
     Random random = new Random();
+    int topBound;
+    int leftBound;
+
     for (int i = 0; i < level * 5; i++) {
       int randomId = random.nextInt(3);
-      int topBound = random.nextInt(topCoord);
-      int leftBound = random.nextInt(LeftCoord);
 
       int id = 0;
 
@@ -148,9 +150,11 @@ public class BoomshineView extends ImageView {
               R.drawable.ball_blue, dimensions);
       int spriteHeight = dimensions.outHeight;
       int spriteWidth = dimensions.outWidth;
-      int speed = new Random().nextInt(20) + 1;
+      topBound = random.nextInt(topCoord - spriteHeight) + spriteHeight;
+      leftBound = random.nextInt(LeftCoord - spriteWidth) + spriteWidth;
+      int speed = new Random().nextInt(20) + 2;
       ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(mContext, mDisplay,
-              id, topBound - spriteHeight, leftBound - spriteHeight, speed, 0, mHeight, 0, mWidth, 0, 25);
+              id, topBound - spriteHeight, leftBound - spriteWidth, speed, 0, mHeight - spriteHeight, 0, mWidth - spriteWidth, 0, 25);
       movingSprites.add(cNew);
     }
   }

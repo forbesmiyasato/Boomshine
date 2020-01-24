@@ -36,11 +36,11 @@ public class BoundedMovingSprite extends MovingSprite {
     {
       mDx = mDx * -1;
     }
-    if (height + getTopCoordinate() + height >= mBottomBound)
+    if (height + getTopCoordinate() >= mBottomBound)
     {
       mDy = mDy * -1;
     }
-    if (width + getLeftCoordinate() + width >= mRightBound)
+    if (width + getLeftCoordinate() >= mRightBound)
     {
       mDx = mDx * -1;
     }
