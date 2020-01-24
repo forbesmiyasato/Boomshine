@@ -53,7 +53,7 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
   public boolean handleExploding () {
     int positionShift;
 
-    if (mExplosionProgress >= 100) {
+    if (mExplosionProgress >= 150) {
       bExploding = false;
     }
     mExplosionProgress += bExploding ? 2 : -4; //TODO ASK

@@ -1,8 +1,11 @@
 package edu.pacificu.cs.group6Boomshine;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -17,8 +20,11 @@ import java.util.Random;
  * @author Computer Science, Pacific University.
  * @version 1.0
  */
+
+@SuppressLint("AppCompatCustomView")
 public class BoomshineView extends ImageView {
   static final int DEFAULT_BALL_RADIUS = 30;
+  private final int MAX_LEVEL_ATTEMPTS = 3;
   ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
   ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;
   private int mHeight;
@@ -31,6 +37,10 @@ public class BoomshineView extends ImageView {
   private Paint mPaint;
   private MediaPlayer mcMediaPlayer;
   private boolean donePlayingSound = false;
+  private int mTotalScore;
+  private int mNumAttempts;
+  private int mCurrentLevel;
+  private boolean mGameEnd;
 
   /**
    * Constructor that initializes the values associated with the sprite.
@@ -47,8 +57,12 @@ public class BoomshineView extends ImageView {
     mContext = context;
     mDisplay = display;
     mLevel = new Level(1);
+    mCurrentLevel = 1;
     mPaint = new Paint();
     mPaint.setAntiAlias(true);
+    mTotalScore = 0;
+    mNumAttempts = 0;
+    mGameEnd = false;
   }
 
   /**
@@ -60,63 +74,79 @@ public class BoomshineView extends ImageView {
 
   @Override
   public void onDraw(Canvas canvas) {
-    ExplodingBoundedMovingCircle cCollidedMovingCircle = null;
-    ExplodingBoundedMovingCircle mExplodedCircle = null;
-    mHeight = getHeight();
-    mWidth = getWidth();
+    if (!mGameEnd){
+      ExplodingBoundedMovingCircle cCollidedMovingCircle = null;
+      ExplodingBoundedMovingCircle mExplodedCircle = null;
+      mHeight = getHeight();
+      mWidth = getWidth();
 
-    //Paint Score on screen
-    mPaint.setColor(getResources().getColor(R.color.cWhite));
-    mPaint.setTextSize(50);
-    canvas.drawText(mLevel.getHitInfo(), 10, mHeight - 50, mPaint);
+      //Paint Score on screen
+      mPaint.setColor(getResources().getColor(R.color.cWhite));
+      setTextSizeForWidth(mPaint, mWidth / 4, mLevel.getHitInfo());
+      //mPaint.setTextSize(50);
+      canvas.drawText(mLevel.getHitInfo(), 10, mHeight - 50, mPaint);
+      canvas.drawText("Total Score: " + mTotalScore, mWidth - 2 * (mWidth / 3),
+              mHeight - 50, mPaint);
+      canvas.drawText("Attempts: " + (mNumAttempts + 1) + " / " + MAX_LEVEL_ATTEMPTS,
+              mWidth - (mWidth / 4), mHeight - 50, mPaint);
 
-    if (firstRender) {
-      setCircles(mLevel.getLevelNumber());
-      firstRender = false;
-    }
-
-    for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
-      explodingSprite.doDraw(canvas);
-      if (explodingSprite.handleExploding()) {
-        mExplodedCircle = explodingSprite;
+      if (firstRender) {
+        setCircles(mLevel.getLevelNumber());
+        firstRender = false;
       }
-    }
 
-    for (ExplodingBoundedMovingCircle movingSprite : mMovingSprites) {
-      movingSprite.move();
-      movingSprite.hitBound();
-      movingSprite.doDraw(canvas);
       for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
-        if (movingSprite.collide(explodingSprite)) {
-          cCollidedMovingCircle = movingSprite;
-          mLevel.incrememtCirclesHit();
+        explodingSprite.doDraw(canvas);
+        if (explodingSprite.handleExploding()) {
+          mExplodedCircle = explodingSprite;
         }
       }
-    }
 
-    if (mExplodedCircle != null) {
-      mExplodingSprites.remove(mExplodedCircle);
-    }
-    if (cCollidedMovingCircle != null) {
-      mExplodingSprites.add(cCollidedMovingCircle);
-      mMovingSprites.remove(cCollidedMovingCircle);
-    }
-
-    if (!firstClick && mExplodingSprites.isEmpty()) {
-      if (mLevel.levelOver()) {
-        levelPassed();
-      } else {
-        levelFailed();
+      for (ExplodingBoundedMovingCircle movingSprite : mMovingSprites) {
+        movingSprite.move();
+        movingSprite.hitBound();
+        movingSprite.doDraw(canvas);
+        for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
+          if (movingSprite.collide(explodingSprite)) {
+            cCollidedMovingCircle = movingSprite;
+            mLevel.incrememtCirclesHit();
+          }
+        }
       }
-    }
 
-    super.onDraw(canvas);
-    invalidate();
+      if (mExplodedCircle != null) {
+        mExplodingSprites.remove(mExplodedCircle);
+      }
+      if (cCollidedMovingCircle != null) {
+        mExplodingSprites.add(cCollidedMovingCircle);
+        mMovingSprites.remove(cCollidedMovingCircle);
+      }
+
+      if (!firstClick && mExplodingSprites.isEmpty()) {
+        if (mLevel.levelOver()) {
+          levelPassed();
+        } else {
+          levelFailed();
+        }
+      }
+
+      super.onDraw(canvas);
+      invalidate();
+    }
   }
 
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
+    if (mcMediaPlayer != null)
+    {
+      mcMediaPlayer.release();
+    }
+    if (!donePlayingSound)
+    {
+      mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.click_sound);
+      mcMediaPlayer.start();
+    }
     int color;
     if (event.getAction() != MotionEvent.ACTION_DOWN) {
       return super.onTouchEvent(event);
@@ -144,7 +174,9 @@ public class BoomshineView extends ImageView {
       color = getRandomColor();
       topBound = random.nextInt(mHeight - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
       leftBound = random.nextInt(mWidth - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
-      int speed = new Random().nextInt(20) + 2;
+      int speed = 3;
+      //int speed = new Random().nextInt(20) + 2;
+
       ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(mContext, mDisplay,
               color, topBound - DEFAULT_BALL_RADIUS,
               leftBound - DEFAULT_BALL_RADIUS, speed, 0,
@@ -179,20 +211,65 @@ public class BoomshineView extends ImageView {
   }
 
   public void levelPassed() {
+    mTotalScore += mLevel.getLevelScore();
+    mNumAttempts = 0;
     mLevel.nextLevel();
-    firstRender = true;
-    firstClick = true;
-    mMovingSprites.clear();
-    mExplodingSprites.clear();
+    mCurrentLevel++;
+    resetLevelFlags();
+    if (mcMediaPlayer != null)
+    {
+      mcMediaPlayer.release();
+    }
     mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.win_sound);
     mcMediaPlayer.start();
   }
 
   public void levelFailed() {
+    mNumAttempts++;
     if (!donePlayingSound) {
       mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.lose_sound);
       mcMediaPlayer.start();
     }
     donePlayingSound = true;
+    if (mNumAttempts < MAX_LEVEL_ATTEMPTS)
+    {
+      resetLevelFlags();
+      mLevel = new Level(mCurrentLevel);
+      donePlayingSound = false;
+    }
+    else
+    {
+      mGameEnd = true;
+    }
+  }
+
+  private void resetLevelFlags ()
+  {
+    firstRender = true;
+    firstClick = true;
+    mMovingSprites.clear();
+    mExplodingSprites.clear();
+  }
+
+
+  private static void setTextSizeForWidth(Paint paint, float desiredWidth,
+                                          String text) {
+
+    // Pick a reasonably large value for the test. Larger values produce
+    // more accurate results, but may cause problems with hardware
+    // acceleration. But there are workarounds for that, too; refer to
+    // http://stackoverflow.com/questions/6253528/font-size-too-large-to-fit-in-cache
+    final float testTextSize = 48f;
+
+    // Get the bounds of the text, using our testTextSize.
+    paint.setTextSize(testTextSize);
+    Rect bounds = new Rect();
+    paint.getTextBounds(text, 0, text.length(), bounds);
+
+    // Calculate the desired size as a proportion of our testTextSize.
+    float desiredTextSize = testTextSize * desiredWidth / bounds.width();
+
+    // Set the paint for that size.
+    paint.setTextSize(desiredTextSize);
   }
 }

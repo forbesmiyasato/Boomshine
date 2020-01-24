@@ -96,6 +96,7 @@ public class Level {
 
     public String getHitInfo () {
         String sHitInfo = "Hit: " + mCirclesHit + "/" + mHitsRequired + " from " + mTotalCircles;
+        calculateLevelScore();
         return sHitInfo;
     }
 }
