@@ -1,11 +1,9 @@
 package edu.pacificu.cs.group6Boomshine;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Point;
-import android.util.Log;
+import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -21,8 +19,8 @@ import java.util.Random;
  */
 public class BoomshineView extends ImageView {
   static final int DEFAULT_BALL_RADIUS = 30;
-  ArrayList<ExplodingBoundedMovingCircle> movingSprites;
-  ArrayList<ExplodingBoundedMovingCircle> explodingSprites;
+  ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
+  ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;
   private int mHeight;
   private int mWidth;
   private boolean firstClick = true;
@@ -30,6 +28,9 @@ public class BoomshineView extends ImageView {
   private Context mContext;
   private Display mDisplay;
   private Level mLevel;
+  private Paint mPaint;
+  private MediaPlayer mcMediaPlayer;
+  private boolean donePlayingSound = false;
 
   /**
    * Constructor that initializes the values associated with the sprite.
@@ -41,11 +42,13 @@ public class BoomshineView extends ImageView {
   public BoomshineView(Context context, Display display) {
     super(context);
     setFocusable(true); // make sure we get key events
-    movingSprites = new ArrayList<>();
-    explodingSprites = new ArrayList<>();
+    mMovingSprites = new ArrayList<>();
+    mExplodingSprites = new ArrayList<>();
     mContext = context;
     mDisplay = display;
     mLevel = new Level(1);
+    mPaint = new Paint();
+    mPaint.setAntiAlias(true);
   }
 
   /**
@@ -57,50 +60,53 @@ public class BoomshineView extends ImageView {
 
   @Override
   public void onDraw(Canvas canvas) {
-    ExplodingBoundedMovingCircle cTemp = null;
-    ExplodingBoundedMovingCircle cTemp1 = null;
+    ExplodingBoundedMovingCircle cCollidedMovingCircle = null;
+    ExplodingBoundedMovingCircle mExplodedCircle = null;
     mHeight = getHeight();
     mWidth = getWidth();
+
+    //Paint Score on screen
+    mPaint.setColor(getResources().getColor(R.color.cWhite));
+    mPaint.setTextSize(50);
+    canvas.drawText(mLevel.getHitInfo(), 10, mHeight - 50, mPaint);
 
     if (firstRender) {
       setCircles(mLevel.getLevelNumber());
       firstRender = false;
     }
 
-    for (ExplodingBoundedMovingCircle explodingSprite : explodingSprites) {
+    for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
       explodingSprite.doDraw(canvas);
       if (explodingSprite.handleExploding()) {
-        cTemp1 = explodingSprite;
+        mExplodedCircle = explodingSprite;
       }
     }
 
-    for (ExplodingBoundedMovingCircle movingSprite : movingSprites) {
+    for (ExplodingBoundedMovingCircle movingSprite : mMovingSprites) {
       movingSprite.move();
       movingSprite.hitBound();
       movingSprite.doDraw(canvas);
-      for (ExplodingBoundedMovingCircle explodingSprite : explodingSprites) {
+      for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
         if (movingSprite.collide(explodingSprite)) {
-          cTemp = movingSprite;
+          cCollidedMovingCircle = movingSprite;
           mLevel.incrememtCirclesHit();
         }
       }
     }
 
-    if (cTemp1 != null) {
-      explodingSprites.remove(cTemp1);
+    if (mExplodedCircle != null) {
+      mExplodingSprites.remove(mExplodedCircle);
     }
-    if (cTemp != null) {
-      explodingSprites.add(cTemp);
-      movingSprites.remove(cTemp);
+    if (cCollidedMovingCircle != null) {
+      mExplodingSprites.add(cCollidedMovingCircle);
+      mMovingSprites.remove(cCollidedMovingCircle);
     }
 
-    if (explodingSprites.isEmpty()) {
+    if (!firstClick && mExplodingSprites.isEmpty()) {
       if (mLevel.levelOver()) {
-        mLevel.nextLevel();
-        firstRender = true;
-        firstClick = true;
-        movingSprites.clear();
-        explodingSprites.clear();
+        levelPassed();
+      } else {
+        levelFailed();
       }
     }
 
@@ -122,7 +128,7 @@ public class BoomshineView extends ImageView {
               color, (int) event.getY(),
               (int) event.getX(), 0, 0, mHeight,
               0, mWidth, 0, 25);
-      explodingSprites.add(cNew);
+      mExplodingSprites.add(cNew);
     }
 
     firstClick = false;
@@ -144,7 +150,7 @@ public class BoomshineView extends ImageView {
               leftBound - DEFAULT_BALL_RADIUS, speed, 0,
               mHeight, 0,
               mWidth, 0, 25);
-      movingSprites.add(cNew);
+      mMovingSprites.add(cNew);
     }
   }
 
@@ -170,5 +176,23 @@ public class BoomshineView extends ImageView {
         break;
     }
     return color;
+  }
+
+  public void levelPassed() {
+    mLevel.nextLevel();
+    firstRender = true;
+    firstClick = true;
+    mMovingSprites.clear();
+    mExplodingSprites.clear();
+    mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.win_sound);
+    mcMediaPlayer.start();
+  }
+
+  public void levelFailed() {
+    if (!donePlayingSound) {
+      mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.lose_sound);
+      mcMediaPlayer.start();
+    }
+    donePlayingSound = true;
   }
 }

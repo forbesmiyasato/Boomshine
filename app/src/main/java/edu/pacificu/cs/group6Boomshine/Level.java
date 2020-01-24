@@ -12,7 +12,7 @@ package edu.pacificu.cs.group6Boomshine;
 
 public class Level {
 
-    private final int CIRCLE_MULTIPLIER = 2;
+    private final int CIRCLE_MULTIPLIER = 5;
     private final int SCORE_MULTIPLIER = 10;
     private int mHitsRequired;
     private int mTotalCircles;
@@ -92,5 +92,10 @@ public class Level {
 
     public int getLevelNumber () {
         return this.mLevelNumber;
+    }
+
+    public String getHitInfo () {
+        String sHitInfo = "Hit: " + mCirclesHit + "/" + mHitsRequired + " from " + mTotalCircles;
+        return sHitInfo;
     }
 }

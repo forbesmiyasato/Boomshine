@@ -60,6 +60,7 @@ public class FixedSprite extends ImageView
     mColor = color;
     ++mCount;
     mPaint = new Paint();
+    mPaint.setAntiAlias(true);
   }
 
   /**
@@ -75,7 +76,6 @@ public class FixedSprite extends ImageView
 //    canvas.drawBitmap (mBitmapImage, (this.mLeftCoordinate),
 //            this.mTopCoordinate, null);
     mPaint.setColor(mColor);
-    mPaint.setAntiAlias(true);
     canvas.drawCircle(mLeftCoordinate, mTopCoordinate, mRadius, mPaint);
 
   }
@@ -105,9 +105,9 @@ public class FixedSprite extends ImageView
   }
 
   /**
-   * Retrieves the number of movingSprites created.
+   * Retrieves the number of mMovingSprites created.
    *
-   * @return number of movingSprites
+   * @return number of mMovingSprites
    *
    * @since 1.0
    */
