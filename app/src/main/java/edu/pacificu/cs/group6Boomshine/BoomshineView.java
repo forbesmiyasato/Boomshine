@@ -128,7 +128,7 @@ public class BoomshineView extends ImageView {
     int topBound;
     int leftBound;
 
-    for (int i = 0; i < level * 5; i++) {
+    for (int i = 0; i < level * 100; i++) {
       int randomId = random.nextInt(3);
 
       int id = 0;
@@ -150,9 +150,13 @@ public class BoomshineView extends ImageView {
               R.drawable.ball_blue, dimensions);
       int spriteHeight = dimensions.outHeight;
       int spriteWidth = dimensions.outWidth;
-      topBound = random.nextInt(topCoord - spriteHeight) + spriteHeight;
-      leftBound = random.nextInt(LeftCoord - spriteWidth) + spriteWidth;
+      Log.d("setCircles", String.valueOf(LeftCoord));
+      Log.d("setCircles", String.valueOf(spriteWidth));
+      topBound = random.nextInt(topCoord - spriteHeight * 2) + spriteHeight;
+      leftBound = random.nextInt(LeftCoord - spriteWidth * 2) + spriteWidth;
+      Log.d("setCircles", String.valueOf(leftBound));
       int speed = new Random().nextInt(20) + 2;
+      Log.d("setCircles", String.valueOf(speed));
       ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(mContext, mDisplay,
               id, topBound - spriteHeight, leftBound - spriteWidth, speed, 0, mHeight - spriteHeight, 0, mWidth - spriteWidth, 0, 25);
       movingSprites.add(cNew);
