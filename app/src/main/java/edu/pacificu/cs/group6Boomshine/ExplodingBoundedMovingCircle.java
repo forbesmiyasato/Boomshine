@@ -62,16 +62,21 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
     final int SQUARE = 2;
     boolean bCollided = false;
     //(x2-x1)^2 + (y1-y2)^2 <= (r1+r2)^2 to check if collides
-    float dRadius = cOtherCircle.mRadius + this.getRadius();
-    float dX = getLeftCoordinate() - cOtherCircle.getLeftCoordinate();
-    float dY = getTopCoordinate() - cOtherCircle.getTopCoordinate();
+    float dRadius = cOtherCircle.getRadius() + this.getRadius();
+    float dX = (getLeftCoordinate()) - (cOtherCircle.getLeftCoordinate());
+    float dY = (getTopCoordinate()) - (cOtherCircle.getTopCoordinate());
 
     if (Math.pow(dX, SQUARE) + Math.pow(dY, SQUARE) <= Math.pow(dRadius, SQUARE))
     {
       Log.d("collide", "Circles collided");
       mSpeed = 0;
       bCollided = true;
+      Log.d("collide", "this.x = " + dX);
+      Log.d("collide", "this.y = " + dY);
+      Log.d("collide", "other.x = " + mRadius);
+      Log.d("collide", "other.y = " + cOtherCircle.mRadius);
     }
+
 
     return bCollided;
   }
@@ -81,27 +86,31 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
   }
 
   public boolean handleExploding () {
+    int positionShift;
+
     if (mExplosionProgress >= 300) {
       bExploding = false;
     }
-
-    mExplosionProgress += bExploding ? 1 : -1; //TODO ASK
+    mExplosionProgress += bExploding ? 2 : -2; //TODO ASK
     Bitmap bitmap = getBitmap();
     float aspectRatio = bitmap.getWidth() /
-            (float) bitmap.getHeight();
-    int width = mExplosionProgress;
-    int height = mExplosionProgress;
+              (float) bitmap.getHeight();
+      int width = mExplosionProgress;
+      int height = Math.round(width / aspectRatio);
 
-    bitmap = Bitmap.createScaledBitmap(
-            bitmap, width, height, false);
-    setmBitmapImage(bitmap);
-    Log.d("Handle", String.valueOf(mStartPositionLeft));
-    Log.d("Handle", String.valueOf(width));
-    Log.d("Handle", String.valueOf(getSpriteWidth()));
+      bitmap = Bitmap.createScaledBitmap(
+              bitmap, width, height, true);
+      setmBitmapImage(bitmap);
 
-    setLeftCoordinate(mStartPositionLeft - (width / 2) + 50);
-    setTopCoordinate(mStartPositionTop - (width / 2) + 50);
+    mRadius = width / 2;
 
-    return mExplosionProgress <= 20;
+//    setLeftCoordinate(mStartPositionLeft - ((width - getSpriteWidth()) / 2));
+//    setTopCoordinate(mStartPositionTop - ((width - getSpriteWidth()) / 2));
+
+    positionShift = bExploding ? -1 : 1;
+    setLeftCoordinate(getLeftCoordinate() + positionShift);
+    setTopCoordinate(getTopCoordinate() + positionShift);
+
+    return mExplosionProgress <= 2;
   }
 }

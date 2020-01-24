@@ -65,8 +65,6 @@ public class FixedSprite extends ImageView
     mHeight = mBitmapImage.getHeight ();
     mResID = drawable;
     ++mCount;
-    Log.d("Fixed", String.valueOf(mWidth));
-
   }
 
   /**
