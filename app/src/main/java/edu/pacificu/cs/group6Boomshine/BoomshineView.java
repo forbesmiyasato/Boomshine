@@ -2,6 +2,7 @@ package edu.pacificu.cs.group6Boomshine;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -36,6 +37,7 @@ public class BoomshineView extends ImageView {
   private Level mLevel;
   private Paint mPaint;
   private MediaPlayer mcMediaPlayer;
+  private Intent mcGameOverIntent;
   private boolean donePlayingSound = false;
   private int mTotalScore;
   private int mNumAttempts;
@@ -63,6 +65,8 @@ public class BoomshineView extends ImageView {
     mTotalScore = 0;
     mNumAttempts = 0;
     mGameEnd = false;
+
+    mcGameOverIntent = new Intent(mContext, GameOverActivity.class);
   }
 
   /**
@@ -132,6 +136,11 @@ public class BoomshineView extends ImageView {
 
       super.onDraw(canvas);
       invalidate();
+    }
+    else
+    {
+      mcGameOverIntent.putExtra("player_score", mTotalScore);
+      mContext.startActivity(mcGameOverIntent);
     }
   }
 

@@ -18,4 +18,8 @@
     <string name="play_anyway">Play As Guest</string>
     <string name="game_menu">GameMenu</string>
     <string name="play">Play</string>
+    <string name="game_over_title">Game Over</string>
+    <string name="game_over_score">Score</string>
+    <string name="game_over_play_again">Play Again</string>
+    <string name="game_over_quit">Quit</string>
 </resources>
