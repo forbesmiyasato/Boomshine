@@ -12,7 +12,8 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
   private float mRadius;
   private int mExplosionProgress;
   private boolean bExploding = true;
-
+  protected final int mStartPositionTop;
+  private final int mStartPositionLeft;
   ExplodingBoundedMovingCircle(Context context, Display display, int drawable,
                                int topCoord, int leftCoord, int speed, int topBound, int bottomBound,
                                int leftBound, int rightBound, int expandingSpeed, float radius)
@@ -20,6 +21,8 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
     super(context, display, drawable, topCoord, leftCoord, speed, topBound, bottomBound, leftBound, rightBound);
     mRadius = getSpriteWidth() / 2;
     mExplosionProgress = getSpriteWidth();
+    mStartPositionTop = topCoord;
+    mStartPositionLeft = leftCoord;
   }
 
 //  @Override
@@ -92,7 +95,12 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
     bitmap = Bitmap.createScaledBitmap(
             bitmap, width, height, false);
     setmBitmapImage(bitmap);
-    setLeftCoordinate(getLeftCoordinate());
+    Log.d("Handle", String.valueOf(mStartPositionLeft));
+    Log.d("Handle", String.valueOf(width));
+    Log.d("Handle", String.valueOf(getSpriteWidth()));
+
+    setLeftCoordinate(mStartPositionLeft - (width / 2) + 50);
+    setTopCoordinate(mStartPositionTop - (width / 2) + 50);
 
     return mExplosionProgress <= 20;
   }
