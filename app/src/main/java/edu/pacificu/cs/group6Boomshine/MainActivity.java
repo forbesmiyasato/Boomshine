@@ -9,6 +9,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity
 
     mGraphicsView = new BoomshineView (this, mDisplay);
     mGraphicsView.setBackgroundColor (Color.BLACK);
-    setContentView (mGraphicsView);
+    setContentView (R.layout.activity_main);
   }
 
   /**
@@ -65,4 +66,8 @@ public class MainActivity extends AppCompatActivity
             About.class));
   }
 
+  public void playAsGuestClicked (View cView) {
+    startActivity (new Intent(this,
+            BoomshineGame.class));
+  }
 }
