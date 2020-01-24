@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
 
 public class BoomshineGame extends AppCompatActivity {
@@ -22,6 +23,11 @@ public class BoomshineGame extends AppCompatActivity {
 
     mGraphicsView = new BoomshineView (this, mDisplay);
     mGraphicsView.setBackgroundColor (Color.BLACK);
-    setContentView (mGraphicsView);
+    setContentView (R.layout.activity_boomshine_game);
+  }
+
+  public void onPlayClicked (View cView)
+  {
+    setContentView(mGraphicsView);
   }
 }

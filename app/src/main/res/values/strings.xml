@@ -16,4 +16,6 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="play_anyway">Play As Guest</string>
+    <string name="game_menu">GameMenu</string>
+    <string name="play">Play</string>
 </resources>
