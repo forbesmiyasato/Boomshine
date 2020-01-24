@@ -6,13 +6,9 @@ import android.util.Log;
 import android.view.Display;
 
 public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
-
-  private int mExpandingSpeed;
-  private float mScale;
   private int mExplosionProgress;
   private boolean bExploding = true;
   protected final int mStartPositionTop;
-  private final int mStartPositionLeft;
   ExplodingBoundedMovingCircle(Context context, Display display, int drawable,
                                int topCoord, int leftCoord, int speed, int topBound, int bottomBound,
                                int leftBound, int rightBound, int expandingSpeed, float radius)
@@ -20,7 +16,6 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
     super(context, display, drawable, topCoord, leftCoord, speed, topBound, bottomBound, leftBound, rightBound);
     mExplosionProgress = mRadius;
     mStartPositionTop = topCoord;
-    mStartPositionLeft = leftCoord;
   }
 
   public float getRadius () {
@@ -56,6 +51,7 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
     if (mExplosionProgress >= 150) {
       bExploding = false;
     }
+
     mExplosionProgress += bExploding ? 2 : -4; //TODO ASK
 
     mRadius = mExplosionProgress;
