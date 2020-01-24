@@ -43,6 +43,7 @@
         android:layout_marginStart="166dp"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="166dp"
+        android:onClick="onPlayAgianClicked"
         android:text="@string/game_over_play_again"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

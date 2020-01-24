@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class GameOverActivity extends AppCompatActivity {
 
     TextView mPlayerScoreTextView;
+    Button mBtnPlayAgain;
     private int mPlayerScore;
 
     @Override
@@ -20,7 +23,14 @@ public class GameOverActivity extends AppCompatActivity {
         mPlayerScore = tempIntent.getIntExtra("player_score", 0);
 
         mPlayerScoreTextView = findViewById(R.id.textViewPlayerscoreFinal);
+        mBtnPlayAgain = findViewById(R.id.btnPlayAgain);
 
         mPlayerScoreTextView.setText(Integer.toString(mPlayerScore));
+    }
+
+    public void onPlayAgianClicked (View view)
+    {
+        startActivity (new Intent(this,
+                BoomshineGame.class));
     }
 }
