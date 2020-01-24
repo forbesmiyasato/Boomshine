@@ -54,6 +54,8 @@ public class BoomshineView extends ImageView {
 
   @Override
   public void onDraw(Canvas canvas) {
+    ExplodingBoundedMovingCircle cTemp = null;
+    ExplodingBoundedMovingCircle cTemp1 = null;
     mHeight = getHeight();
     mWidth = getWidth();
 //    if (firstClick)
@@ -65,16 +67,31 @@ public class BoomshineView extends ImageView {
       setCircles(1, mHeight, mWidth);
       firstRender = false;
     }
+
+    for (ExplodingBoundedMovingCircle explodingSprite : explodingSprites) {
+      explodingSprite.doDraw(canvas);
+      if (explodingSprite.handleExploding()) {
+        cTemp1 = explodingSprite;
+      }
+    }
+
     for (ExplodingBoundedMovingCircle movingSprite : movingSprites) {
       movingSprite.move();
       movingSprite.hitBound();
       movingSprite.doDraw(canvas);
       for (ExplodingBoundedMovingCircle explodingSprite : explodingSprites) {
-        explodingSprite.doDraw(canvas);
-        movingSprite.collide(explodingSprite);
-        explodingSprites.add(movingSprite);
-        movingSprites.remove(movingSprite);
+        if (movingSprite.collide(explodingSprite)) {
+          cTemp = movingSprite;
+        }
       }
+    }
+
+    if(cTemp1 != null) {
+      explodingSprites.remove(cTemp1);
+    }
+    if (cTemp != null) {
+      explodingSprites.add(cTemp);
+      movingSprites.remove(cTemp);
     }
     super.onDraw(canvas);
     invalidate();
@@ -128,7 +145,7 @@ public class BoomshineView extends ImageView {
     int topBound;
     int leftBound;
 
-    for (int i = 0; i < level * 100; i++) {
+    for (int i = 0; i < level * 1; i++) {
       int randomId = random.nextInt(3);
 
       int id = 0;
@@ -150,13 +167,9 @@ public class BoomshineView extends ImageView {
               R.drawable.ball_blue, dimensions);
       int spriteHeight = dimensions.outHeight;
       int spriteWidth = dimensions.outWidth;
-      Log.d("setCircles", String.valueOf(LeftCoord));
-      Log.d("setCircles", String.valueOf(spriteWidth));
       topBound = random.nextInt(topCoord - spriteHeight * 2) + spriteHeight;
       leftBound = random.nextInt(LeftCoord - spriteWidth * 2) + spriteWidth;
-      Log.d("setCircles", String.valueOf(leftBound));
       int speed = new Random().nextInt(20) + 2;
-      Log.d("setCircles", String.valueOf(speed));
       ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(mContext, mDisplay,
               id, topBound - spriteHeight, leftBound - spriteWidth, speed, 0, mHeight - spriteHeight, 0, mWidth - spriteWidth, 0, 25);
       movingSprites.add(cNew);
