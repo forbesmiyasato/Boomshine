@@ -76,8 +76,8 @@ public class MovingSprite extends FixedSprite
 
   public void move ()
   {
-    setTopCoordinate(getTopCoordinate() + mSpeed != 0 ? mDy : 0);
-    setLeftCoordinate(getLeftCoordinate() + mSpeed != 0 ? mDx : 0);
+    setTopCoordinate(getTopCoordinate() + (mSpeed != 0 ? mDy : 0));
+    setLeftCoordinate(getLeftCoordinate() + (mSpeed != 0 ? mDx : 0));
   }
 
   public void randomDirection() {
