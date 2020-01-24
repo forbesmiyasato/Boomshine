@@ -12,6 +12,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -28,6 +29,7 @@ public class BoomshineView extends ImageView {
   private final int MAX_LEVEL_ATTEMPTS = 3;
   ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
   ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;
+  ExplodingCircleFactory mcFactory;
   private int mHeight;
   private int mWidth;
   private boolean firstClick = true;
@@ -64,6 +66,7 @@ public class BoomshineView extends ImageView {
     mTotalScore = 0;
     mNumAttempts = 0;
     mGameEnd = false;
+    mcFactory = new ExplodingCircleFactory();
   }
 
   /**
@@ -161,11 +164,14 @@ public class BoomshineView extends ImageView {
 
     if (firstClick) {
       color = getRandomColor();
-      ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(getContext(), getDisplay(),
+      /*ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(getContext(), getDisplay(),
               color, (int) event.getY(),
               (int) event.getX(), 0, 0, mHeight,
-              0, mWidth, 0, 25);
-      mExplodingSprites.add(cNew);
+              0, mWidth, 0, 25);*/
+      mExplodingSprites.addAll(mcFactory.create(ExplodingType.ULTIMATE, getContext(), getDisplay(),
+              color, (int) event.getY(),
+              (int) event.getX(), 0, 0, mHeight,
+              0, mWidth, 0, DEFAULT_BALL_RADIUS));
     }
 
     firstClick = false;
@@ -188,7 +194,7 @@ public class BoomshineView extends ImageView {
               color, topBound - DEFAULT_BALL_RADIUS,
               leftBound - DEFAULT_BALL_RADIUS, speed, 0,
               mHeight, 0,
-              mWidth, 0, 25);
+              mWidth, 0, DEFAULT_BALL_RADIUS);
       mMovingSprites.add(cNew);
     }
   }

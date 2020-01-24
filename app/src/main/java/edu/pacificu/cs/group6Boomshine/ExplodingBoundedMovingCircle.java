@@ -13,11 +13,14 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
   private boolean bExploding = true;
   protected final int mStartPositionTop;
   private final int mStartPositionLeft;
+  private int mStartRadius;
   ExplodingBoundedMovingCircle(Context context, Display display, int drawable,
                                int topCoord, int leftCoord, int speed, int topBound, int bottomBound,
-                               int leftBound, int rightBound, int expandingSpeed, float radius)
+                               int leftBound, int rightBound, int expandingSpeed, int radius)
   {
     super(context, display, drawable, topCoord, leftCoord, speed, topBound, bottomBound, leftBound, rightBound);
+    mRadius = radius;
+    mStartRadius = radius;
     mExplosionProgress = mRadius;
     mStartPositionTop = topCoord;
     mStartPositionLeft = leftCoord;
@@ -53,9 +56,10 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
   public boolean handleExploding () {
     int positionShift;
 
-    if (mExplosionProgress >= 150) {
+    if (mExplosionProgress >= (6 * mStartRadius)) {
       bExploding = false;
     }
+
     mExplosionProgress += bExploding ? 2 : -4; //TODO ASK
 
     mRadius = mExplosionProgress;
