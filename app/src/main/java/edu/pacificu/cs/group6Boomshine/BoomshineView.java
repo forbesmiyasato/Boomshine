@@ -20,6 +20,7 @@ import java.util.Random;
  * @version 1.0
  */
 public class BoomshineView extends ImageView {
+  static final int DEFAULT_BALL_RADIUS = 30;
   ArrayList<ExplodingBoundedMovingCircle> movingSprites;
   ArrayList<ExplodingBoundedMovingCircle> explodingSprites;
   private int mHeight;
@@ -28,6 +29,7 @@ public class BoomshineView extends ImageView {
   private boolean firstRender = true;
   private Context mContext;
   private Display mDisplay;
+  private Level mLevel;
 
   /**
    * Constructor that initializes the values associated with the sprite.
@@ -43,6 +45,7 @@ public class BoomshineView extends ImageView {
     explodingSprites = new ArrayList<>();
     mContext = context;
     mDisplay = display;
+    mLevel = new Level(1);
   }
 
   /**
@@ -58,13 +61,9 @@ public class BoomshineView extends ImageView {
     ExplodingBoundedMovingCircle cTemp1 = null;
     mHeight = getHeight();
     mWidth = getWidth();
-//    if (firstClick)
-//    {
-//
-//    }
 
     if (firstRender) {
-      setCircles(1, mHeight, mWidth);
+      setCircles(mLevel.getLevelNumber());
       firstRender = false;
     }
 
@@ -82,17 +81,29 @@ public class BoomshineView extends ImageView {
       for (ExplodingBoundedMovingCircle explodingSprite : explodingSprites) {
         if (movingSprite.collide(explodingSprite)) {
           cTemp = movingSprite;
+          mLevel.incrememtCirclesHit();
         }
       }
     }
 
-    if(cTemp1 != null) {
+    if (cTemp1 != null) {
       explodingSprites.remove(cTemp1);
     }
     if (cTemp != null) {
       explodingSprites.add(cTemp);
       movingSprites.remove(cTemp);
     }
+
+    if (explodingSprites.isEmpty()) {
+      if (mLevel.levelOver()) {
+        mLevel.nextLevel();
+        firstRender = true;
+        firstClick = true;
+        movingSprites.clear();
+        explodingSprites.clear();
+      }
+    }
+
     super.onDraw(canvas);
     invalidate();
   }
@@ -100,39 +111,17 @@ public class BoomshineView extends ImageView {
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
+    int color;
     if (event.getAction() != MotionEvent.ACTION_DOWN) {
       return super.onTouchEvent(event);
     }
 
-    Random random = new Random();
-    int randomId = random.nextInt(3);
-    int id = 0;
-
-    switch (randomId) {
-      case 0:
-        id = R.drawable.ball_blue;
-        break;
-      case 1:
-        id = R.drawable.ball_green;
-        break;
-      case 2:
-        id = R.drawable.ball_yellow;
-        break;
-    }
     if (firstClick) {
-      BitmapFactory.Options dimensions = new BitmapFactory.Options();
-      dimensions.inJustDecodeBounds = true;
-      Bitmap mBitmap = BitmapFactory.decodeResource(getResources(),
-              R.drawable.ball_blue, dimensions);
-      int spriteHeight = dimensions.outHeight;
-      int spriteWidth = dimensions.outWidth;
-      Point size = new Point();
-      getDisplay().getSize(size);
-      int Width = size.x;
-      int Height = size.y;
-      int speed = new Random().nextInt(20) + 1;
+      color = getRandomColor();
       ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(getContext(), getDisplay(),
-              id, (int) event.getY() - spriteHeight, (int) event.getX() - spriteWidth, 0, 0, mHeight, 0, mWidth, 0, 25);
+              color, (int) event.getY(),
+              (int) event.getX(), 0, 0, mHeight,
+              0, mWidth, 0, 25);
       explodingSprites.add(cNew);
     }
 
@@ -140,39 +129,46 @@ public class BoomshineView extends ImageView {
     return true;
   }
 
-  void setCircles(int level, int topCoord, int LeftCoord) {
-    Random random = new Random();
+  void setCircles(int level) {
     int topBound;
     int leftBound;
-
-    for (int i = 0; i < level * 1; i++) {
-      int randomId = random.nextInt(3);
-
-      int id = 0;
-
-      switch (randomId) {
-        case 0:
-          id = R.drawable.ball_blue;
-          break;
-        case 1:
-          id = R.drawable.ball_green;
-          break;
-        case 2:
-          id = R.drawable.ball_yellow;
-          break;
-      }
-      BitmapFactory.Options dimensions = new BitmapFactory.Options();
-      dimensions.inJustDecodeBounds = true;
-      Bitmap mBitmap = BitmapFactory.decodeResource(getResources(),
-              R.drawable.ball_blue, dimensions);
-      int spriteHeight = dimensions.outHeight;
-      int spriteWidth = dimensions.outWidth;
-      topBound = random.nextInt(topCoord - spriteHeight * 2) + spriteHeight;
-      leftBound = random.nextInt(LeftCoord - spriteWidth * 2) + spriteWidth;
+    Random random = new Random();
+    int color;
+    for (int i = 0; i < level * 5; i++) {
+      color = getRandomColor();
+      topBound = random.nextInt(mHeight - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
+      leftBound = random.nextInt(mWidth - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
       int speed = new Random().nextInt(20) + 2;
       ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(mContext, mDisplay,
-              id, topBound - spriteHeight, leftBound - spriteWidth, speed, 0, mHeight - spriteHeight, 0, mWidth - spriteWidth, 0, 25);
+              color, topBound - DEFAULT_BALL_RADIUS,
+              leftBound - DEFAULT_BALL_RADIUS, speed, 0,
+              mHeight, 0,
+              mWidth, 0, 25);
       movingSprites.add(cNew);
     }
+  }
+
+  public int getRandomColor() {
+    Random random = new Random();
+    int randomColor = random.nextInt(5);
+    int color = 0;
+    switch (randomColor) {
+      case 0:
+        color = getResources().getColor(R.color.cGrass1);
+        break;
+      case 1:
+        color = getResources().getColor(R.color.cYellow);
+        break;
+      case 2:
+        color = getResources().getColor(R.color.cBlue);
+        break;
+      case 3:
+        color = getResources().getColor(R.color.cOrange);
+        break;
+      case 4:
+        color = getResources().getColor(R.color.cPurple);
+        break;
+    }
+    return color;
   }
 }

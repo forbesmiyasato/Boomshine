@@ -82,4 +82,15 @@ public class Level {
         this.mCirclesHit++;
     }
 
+    public void nextLevel () {
+        this.mLevelNumber++;
+        this.mLevelScore = 0;
+        this.mCirclesHit = 0;
+        this.mHitsRequired = mLevelNumber;
+        this.mTotalCircles = mLevelNumber * CIRCLE_MULTIPLIER;
+    }
+
+    public int getLevelNumber () {
+        return this.mLevelNumber;
+    }
 }

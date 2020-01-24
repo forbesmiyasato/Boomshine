@@ -9,7 +9,6 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
 
   private int mExpandingSpeed;
   private float mScale;
-  private float mRadius;
   private int mExplosionProgress;
   private boolean bExploding = true;
   protected final int mStartPositionTop;
@@ -19,39 +18,9 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
                                int leftBound, int rightBound, int expandingSpeed, float radius)
   {
     super(context, display, drawable, topCoord, leftCoord, speed, topBound, bottomBound, leftBound, rightBound);
-    mRadius = getSpriteWidth() / 2;
-    mExplosionProgress = getSpriteWidth();
+    mExplosionProgress = mRadius;
     mStartPositionTop = topCoord;
     mStartPositionLeft = leftCoord;
-  }
-
-//  @Override
-//  public void doDraw(Canvas canvas) {
-//
-//  }
-
-//  public void expandCircle() {
-//    Bitmap bitmap = getBitmap();
-//    long currentTimeMillis = System.currentTimeMillis();
-//    long fiveSeconds = 5000;
-//    int incrementWidth = 30;
-//
-////    while (System.currentTimeMillis() - currentTimeMillis < fiveSeconds) {
-////      float aspectRatio = bitmap.getWidth() /
-////              (float) bitmap.getHeight();
-////      int width = getDisplayWidth() + incrementWidth;
-////      int height = Math.round(width / aspectRatio);
-////
-////      bitmap = Bitmap.createScaledBitmap(
-////              bitmap, width, height, false);
-////      setmBitmapImage(bitmap);
-//////      setLeftCoordinate(getLeftCoordinate() - getSpriteWidth());
-////    }
-//
-//  }
-
-  public void retractCircle() {
-
   }
 
   public float getRadius () {
@@ -81,36 +50,24 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
     return bCollided;
   }
 
-  private boolean isDoneRetracting () {
-    return false;
-  }
-
   public boolean handleExploding () {
     int positionShift;
 
-    if (mExplosionProgress >= 300) {
+    if (mExplosionProgress >= 100) {
       bExploding = false;
     }
-    mExplosionProgress += bExploding ? 2 : -2; //TODO ASK
-    Bitmap bitmap = getBitmap();
-    float aspectRatio = bitmap.getWidth() /
-              (float) bitmap.getHeight();
-      int width = mExplosionProgress;
-      int height = Math.round(width / aspectRatio);
+    mExplosionProgress += bExploding ? 2 : -4; //TODO ASK
 
-      bitmap = Bitmap.createScaledBitmap(
-              bitmap, width, height, true);
-      setmBitmapImage(bitmap);
-
-    mRadius = width / 2;
+    mRadius = mExplosionProgress;
 
 //    setLeftCoordinate(mStartPositionLeft - ((width - getSpriteWidth()) / 2));
 //    setTopCoordinate(mStartPositionTop - ((width - getSpriteWidth()) / 2));
 
-    positionShift = bExploding ? -1 : 1;
+    Log.d("EXPLOSION", String.valueOf(mRadius));
+    positionShift = bExploding ? -1 : 2;
     setLeftCoordinate(getLeftCoordinate() + positionShift);
     setTopCoordinate(getTopCoordinate() + positionShift);
 
-    return mExplosionProgress <= 2;
+    return mExplosionProgress <= 0;
   }
 }

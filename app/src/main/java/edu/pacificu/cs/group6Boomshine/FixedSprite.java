@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.Display;
 import android.widget.ImageView;
@@ -20,14 +22,13 @@ public class FixedSprite extends ImageView
 {
   protected Bitmap mBitmapImage;
   protected Display mDisplay;
-  private int mResID;
   protected int mTopCoordinate;
   protected int mLeftCoordinate;
-  private int mWidth;
-  private int mHeight;
   private Context mContext;
   private static int mCount = 0;
-
+  private Paint mPaint;
+  protected int mRadius = BoomshineView.DEFAULT_BALL_RADIUS;
+  private int mColor;
   /**
    * Constructor that initializes the values associated with the sprite.
    *
@@ -48,23 +49,17 @@ public class FixedSprite extends ImageView
    *
    * @since 1.0
    */
-  public FixedSprite (Context context, Display display, int drawable,
+  public FixedSprite (Context context, Display display, int color,
                       int topCoord, int leftCoord)
   {
     super (context);
-
-    BitmapFactory.Options opts = new BitmapFactory.Options ();
-    opts.inJustDecodeBounds = true;
-    mBitmapImage = BitmapFactory.decodeResource (context.getResources (),
-            drawable);
     mContext = context;
     mDisplay = display;
     mTopCoordinate = topCoord;
     mLeftCoordinate = leftCoord;
-    mWidth = mBitmapImage.getWidth ();
-    mHeight = mBitmapImage.getHeight ();
-    mResID = drawable;
+    mColor = color;
     ++mCount;
+    mPaint = new Paint();
   }
 
   /**
@@ -77,32 +72,12 @@ public class FixedSprite extends ImageView
    */
   public void doDraw (Canvas canvas)
   {
-    canvas.drawBitmap (mBitmapImage, (this.mLeftCoordinate),
-            this.mTopCoordinate, null);
-  }
+//    canvas.drawBitmap (mBitmapImage, (this.mLeftCoordinate),
+//            this.mTopCoordinate, null);
+    mPaint.setColor(mColor);
+    mPaint.setAntiAlias(true);
+    canvas.drawCircle(mLeftCoordinate, mTopCoordinate, mRadius, mPaint);
 
-  /**
-   * Retrieves the bitmap.
-   *
-   * @return the bitmap
-   *
-   * @since 1.0
-   */
-  public Bitmap getBitmap ()
-  {
-    return mBitmapImage;
-  }
-
-  /**
-   * Retrieves the sprite's reference id.
-   *
-   * @return the reference id
-   *
-   * @since 1.0
-   */
-  public int getResID ()
-  {
-    return this.mResID;
   }
 
   /**
@@ -141,55 +116,4 @@ public class FixedSprite extends ImageView
     return mCount;
   }
 
-  /**
-   * Retrieves the width of the sprite.
-   *
-   * @return the width of the sprite
-   *
-   * @since 1.0
-   */
-  public int getSpriteWidth ()
-  {
-    return mWidth;
-  }
-
-  /**
-   * Retrieves the height of the sprite
-   *
-   * @return the height of the sprite
-   *
-   * @since 1.0
-   */
-  public int getSpriteHeight ()
-  {
-    return mHeight;
-  }
-
-  /**
-   * Retrieves the height of the display.
-   *
-   * @return the height of the display
-   *
-   * @since 1.0
-   */
-  public int getDisplayHeight ()
-  {
-    return mContext.getResources ().getDisplayMetrics ().heightPixels;
-  }
-
-  /**
-   * Retrieves the width of the display.
-   *
-   * @return the width of the display
-   *
-   * @since 1.0
-   */
-  public int getDisplayWidth ()
-  {
-    return mContext.getResources ().getDisplayMetrics ().widthPixels;
-  }
-
-  public void setmBitmapImage(Bitmap mBitmapImage) {
-    this.mBitmapImage = mBitmapImage;
-  }
 }
