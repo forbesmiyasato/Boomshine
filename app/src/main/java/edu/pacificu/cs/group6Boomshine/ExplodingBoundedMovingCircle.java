@@ -77,11 +77,8 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
 
     mRadius = mExplosionProgress;
 
-    positionShift = bExploding ? (explosionRate / -2) : explosionRate;
-
-//    Log.d("Handle", "Explosion: " + explosionRate / -2);
-    setLeftCoordinate(getLeftCoordinate() + positionShift);
-    setTopCoordinate(getTopCoordinate() + positionShift);
+    setLeftCoordinate(getLeftCoordinate());
+    setTopCoordinate(getTopCoordinate());
 
     return mExplosionProgress <= 0;
   }
