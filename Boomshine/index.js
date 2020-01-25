@@ -23,8 +23,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 /**
  *  App Configuration
  */
+require('dotenv').config()
+
 app.use(express.json());
-mongoose.connect("mongodb+srv://forbes:Forbesforbes11@cluster0-lxt5l.mongodb.net/Boomshine?retryWrites=true&w=majority", {
+mongoose.connect(`mongodb+srv://forbes:${process.env.DB_PW}@cluster0-lxt5l.mongodb.net/Boomshine?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true
@@ -99,7 +101,7 @@ app.post('/register', (req, res, next) => {
 
     NewUser.save()
         .then(() => res.json('User Added'))
-        .catch(err => res.status(400).json('Error: ' + err));
+        .catch(() => res.json('Username already chosen'))
 })
 
 //Login
@@ -110,11 +112,11 @@ app.post('/login', (req, res, next) => {
     var Name = req.body.Name;
     var inputPassword = req.body.Password;
     User.findOne({ Name: Name}, function(err, user){
-        console.log(user);
         if (!user)
         {
             res.json('Login Fail');
             console.log('Login Fail');
+            return;
         }
         var Salt = user.Salt;
         var HashedPassword = user.HashedPassword;

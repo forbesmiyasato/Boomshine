@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
     {
-        Name: String,
+        Name: {type : String , unique : true, required : true},
         HashedPassword: String,
         Salt : String,
         HighScore: Number,
