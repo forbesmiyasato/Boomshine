@@ -43,7 +43,7 @@ public class SuperballExplode {
 
         cRetList.add (new ExplodingBoundedMovingCircle(eType, context, display, drawable, topCoord,
                 leftCoord, speed, topBound, bottomBound, leftBound, rightBound,
-                radius * EXPANTION_MULTIPLIER));
+                radius));
 
         return cRetList;
     }

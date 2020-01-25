@@ -64,8 +64,8 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
 
   public boolean handleExploding () {
     int explosionRate = this.mStrategy.handleExploding();
-
-    if (mExplosionProgress >= (6 * mStartRadius)) {
+    int explosionRadiusMult = this.mStrategy.getRadiusMultiplier();
+    if (mExplosionProgress >= (explosionRadiusMult * mStartRadius)) {
       bExploding = false;
     }
 

@@ -167,7 +167,7 @@ public class BoomshineView extends ImageView {
               color, (int) event.getY(),
               (int) event.getX(), 0, 0, mHeight,
               0, mWidth, 0, 25);*/
-      mExplodingSprites.addAll(mcFactory.create(ExplodingType.NORMAL, getContext(), getDisplay(),
+      mExplodingSprites.addAll(mcFactory.create(ExplodingType.MULTI, getContext(), getDisplay(),
               color, (int) event.getY() + DEFAULT_BALL_RADIUS / 2,
               (int) event.getX() + DEFAULT_BALL_RADIUS / 2, 0, 0, mHeight,
               0, mWidth, DEFAULT_BALL_RADIUS));

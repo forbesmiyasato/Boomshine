@@ -5,4 +5,9 @@ public class handleExplodingNormal implements IExpansionStrategy {
     public int handleExploding() {
         return 2;
     }
+
+    @Override
+    public int getRadiusMultiplier() {
+        return 6;
+    }
 }
