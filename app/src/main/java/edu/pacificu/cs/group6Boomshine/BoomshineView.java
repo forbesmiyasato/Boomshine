@@ -168,10 +168,10 @@ public class BoomshineView extends ImageView {
               color, (int) event.getY(),
               (int) event.getX(), 0, 0, mHeight,
               0, mWidth, 0, 25);*/
-      mExplodingSprites.addAll(mcFactory.create(ExplodingType.ULTIMATE, getContext(), getDisplay(),
+      mExplodingSprites.addAll(mcFactory.create(ExplodingType.NORMAL, getContext(), getDisplay(),
               color, (int) event.getY(),
               (int) event.getX(), 0, 0, mHeight,
-              0, mWidth, 0, DEFAULT_BALL_RADIUS));
+              0, mWidth, DEFAULT_BALL_RADIUS));
     }
 
     firstClick = false;
@@ -190,11 +190,11 @@ public class BoomshineView extends ImageView {
       int speed = 3;
       //int speed = new Random().nextInt(20) + 2;
 
-      ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(mContext, mDisplay,
-              color, topBound - DEFAULT_BALL_RADIUS,
+      ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(ExplodingType.NORMAL,
+              mContext, mDisplay, color, topBound - DEFAULT_BALL_RADIUS,
               leftBound - DEFAULT_BALL_RADIUS, speed, 0,
               mHeight, 0,
-              mWidth, 0, DEFAULT_BALL_RADIUS);
+              mWidth, DEFAULT_BALL_RADIUS);
       mMovingSprites.add(cNew);
     }
   }
