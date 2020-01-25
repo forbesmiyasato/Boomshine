@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static edu.pacificu.cs.group6Boomshine.FixedSprite.DEFAULT_BALL_RADIUS;
+
 /**
  * Defines the View for displaying the animation.
  *
@@ -23,7 +25,6 @@ import java.util.Random;
 
 @SuppressLint("AppCompatCustomView")
 public class BoomshineView extends ImageView {
-  static final int DEFAULT_BALL_RADIUS = 30;
   private final int MAX_LEVEL_ATTEMPTS = 3;
   ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
   ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;

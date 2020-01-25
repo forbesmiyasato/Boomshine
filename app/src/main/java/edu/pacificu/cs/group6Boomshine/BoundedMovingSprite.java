@@ -1,8 +1,6 @@
 package edu.pacificu.cs.group6Boomshine;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.Display;
 
 public class BoundedMovingSprite extends MovingSprite {
@@ -23,12 +21,6 @@ public class BoundedMovingSprite extends MovingSprite {
   }
 
   public void hitBound () {
-    BitmapFactory.Options dimensions = new BitmapFactory.Options();
-    dimensions.inJustDecodeBounds = true;
-    Bitmap mBitmap = BitmapFactory.decodeResource(getResources(),
-            mDrawable, dimensions);
-    int height = dimensions.outHeight;
-    int width =  dimensions.outWidth;
     if (getTopCoordinate() <= mTopBound) {
       mDy = mDy * -1;
     }
@@ -36,11 +28,11 @@ public class BoundedMovingSprite extends MovingSprite {
     {
       mDx = mDx * -1;
     }
-    if (height + getTopCoordinate() >= mBottomBound)
+    if (DEFAULT_BALL_RADIUS * 2 + getTopCoordinate() >= mBottomBound)
     {
       mDy = mDy * -1;
     }
-    if (width + getLeftCoordinate() >= mRightBound)
+    if (DEFAULT_BALL_RADIUS * 2 + getLeftCoordinate() >= mRightBound)
     {
       mDx = mDx * -1;
     }

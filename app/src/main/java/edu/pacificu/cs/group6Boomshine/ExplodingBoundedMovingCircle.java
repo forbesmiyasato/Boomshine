@@ -1,7 +1,6 @@
 package edu.pacificu.cs.group6Boomshine;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Display;
 
 public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
@@ -57,13 +56,8 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
 
     if (Math.pow(dX, SQUARE) + Math.pow(dY, SQUARE) <= Math.pow(dRadius, SQUARE))
     {
-      Log.d("collide", "Circles collided");
       mSpeed = 0;
       bCollided = true;
-      Log.d("collide", "this.x = " + dX);
-      Log.d("collide", "this.y = " + dY);
-      Log.d("collide", "other.x = " + mRadius);
-      Log.d("collide", "other.y = " + cOtherCircle.mRadius);
     }
 
 
@@ -85,7 +79,7 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
 
     positionShift = bExploding ? (explosionRate / -2) : explosionRate;
 
-    Log.d("Handle", "Explosion: " + explosionRate / -2);
+//    Log.d("Handle", "Explosion: " + explosionRate / -2);
     setLeftCoordinate(getLeftCoordinate() + positionShift);
     setTopCoordinate(getTopCoordinate() + positionShift);
 
