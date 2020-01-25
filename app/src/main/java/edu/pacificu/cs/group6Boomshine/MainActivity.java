@@ -1,7 +1,5 @@
 package edu.pacificu.cs.group6Boomshine;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,9 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.userauth.Client;
-import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.userauth.Service;
-import io.reactivex.Scheduler;
+import androidx.appcompat.app.AppCompatActivity;
+
+import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.userauth.RetrofitClient;
+import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.userauth.HttpService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
   CompositeDisposable mcCompositeDisposable;
 
-  private Service mService;
+  private HttpService mService;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Init service
     mcCompositeDisposable = new CompositeDisposable();
-    Retrofit retrofitClient = Client.getInstance();
-    mService = retrofitClient.create(Service.class);
+    Retrofit retrofitClient = RetrofitClient.getInstance();
+    mService = retrofitClient.create(HttpService.class);
 
     //Init view
     mLoginButton = findViewById(R.id.register);

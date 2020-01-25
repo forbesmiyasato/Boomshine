@@ -9,12 +9,17 @@ const path = require("path");
 const mongodb = require("mongodb");
 const crypto = require("crypto");
 var mongoose = require("mongoose");
+var bodyParser = require('body-parser');
+
 /**
  * App Variables
  */
 
 const app = express();
 const port = process.env.PORT || "8000";
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
 /**
  *  App Configuration
  */
@@ -70,6 +75,7 @@ app.get("/", (req, res) => {
 
 //Sign up
 app.post('/register', (req, res, next) => {
+    console.log("login body" + req.body.Password);
     var plainPassword = req.body.Password;
     var hashData = saltHashPassword(plainPassword);
     var HashedPassword = hashData.passwordHash;
@@ -91,8 +97,6 @@ app.post('/register', (req, res, next) => {
         PWUltimate
     });
 
-    console.log(NewUser);
-
     NewUser.save()
         .then(() => res.json('User Added'))
         .catch(err => res.status(400).json('Error: ' + err));
@@ -100,10 +104,18 @@ app.post('/register', (req, res, next) => {
 
 //Login
 app.post('/login', (req, res, next) => {
+    console.log("login body" + req);
+    console.log("login body" + req.body.Password);
+
     var Name = req.body.Name;
     var inputPassword = req.body.Password;
     User.findOne({ Name: Name}, function(err, user){
         console.log(user);
+        if (!user)
+        {
+            res.json('Login Fail');
+            console.log('Login Fail');
+        }
         var Salt = user.Salt;
         var HashedPassword = user.HashedPassword;
         var HashedInputPassword = checkHashPassword(inputPassword, Salt).passwordHash;
