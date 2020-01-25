@@ -3,7 +3,6 @@ package edu.pacificu.cs.group6Boomshine;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -12,7 +11,6 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -80,7 +78,7 @@ public class BoomshineView extends ImageView {
   public void onDraw(Canvas canvas) {
     if (!mGameEnd){
       ExplodingBoundedMovingCircle cCollidedMovingCircle = null;
-      ExplodingBoundedMovingCircle mExplodedCircle = null;
+      ExplodingBoundedMovingCircle cExplodedCircle = null;
       mHeight = getHeight();
       mWidth = getWidth();
 
@@ -92,7 +90,7 @@ public class BoomshineView extends ImageView {
       for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
         explodingSprite.doDraw(canvas);
         if (explodingSprite.handleExploding()) {
-          mExplodedCircle = explodingSprite;
+          cExplodedCircle = explodingSprite;
         }
       }
 
@@ -107,8 +105,8 @@ public class BoomshineView extends ImageView {
         }
       }
 
-      if (mExplodedCircle != null) {
-        mExplodingSprites.remove(mExplodedCircle);
+      if (cExplodedCircle != null) {
+        mExplodingSprites.remove(cExplodedCircle);
       }
       if (cCollidedMovingCircle != null) {
         mExplodingSprites.add(cCollidedMovingCircle);
@@ -169,8 +167,8 @@ public class BoomshineView extends ImageView {
               (int) event.getX(), 0, 0, mHeight,
               0, mWidth, 0, 25);*/
       mExplodingSprites.addAll(mcFactory.create(ExplodingType.NORMAL, getContext(), getDisplay(),
-              color, (int) event.getY(),
-              (int) event.getX(), 0, 0, mHeight,
+              color, (int) event.getY() + DEFAULT_BALL_RADIUS / 2,
+              (int) event.getX() + DEFAULT_BALL_RADIUS / 2, 0, 0, mHeight,
               0, mWidth, DEFAULT_BALL_RADIUS));
     }
 

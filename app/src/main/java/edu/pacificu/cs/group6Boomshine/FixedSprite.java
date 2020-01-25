@@ -75,7 +75,6 @@ public class FixedSprite extends ImageView
 //            this.mTopCoordinate, null);
     mPaint.setColor(mColor);
     canvas.drawCircle(mLeftCoordinate, mTopCoordinate, mRadius, mPaint);
-    Log.d("Height", "Height:" + getWidth());
   }
 
   /**
