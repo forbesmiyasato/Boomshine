@@ -23,7 +23,7 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
     mStartPositionTop = topCoord;
     meType = eType;
 
-    switch (eType)
+    switch (meType)
     {
       case NORMAL:
         mStrategy = new handleExplodingNormal();

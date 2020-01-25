@@ -3,6 +3,8 @@ package edu.pacificu.cs.group6Boomshine;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -38,6 +40,7 @@ public class BoomshineView extends ImageView {
   private Level mLevel;
   private Paint mPaint;
   private MediaPlayer mcMediaPlayer;
+  private IconHandler mcIconHandler;
   private boolean donePlayingSound = false;
   private int mTotalScore;
   private int mNumAttempts;
@@ -66,6 +69,7 @@ public class BoomshineView extends ImageView {
     mNumAttempts = 0;
     mGameEnd = false;
     mcFactory = new ExplodingCircleFactory();
+    mcIconHandler = new IconHandler(context);
   }
 
   /**
@@ -127,11 +131,14 @@ public class BoomshineView extends ImageView {
       mPaint.setColor(getResources().getColor(R.color.cWhite));
       setTextSizeForWidth(mPaint, mWidth / 4, mLevel.getHitInfo());
       //mPaint.setTextSize(50);
-      canvas.drawText(mLevel.getHitInfo(), 10, mHeight - 50, mPaint);
-      canvas.drawText("Total Score: " + mTotalScore, mWidth - 2 * (mWidth / 3),
-              mHeight - 50, mPaint);
+      canvas.drawText(mLevel.getHitInfo(), 10, 50, mPaint);
+      canvas.drawText("Level: " + mCurrentLevel, mWidth - 8 * (mWidth / 15), 50, mPaint);
       canvas.drawText("Attempts: " + (mNumAttempts + 1) + " / " + MAX_LEVEL_ATTEMPTS,
-              mWidth - (mWidth / 4), mHeight - 50, mPaint);
+              mWidth - (mWidth / 4), 50, mPaint);
+
+      canvas.drawText("Total Score: " + mTotalScore, 10,mHeight - 50, mPaint);
+
+      mcIconHandler.drawIcons(canvas);
 
       super.onDraw(canvas);
       invalidate();
@@ -167,7 +174,7 @@ public class BoomshineView extends ImageView {
               color, (int) event.getY(),
               (int) event.getX(), 0, 0, mHeight,
               0, mWidth, 0, 25);*/
-      mExplodingSprites.addAll(mcFactory.create(ExplodingType.MULTI, getContext(), getDisplay(),
+      mExplodingSprites.addAll(mcFactory.create(ExplodingType.SUPER, getContext(), getDisplay(),
               color, (int) event.getY() + DEFAULT_BALL_RADIUS / 2,
               (int) event.getX() + DEFAULT_BALL_RADIUS / 2, 0, 0, mHeight,
               0, mWidth, DEFAULT_BALL_RADIUS));
