@@ -106,8 +106,6 @@ app.post('/register', (req, res, next) => {
 
 //Login
 app.post('/login', (req, res, next) => {
-    console.log("login body" + req);
-    console.log("login body" + req.body.Password);
 
     var Name = req.body.Name;
     var inputPassword = req.body.Password;

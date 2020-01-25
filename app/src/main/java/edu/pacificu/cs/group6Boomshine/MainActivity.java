@@ -154,6 +154,12 @@ public class MainActivity extends AppCompatActivity {
               @Override
               public void accept(String response) throws Exception {
                 Toast.makeText(MainActivity.this, "" + response, Toast.LENGTH_SHORT).show();
+                response = response.replace("\"", ""); //Returned response has ""x"" format
+                if (response.equals("User Added"))
+                {
+                  startActivity(new Intent(MainActivity.this,
+                          BoomshineGame.class));
+                }
               }
             }));
   }
@@ -184,6 +190,12 @@ public class MainActivity extends AppCompatActivity {
               @Override
               public void accept(String response) throws Exception {
                 Toast.makeText(MainActivity.this, "" + response, Toast.LENGTH_SHORT).show();
+                response = response.replace("\"", ""); //Returned response has ""x"" format
+                if (response.equals("Login Success"))
+                {
+                  startActivity(new Intent(MainActivity.this,
+                          BoomshineGame.class));
+                }
               }
             }));
   }
