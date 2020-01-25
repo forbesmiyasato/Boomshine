@@ -7,16 +7,17 @@ import android.view.Display;
 
 public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
 
-  private int mExpandingSpeed;
-  private float mScale;
   private int mExplosionProgress;
   private boolean bExploding = true;
   protected final int mStartPositionTop;
   private final int mStartPositionLeft;
   private int mStartRadius;
-  ExplodingBoundedMovingCircle(Context context, Display display, int drawable,
+  private ExplodingType meType;
+  private IExpansionStrategy mStrategy;
+
+  ExplodingBoundedMovingCircle(ExplodingType eType, Context context, Display display, int drawable,
                                int topCoord, int leftCoord, int speed, int topBound, int bottomBound,
-                               int leftBound, int rightBound, int expandingSpeed, int radius)
+                               int leftBound, int rightBound, int radius)
   {
     super(context, display, drawable, topCoord, leftCoord, speed, topBound, bottomBound, leftBound, rightBound);
     mRadius = radius;
@@ -24,6 +25,23 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
     mExplosionProgress = mRadius;
     mStartPositionTop = topCoord;
     mStartPositionLeft = leftCoord;
+    meType = eType;
+
+    switch (eType)
+    {
+      case NORMAL:
+        mStrategy = new handleExplodingNormal();
+        break;
+      case SUPER:
+        mStrategy = new handleExplodingSuper();
+        break;
+      case MULTI:
+        mStrategy = new handleExplodingMulti();
+        break;
+      case ULTIMATE:
+        mStrategy = new handleExplodingUltra();
+        break;
+    }
   }
 
   public float getRadius () {
@@ -56,6 +74,8 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
   public boolean handleExploding () {
     int positionShift;
 
+    mExplosionProgress = this.mStrategy.handleExploding();
+
     if (mExplosionProgress >= (6 * mStartRadius)) {
       bExploding = false;
     }
@@ -64,10 +84,6 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
 
     mRadius = mExplosionProgress;
 
-//    setLeftCoordinate(mStartPositionLeft - ((width - getSpriteWidth()) / 2));
-//    setTopCoordinate(mStartPositionTop - ((width - getSpriteWidth()) / 2));
-
-    Log.d("EXPLOSION", String.valueOf(mRadius));
     positionShift = bExploding ? -1 : 2;
     setLeftCoordinate(getLeftCoordinate() + positionShift);
     setTopCoordinate(getTopCoordinate() + positionShift);

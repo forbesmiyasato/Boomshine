@@ -28,11 +28,11 @@ public class MultiballExplode {
      * @return An ArrayList containing two expanding circles
      */
 
-    public ArrayList<ExplodingBoundedMovingCircle> createMulti(Context context, Display display,
+    public ArrayList<ExplodingBoundedMovingCircle> createMulti(ExplodingType eType, Context context, Display display,
                                                           int drawable, int topCoord,
                                                           int leftCoord, int speed, int topBound,
                                                           int bottomBound, int leftBound,
-                                                          int rightBound, int expandingSpeed,
+                                                          int rightBound,
                                                           int radius) {
 
         ArrayList<ExplodingBoundedMovingCircle> cRetList = new ArrayList<>();
@@ -44,12 +44,12 @@ public class MultiballExplode {
         int randomXCoord = cRandom.nextInt(cDisplaySize.width());
         int randomYCoord = cRandom.nextInt(cDisplaySize.height());
 
-        cRetList.add (new ExplodingBoundedMovingCircle(context, display, drawable, topCoord,
-                leftCoord, speed, topBound, bottomBound, leftBound, rightBound, expandingSpeed,
+        cRetList.add (new ExplodingBoundedMovingCircle(eType, context, display, drawable, topCoord,
+                leftCoord, speed, topBound, bottomBound, leftBound, rightBound,
                 radius));
 
-        cRetList.add (new ExplodingBoundedMovingCircle(context, display, drawable, randomYCoord,
-                randomXCoord, speed, topBound, bottomBound, leftBound, rightBound, expandingSpeed,
+        cRetList.add (new ExplodingBoundedMovingCircle(eType, context, display, drawable, randomYCoord,
+                randomXCoord, speed, topBound, bottomBound, leftBound, rightBound,
                 radius));
 
         return cRetList;

@@ -30,32 +30,31 @@ public class ExplodingCircleFactory {
                                                                    int speed, int topBound,
                                                                    int bottomBound, int leftBound,
                                                                    int rightBound,
-                                                                   int expandingSpeed,
                                                                    int radius){
         mcCircles = new ArrayList<>();
 
         switch (eType)
         {
             case NORMAL:
-                mcCircles.add(new ExplodingBoundedMovingCircle(context, display, drawable,
+                mcCircles.add(new ExplodingBoundedMovingCircle(eType, context, display, drawable,
                         topCoord, leftCoord, speed, topBound, bottomBound, leftBound,
-                        rightBound, expandingSpeed, radius));
+                        rightBound, radius));
                 break;
             case MULTI:
                 MultiballExplode cMulti = new MultiballExplode();
-                mcCircles.addAll(cMulti.createMulti(context, display, drawable,
+                mcCircles.addAll(cMulti.createMulti(eType, context, display, drawable,
                         topCoord, leftCoord, speed, topBound, bottomBound, leftBound,
-                        rightBound, expandingSpeed, radius));
+                        rightBound, radius));
             case SUPER:
                 SuperballExplode cSuper = new SuperballExplode();
-                mcCircles.addAll(cSuper.createSuper(context, display, drawable,
+                mcCircles.addAll(cSuper.createSuper(eType, context, display, drawable,
                         topCoord, leftCoord, speed, topBound, bottomBound, leftBound,
-                        rightBound, expandingSpeed, radius));
+                        rightBound, radius));
             case ULTIMATE:
                 UltraballExplode cUltimate = new UltraballExplode();
-                mcCircles.addAll(cUltimate.createUltra(context, display, drawable,
+                mcCircles.addAll(cUltimate.createUltra(eType, context, display, drawable,
                         topCoord, leftCoord, speed, topBound, bottomBound, leftBound,
-                        rightBound, expandingSpeed, radius));
+                        rightBound, radius));
             default:
                 break;
         }
