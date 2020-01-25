@@ -3,7 +3,6 @@ package edu.pacificu.cs.group6Boomshine;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -70,7 +69,6 @@ public class BoomshineGame extends AppCompatActivity {
   public void onPlayClicked (View cView)
   {
     setContentView(mGraphicsView);
-    Log.d("BoomshineGame", String.valueOf(mPWMulti));
   }
 
   private void getUserData(String name) {

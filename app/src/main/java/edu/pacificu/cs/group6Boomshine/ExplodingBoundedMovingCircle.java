@@ -8,7 +8,6 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
   private int mExplosionProgress;
   private boolean bExploding = true;
   protected final int mStartPositionTop;
-  private final int mStartPositionLeft;
   private int mStartRadius;
   private ExplodingType meType;
   private IExpansionStrategy mStrategy;
@@ -22,7 +21,6 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
     mStartRadius = radius;
     mExplosionProgress = mRadius;
     mStartPositionTop = topCoord;
-    mStartPositionLeft = leftCoord;
     meType = eType;
 
     switch (eType)
@@ -65,8 +63,6 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
   }
 
   public boolean handleExploding () {
-    int positionShift;
-
     int explosionRate = this.mStrategy.handleExploding();
 
     if (mExplosionProgress >= (6 * mStartRadius)) {
