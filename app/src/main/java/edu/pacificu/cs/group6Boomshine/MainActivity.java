@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
   EditText mLoginUsername;
   EditText mLoginPassword;
-
+  String mName;
   TextView mCreateAccount;
 
   CompositeDisposable mcCompositeDisposable;
@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void registerUser(String name, String password) {
+    mName = name;
     mcCompositeDisposable.add(mService.registerUser(name, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -157,8 +158,10 @@ public class MainActivity extends AppCompatActivity {
                 response = response.replace("\"", ""); //Returned response has ""x"" format
                 if (response.equals("User Added"))
                 {
-                  startActivity(new Intent(MainActivity.this,
-                          BoomshineGame.class));
+                  Intent cIntent = new Intent(MainActivity.this,
+                          BoomshineGame.class);
+                  cIntent.putExtra("Username", mName);
+                  startActivity(cIntent);
                 }
               }
             }));
@@ -182,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
       Toast.makeText(this, "Password cannot be empty", Toast.LENGTH_SHORT).show();
       return;
     }
-
+    mName = name;
     mcCompositeDisposable.add(mService.loginUser(name, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -193,8 +196,10 @@ public class MainActivity extends AppCompatActivity {
                 response = response.replace("\"", ""); //Returned response has ""x"" format
                 if (response.equals("Login Success"))
                 {
-                  startActivity(new Intent(MainActivity.this,
-                          BoomshineGame.class));
+                  Intent cIntent = new Intent(MainActivity.this,
+                        BoomshineGame.class);
+                  cIntent.putExtra("Username", mName);
+                  startActivity(cIntent);
                 }
               }
             }));

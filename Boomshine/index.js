@@ -129,7 +129,21 @@ app.post('/login', (req, res, next) => {
             console.log('Login Fail');
         }
     });
+})
 
+//Get user data
+app.get('/GetUserData', (req, res, next) => {
+    var Name = req.query.Name;
+    User.findOne({ Name: Name}, function(err, user){
+        if (!user)
+        {
+            res.json('User not found');
+            console.log('User not found');
+            return;
+        }
+        console.log(user);
+        res.json(user);
+    });
 })
 
 /**
