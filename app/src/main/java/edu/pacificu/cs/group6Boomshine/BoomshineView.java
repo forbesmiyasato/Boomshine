@@ -121,6 +121,7 @@ public class BoomshineView extends ImageView {
         for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
           if (coin.collide(explodingSprite)) {
             cCollidedCoin = coin;
+            mcGameReference.setPoints(mcGameReference.getPoints() + 1);
           }
         }
       }
@@ -168,6 +169,7 @@ public class BoomshineView extends ImageView {
               mWidth - (mWidth / 4), 50, mPaint);
 
       canvas.drawText("Total Score: " + mTotalScore, 10,mHeight - 50, mPaint);
+      canvas.drawText("Points: " + mcGameReference.getPoints(), 10,mHeight - 100, mPaint);
 
       mcIconHandler.drawIcons(canvas, mUserMultiPowerups, mUserUltraPowerups, mUserSuperPowerups);
 
