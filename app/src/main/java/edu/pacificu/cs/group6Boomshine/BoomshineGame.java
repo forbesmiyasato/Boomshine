@@ -55,6 +55,8 @@ public class BoomshineGame extends AppCompatActivity {
 
     mPowerUpView = new PowerUpView(this, mDisplay);
 
+    mGraphicsView = new BoomshineView(this, mDisplay);
+    mGraphicsView.setBackgroundColor(Color.BLACK);
     mHighScoreView = new HighScoreView(this);
     setContentView(R.layout.activity_boomshine_game);
 
@@ -78,9 +80,6 @@ public class BoomshineGame extends AppCompatActivity {
     if (mName != null) {
       getUserData(mName);
     }
-
-    mGraphicsView = new BoomshineView(this, mDisplay);
-    mGraphicsView.setBackgroundColor(Color.BLACK);
   }
 
   @Override
