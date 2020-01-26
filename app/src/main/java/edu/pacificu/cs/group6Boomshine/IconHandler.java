@@ -1,15 +1,12 @@
 package edu.pacificu.cs.group6Boomshine;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.Icon;
+import android.graphics.Paint;
 
 import java.util.ArrayList;
-
-import edu.pacificu.cs.group6Boomshine.R;
 
 public class IconHandler {
 
@@ -21,8 +18,9 @@ public class IconHandler {
     IconHandler(Context context)
     {
         mcIcons = new ArrayList<>();
-        mcIconPanel = new Rect (0, 0, 0, 0);
+        mcIconPanel = new Rect (Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 0);
         IconRectangle cIconRect;
+
 
         for (ExplodingType eType : ExplodingType.values())
         {
@@ -45,11 +43,11 @@ public class IconHandler {
             if (!cIconRect.isSet())
             {
                 int left = mWidth - (mWidth / 15) * (inc + 2);
-                int right = mHeight - 150;
-                int top = (mWidth - (mWidth / 15) * (inc + 2)) + cIconRect.getWidth();
+                int top = mHeight - 150;
+                int right = (mWidth - (mWidth / 15) * (inc + 2)) + cIconRect.getWidth();
                 int bottom = (mHeight - 150) + cIconRect.getHeight();
 
-                cIconRect.setRect(left, right, top, bottom);
+                cIconRect.setRect(left, top, right, bottom);
                 inc += 2;
 
                 if (left < mcIconPanel.left)
@@ -69,21 +67,31 @@ public class IconHandler {
                     mcIconPanel.set(mcIconPanel.left, mcIconPanel.top, mcIconPanel.right, bottom);
                 }
             }
-
             cIconRect.draw(canvas);
         }
+    }
 
-
+    public void resetIcons()
+    {
+        for (IconRectangle cIconRect : mcIcons)
+        {
+            cIconRect.reset();
+        }
     }
 
     public boolean checkIconBounds (int xTouchPos, int yTouchPos)
     {
         return xTouchPos > this.mcIconPanel.left && xTouchPos < this.mcIconPanel.right &&
-                yTouchPos > this.mcIconPanel.bottom && yTouchPos < this.mcIconPanel.top;
+                yTouchPos < this.mcIconPanel.bottom && yTouchPos > this.mcIconPanel.top;
     }
 
     public ExplodingType checkPress(int xTouchPos, int yTouchPos)
     {
+        for (IconRectangle cIconRect : mcIcons)
+        {
+            cIconRect.reset();
+        }
+
         for (IconRectangle cIconRect : mcIcons)
         {
             if (cIconRect.checkPress(xTouchPos, yTouchPos))

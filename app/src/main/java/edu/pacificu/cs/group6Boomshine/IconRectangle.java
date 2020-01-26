@@ -8,29 +8,38 @@ import android.graphics.Rect;
 
 public class IconRectangle {
     private Rect mcBoundingRect;
-    private Bitmap mBitmap;
+    private Bitmap mPassiveBitmap;
+    private Bitmap mSelectedBitmap;
     private ExplodingType meType;
-    private boolean set;
+    private boolean mbSet;
+    private boolean mbIsSelected;
 
     IconRectangle (ExplodingType eType, Context context)
     {
         this.mcBoundingRect = new Rect();
         this.meType = eType;
-        set = false;
+        mbSet = false;
+        mbIsSelected = false;
 
         switch (meType)
         {
             case MULTI:
-                mBitmap = BitmapFactory.decodeResource(context.getResources(),
+                mPassiveBitmap = BitmapFactory.decodeResource(context.getResources(),
                         R.drawable.multi_ball);
+                mSelectedBitmap = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.multi_ball_selected);
                 break;
             case SUPER:
-                mBitmap = BitmapFactory.decodeResource(context.getResources(),
+                mPassiveBitmap = BitmapFactory.decodeResource(context.getResources(),
                         R.drawable.super_ball);
+                mSelectedBitmap = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.super_ball_selected);
                 break;
             case ULTIMATE:
-                mBitmap = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.ultimate_ball);
+                mPassiveBitmap = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.ultra_ball);
+                mSelectedBitmap = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.ultra_ball_selected);
                 break;
             default:
                 break;
@@ -39,25 +48,32 @@ public class IconRectangle {
 
     }
 
-    public void setRect (int left, int right, int top, int bottom)
+    public void setRect (int left, int top, int right, int bottom)
     {
-        this.mcBoundingRect.set(left, right, top, bottom);
-        this.set = true;
+        this.mcBoundingRect.set(left, top, right, bottom);
+        this.mbSet = true;
     }
 
     public void draw (Canvas canvas)
     {
-        canvas.drawBitmap(this.mBitmap, null, this.mcBoundingRect, null);
+        if (this.mbIsSelected)
+        {
+            canvas.drawBitmap(this.mSelectedBitmap, null, this.mcBoundingRect, null);
+        }
+        else
+        {
+            canvas.drawBitmap(this.mPassiveBitmap, null, this.mcBoundingRect, null);
+        }
     }
 
     public int getWidth ()
     {
-        return this.mBitmap.getWidth();
+        return this.mPassiveBitmap.getWidth();
     }
 
     public int getHeight ()
     {
-        return this.mBitmap.getHeight();
+        return this.mPassiveBitmap.getHeight();
     }
 
     public ExplodingType getExplodingType ()
@@ -66,12 +82,32 @@ public class IconRectangle {
     }
 
     public boolean isSet() {
-        return this.set;
+        return this.mbSet;
     }
 
     public boolean checkPress (int xPressPos, int yPressPos)
     {
-        return xPressPos > this.mcBoundingRect.left && xPressPos < this.mcBoundingRect.right &&
-                yPressPos > this.mcBoundingRect.bottom && yPressPos < this.mcBoundingRect.top;
+        if (xPressPos > this.mcBoundingRect.left && xPressPos < this.mcBoundingRect.right &&
+                yPressPos < this.mcBoundingRect.bottom && yPressPos > this.mcBoundingRect.top &&
+                !this.mbIsSelected)
+        {
+            this.mbIsSelected = true;
+        }
+        else
+        {
+            this.mbIsSelected = false;
+        }
+
+        return mbIsSelected;
+    }
+
+    public void reset()
+    {
+        this.mbIsSelected = false;
+    }
+
+    public boolean isSelected ()
+    {
+        return this.mbIsSelected;
     }
 }
