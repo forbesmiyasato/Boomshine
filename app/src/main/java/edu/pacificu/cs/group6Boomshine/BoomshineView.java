@@ -2,9 +2,6 @@ package edu.pacificu.cs.group6Boomshine;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -15,8 +12,6 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import static edu.pacificu.cs.group6Boomshine.FixedSprite.DEFAULT_BALL_RADIUS;
 
 /**
  * Defines the View for displaying the animation.
@@ -29,10 +24,12 @@ import static edu.pacificu.cs.group6Boomshine.FixedSprite.DEFAULT_BALL_RADIUS;
 public class BoomshineView extends ImageView {
   private final int MAX_LEVEL_ATTEMPTS = 3;
   private final int CIRCLE_LEVEL_MULTIPLIER = 5;
+  final int BALL_SCALE_FACTOR = 60;
+  private final BoomshineGame mcGameReference;
   ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
   ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;
   ExplodingCircleFactory mcFactory;
-  private int mDifficultyScale;
+  private double mDifficultyScale;
   private int mHeight;
   private int mWidth;
   private boolean firstClick = true;
@@ -49,6 +46,10 @@ public class BoomshineView extends ImageView {
   private int mCurrentLevel;
   private boolean mGameEnd;
   private ExplodingType meType;
+  static int DEFAULT_BALL_RADIUS;
+  private int mUserMultiPowerups;
+  private int mUserSuperPowerups;
+  private int mUserUltraPowerups;
 
   /**
    * Constructor that initializes the values associated with the sprite.
@@ -75,6 +76,10 @@ public class BoomshineView extends ImageView {
     mcIconHandler = new IconHandler(context);
     meType = ExplodingType.NORMAL;
     mDifficultyScale = 1;
+    mcGameReference = (BoomshineGame) context;
+    mUserMultiPowerups = ((BoomshineGame) context).getPWMulti();
+    mUserSuperPowerups = ((BoomshineGame) context).getPWSuper();
+    mUserUltraPowerups = ((BoomshineGame) context).getPWUlti();
   }
 
   /**
@@ -92,6 +97,7 @@ public class BoomshineView extends ImageView {
       mHeight = getHeight();
       mWidth = getWidth();
 
+      DEFAULT_BALL_RADIUS = mHeight / BALL_SCALE_FACTOR;
       if (firstRender) {
         setCircles(mLevel.getLevelNumber());
         firstRender = false;
@@ -143,16 +149,14 @@ public class BoomshineView extends ImageView {
 
       canvas.drawText("Total Score: " + mTotalScore, 10,mHeight - 50, mPaint);
 
-      mcIconHandler.drawIcons(canvas);
+      mcIconHandler.drawIcons(canvas, mUserMultiPowerups, mUserUltraPowerups, mUserSuperPowerups);
 
       super.onDraw(canvas);
       invalidate();
     }
     else
     {
-      Intent gameOverIntent = new Intent (this.mContext, GameOverActivity.class);
-      gameOverIntent.putExtra ("player_score", mTotalScore);
-      mContext.startActivity(gameOverIntent);
+      mcGameReference.onGameOver(mTotalScore);
     }
   }
 
@@ -186,6 +190,23 @@ public class BoomshineView extends ImageView {
       }
       else
       {
+        if (meType != ExplodingType.NORMAL)
+        {
+          switch (meType)
+          {
+            case MULTI:
+              mUserMultiPowerups--;
+              break;
+            case SUPER:
+              mUserSuperPowerups--;
+              break;
+            case ULTIMATE:
+              mUserUltraPowerups--;
+              break;
+            default:
+              break;
+          }
+        }
         mExplodingSprites.addAll(mcFactory.create(meType, getContext(), getDisplay(),
                 color, (int) event.getY() + DEFAULT_BALL_RADIUS / 2,
                 (int) event.getX() + DEFAULT_BALL_RADIUS / 2, 0, 0, mHeight,
@@ -202,14 +223,16 @@ public class BoomshineView extends ImageView {
     int leftBound;
     Random random = new Random();
     int color;
+    float defaultRadius = DEFAULT_BALL_RADIUS;
     if (level > 6 && level < 10)
     {
-      mDifficultyScale = 2;
+      mDifficultyScale = 1.5;
     }
     if (level > 10)
     {
-      mDifficultyScale = 3;
+      mDifficultyScale = 2;
     }
+
     for (int i = 0; i < level * CIRCLE_LEVEL_MULTIPLIER; i++) {
       color = getRandomColor();
       topBound = random.nextInt(mHeight - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
@@ -221,7 +244,7 @@ public class BoomshineView extends ImageView {
               mContext, mDisplay, color, topBound - DEFAULT_BALL_RADIUS,
               leftBound - DEFAULT_BALL_RADIUS, speed, 0,
               mHeight, 0,
-              mWidth, DEFAULT_BALL_RADIUS / mDifficultyScale);
+              mWidth, (int)(defaultRadius / mDifficultyScale));
       mMovingSprites.add(cNew);
     }
   }

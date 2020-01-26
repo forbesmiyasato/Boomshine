@@ -8,16 +8,14 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.userauth.HttpService;
-import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.userauth.RetrofitClient;
+import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.httprequests.HttpService;
+import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.httprequests.RetrofitClient;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -34,7 +32,7 @@ public class BoomshineGame extends AppCompatActivity {
   private Display mDisplay;
   private BoomshineView mGraphicsView;
   private PowerUpView mPowerUpView;
-
+  private HighScoreView mHighScoreView;
   //User data
   private JSONObject mUserData;
   private String mName;
@@ -56,6 +54,7 @@ public class BoomshineGame extends AppCompatActivity {
     mPowerUpView = new PowerUpView(this, mDisplay);
     mGraphicsView = new BoomshineView(this, mDisplay);
     mGraphicsView.setBackgroundColor(Color.BLACK);
+    mHighScoreView = new HighScoreView(this);
     setContentView(R.layout.activity_boomshine_game);
 
     //Init service
@@ -76,13 +75,12 @@ public class BoomshineGame extends AppCompatActivity {
 
   @Override
   protected void onDestroy() {
-    Log.d("ON DESTROY", "DESTROY");
+    Log.d("GAME", "ONSTOP CALLED");
     if (mName != null)
   {
     updateUserData();
   }
     super.onDestroy();
-
   }
 
   public void onPlayClicked(View cView) {
@@ -132,6 +130,10 @@ public class BoomshineGame extends AppCompatActivity {
     setContentView(mPowerUpView);
   }
 
+  public void onHighScoresClicked (View cView)
+  {
+    setContentView(mHighScoreView);
+  }
   public boolean onMultiBuy() {
     mPWMulti++;
     mPoints -= MULTI_PRICE;
@@ -206,5 +208,12 @@ public class BoomshineGame extends AppCompatActivity {
   public boolean canBuyUlti ()
   {
     return mPoints >= ULTI_PRICE;
+  }
+
+  public void onGameOver (int totalScore)
+  {
+    Intent gameOverIntent = new Intent (BoomshineGame.this, GameOverActivity.class);
+    gameOverIntent.putExtra ("player_score", totalScore);
+    startActivity(gameOverIntent);
   }
 }

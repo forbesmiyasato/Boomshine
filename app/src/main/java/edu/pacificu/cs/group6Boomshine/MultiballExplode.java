@@ -41,8 +41,8 @@ public class MultiballExplode {
 
         display.getRectSize(cDisplaySize);
 
-        int randomXCoord = cRandom.nextInt(cDisplaySize.width() - FixedSprite.DEFAULT_BALL_RADIUS * 2) + FixedSprite.DEFAULT_BALL_RADIUS;
-        int randomYCoord = cRandom.nextInt(cDisplaySize.height() - FixedSprite.DEFAULT_BALL_RADIUS * 2) + FixedSprite.DEFAULT_BALL_RADIUS;
+        int randomXCoord = cRandom.nextInt(cDisplaySize.width() - BoomshineView.DEFAULT_BALL_RADIUS * 2) + BoomshineView.DEFAULT_BALL_RADIUS;
+        int randomYCoord = cRandom.nextInt(cDisplaySize.height() - BoomshineView.DEFAULT_BALL_RADIUS * 2) + BoomshineView.DEFAULT_BALL_RADIUS;
 
         cRetList.add (new ExplodingBoundedMovingCircle(eType, context, display, drawable, topCoord,
                 leftCoord, speed, topBound, bottomBound, leftBound, rightBound,

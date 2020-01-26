@@ -1,7 +1,6 @@
 package edu.pacificu.cs.group6Boomshine;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Display;
@@ -23,14 +22,16 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
-import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.userauth.HttpService;
-import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.userauth.RetrofitClient;
+import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.httprequests.HttpService;
+import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.httprequests.RetrofitClient;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity
+{
   private Display mDisplay;
   private BoomshineView mGraphicsView;
 
@@ -44,14 +45,13 @@ public class MainActivity extends AppCompatActivity {
   private HttpService mService;
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(Bundle savedInstanceState)
+  {
     super.onCreate(savedInstanceState);
 
     WindowManager window = getWindowManager();
     mDisplay = window.getDefaultDisplay();
 
-    mGraphicsView = new BoomshineView(this, mDisplay);
-    mGraphicsView.setBackgroundColor(Color.BLACK);
     setContentView(R.layout.activity_main);
 
     //Init service
@@ -64,16 +64,19 @@ public class MainActivity extends AppCompatActivity {
     mLoginUsername = findViewById(R.id.login_username);
     mCreateAccount = findViewById(R.id.create_account);
 
-    mCreateAccount.setOnClickListener(new View.OnClickListener() {
+    mCreateAccount.setOnClickListener(new View.OnClickListener()
+    {
       @Override
-      public void onClick(View view) {
+      public void onClick(View view)
+      {
         createAccountClicked();
       }
     });
   }
 
   @Override
-  protected void onStop() {
+  protected void onStop()
+  {
     mcCompositeDisposable.clear();
     super.onStop();
   }
@@ -87,14 +90,16 @@ public class MainActivity extends AppCompatActivity {
    */
 
   @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.menu, menu);
     return true;
   }
 
   @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
     if (item.getItemId() == R.id.menuAbout) {
       onAbout();
     }
@@ -104,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
   /**
    * Starts a new About Activity when the user presses the about button.
    */
-  public void onAbout() {
+  public void onAbout()
+  {
     startActivity(new Intent(this,
             About.class));
   }
@@ -119,16 +125,20 @@ public class MainActivity extends AppCompatActivity {
             .setDescription("Please fill all fields")
             .setCustomView(registerLayout)
             .setNegativeText("CANCEL")
-            .onNegative(new MaterialDialog.SingleButtonCallback() {
+            .onNegative(new MaterialDialog.SingleButtonCallback()
+            {
               @Override
-              public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+              public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+              {
                 dialog.dismiss();
               }
             })
             .setPositiveText("REGISTER")
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
+            .onPositive(new MaterialDialog.SingleButtonCallback()
+            {
               @Override
-              public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+              public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+              {
                 MaterialEditText editRegisterName = registerLayout.findViewById(R.id.register_username);
                 MaterialEditText editRegisterPassword = registerLayout.findViewById(R.id.register_password);
 
@@ -146,18 +156,20 @@ public class MainActivity extends AppCompatActivity {
             }).show();
   }
 
-  private void registerUser(String name, String password) {
+  private void registerUser(String name, String password)
+  {
     mName = name;
     mcCompositeDisposable.add(mService.registerUser(name, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<String>() {
+            .subscribe(new Consumer<String>()
+            {
               @Override
-              public void accept(String response) throws Exception {
+              public void accept(String response) throws Exception
+              {
                 Toast.makeText(MainActivity.this, "" + response, Toast.LENGTH_SHORT).show();
                 response = response.replace("\"", ""); //Returned response has ""x"" format
-                if (response.equals("User Added"))
-                {
+                if (response.equals("User Added")) {
                   Intent cIntent = new Intent(MainActivity.this,
                           BoomshineGame.class);
                   cIntent.putExtra("Username", mName);
@@ -167,16 +179,19 @@ public class MainActivity extends AppCompatActivity {
             }));
   }
 
-  public void playAsGuestClicked(View cView) {
+  public void playAsGuestClicked(View cView)
+  {
     startActivity(new Intent(this,
             BoomshineGame.class));
   }
 
-  public void loginClicked (View cView) {
+  public void loginClicked(View cView)
+  {
     loginUser(mLoginUsername.getText().toString(), mLoginPassword.getText().toString());
   }
 
-  private void loginUser(String name, String password) {
+  private void loginUser(String name, String password)
+  {
     if (TextUtils.isEmpty(name)) {
       Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
       return;
@@ -189,15 +204,16 @@ public class MainActivity extends AppCompatActivity {
     mcCompositeDisposable.add(mService.loginUser(name, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<String>() {
+            .subscribe(new Consumer<String>()
+            {
               @Override
-              public void accept(String response) throws Exception {
+              public void accept(String response) throws Exception
+              {
                 Toast.makeText(MainActivity.this, "" + response, Toast.LENGTH_SHORT).show();
                 response = response.replace("\"", ""); //Returned response has ""x"" format
-                if (response.equals("Login Success"))
-                {
+                if (response.equals("Login Success")) {
                   Intent cIntent = new Intent(MainActivity.this,
-                        BoomshineGame.class);
+                          BoomshineGame.class);
                   cIntent.putExtra("Username", mName);
                   startActivity(cIntent);
                 }

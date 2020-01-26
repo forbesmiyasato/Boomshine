@@ -20,7 +20,6 @@ import android.widget.ImageView;
  */
 public class FixedSprite extends ImageView
 {
-  static final int DEFAULT_BALL_RADIUS = 30;
   protected Bitmap mBitmapImage;
   protected Display mDisplay;
   protected int mTopCoordinate;
@@ -28,7 +27,7 @@ public class FixedSprite extends ImageView
   private Context mContext;
   private static int mCount = 0;
   private Paint mPaint;
-  protected int mRadius = DEFAULT_BALL_RADIUS;
+  protected int mRadius;
   private int mColor;
   /**
    * Constructor that initializes the values associated with the sprite.

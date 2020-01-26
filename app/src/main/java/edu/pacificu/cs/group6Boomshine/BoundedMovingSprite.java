@@ -28,11 +28,11 @@ public class BoundedMovingSprite extends MovingSprite {
     {
       mDx = mDx * -1;
     }
-    if (DEFAULT_BALL_RADIUS * 2 + getTopCoordinate() >= mBottomBound)
+    if (mRadius * 2 + getTopCoordinate() >= mBottomBound)
     {
       mDy = mDy * -1;
     }
-    if (DEFAULT_BALL_RADIUS * 2 + getLeftCoordinate() >= mRightBound)
+    if (mRadius * 2 + getLeftCoordinate() >= mRightBound)
     {
       mDx = mDx * -1;
     }
