@@ -104,16 +104,21 @@ public class IconHandler {
 
     public ExplodingType checkPress(int xTouchPos, int yTouchPos)
     {
-        for (IconRectangle cIconRect : mcIcons)
-        {
-            cIconRect.reset();
-        }
+        IconRectangle temp = null;
 
         for (IconRectangle cIconRect : mcIcons)
         {
             if (cIconRect.checkPress(xTouchPos, yTouchPos) && (cIconRect.getCount() > 0))
             {
+                temp = cIconRect;
                 return cIconRect.getExplodingType();
+            }
+        }
+
+        for (IconRectangle cIconRect : mcIcons)
+        {
+            if (cIconRect != temp) {
+                cIconRect.reset();
             }
         }
 

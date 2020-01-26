@@ -167,6 +167,7 @@ app.post('/UpdateUserData', (req, res, next) => {
 
 //Get highscores
 app.get('/GetHighScore', (req, res, next) => {
+    console.log("Get")
     var Name = req.query.Name;
     User.find({}).select('Name HighScore -_id').sort({HighScore : 'descending'}).limit(5).then(response => {
         res.json(response);

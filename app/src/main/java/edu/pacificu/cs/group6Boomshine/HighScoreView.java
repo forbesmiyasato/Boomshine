@@ -48,7 +48,7 @@ public class HighScoreView extends ImageView
     mPaint = new Paint();
     mPaint.setAntiAlias(true);
 
-    //getHighScores();
+    getHighScores();
   }
 
   /**

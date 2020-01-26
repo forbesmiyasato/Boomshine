@@ -24,4 +24,5 @@
     <color name="cGrass2">#6ec033</color>
     <color name="cSand1">#f6d7b0</color>
     <color name="cSand2">#e7c496</color>
+    <color name="coin">#fff</color>
 </resources>

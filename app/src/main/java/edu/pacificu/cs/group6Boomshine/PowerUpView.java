@@ -105,7 +105,8 @@ public class PowerUpView extends ImageView {
     buyButton.draw(canvas);
     //If can't buy draw shade over it
     if(!bCanBuyMulti) {
-      @SuppressLint("DrawAllocation") Rect cantBuy = new Rect(picSpacing,
+      @SuppressLint("DrawAllocation")
+      Rect cantBuy = new Rect(picSpacing,
               PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
               picSpacing + PIC_WIDTH,
               PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
@@ -121,13 +122,15 @@ public class PowerUpView extends ImageView {
             PIC_Y_START + PIC_HEIGHT);
     superBallPic.draw(canvas);
     //Draw Buy button
-    buyButton.setBounds(picSpacing * 2 + PIC_WIDTH, PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
+    buyButton.setBounds(picSpacing * 2 + PIC_WIDTH,
+            PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
             PIC_WIDTH * 2 + picSpacing * 2,
             PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
     buyButton.draw(canvas);
     //If can't buy draw shade over it
     if(!bCanBuySuper) {
-      @SuppressLint("DrawAllocation") Rect cantBuy = new Rect(picSpacing * 2 + PIC_WIDTH,
+      @SuppressLint("DrawAllocation")
+      Rect cantBuy = new Rect(picSpacing * 2 + PIC_WIDTH,
               PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
               PIC_WIDTH * 2 + picSpacing * 2,
               PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);

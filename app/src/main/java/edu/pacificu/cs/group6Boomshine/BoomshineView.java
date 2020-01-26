@@ -28,6 +28,7 @@ public class BoomshineView extends ImageView {
   private final BoomshineGame mcGameReference;
   ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
   ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;
+  ArrayList<ExplodingBoundedMovingCircle> mCoinSprites;
   ExplodingCircleFactory mcFactory;
   private double mDifficultyScale;
   private int mHeight;
@@ -63,6 +64,7 @@ public class BoomshineView extends ImageView {
     setFocusable(true); // make sure we get key events
     mMovingSprites = new ArrayList<>();
     mExplodingSprites = new ArrayList<>();
+    mCoinSprites = new ArrayList<>();
     mContext = context;
     mDisplay = display;
     mLevel = new Level(1);
@@ -100,6 +102,7 @@ public class BoomshineView extends ImageView {
       DEFAULT_BALL_RADIUS = mHeight / BALL_SCALE_FACTOR;
       if (firstRender) {
         setCircles(mLevel.getLevelNumber());
+        setCoin(mLevel.getLevelNumber());
         firstRender = false;
       }
 
@@ -108,6 +111,12 @@ public class BoomshineView extends ImageView {
         if (explodingSprite.handleExploding()) {
           cExplodedCircle = explodingSprite;
         }
+      }
+
+      for (ExplodingBoundedMovingCircle coin : mCoinSprites) {
+        coin.move();
+        coin.doDraw(canvas);
+        coin.hitBound();
       }
 
       for (ExplodingBoundedMovingCircle movingSprite : mMovingSprites) {
@@ -250,6 +259,28 @@ public class BoomshineView extends ImageView {
               mHeight, 0,
               mWidth, (int)(defaultRadius / mDifficultyScale));
       mMovingSprites.add(cNew);
+    }
+  }
+
+  void setCoin(int level) {
+    int topBound;
+    int leftBound;
+    Random random = new Random();
+    float defaultRadius = DEFAULT_BALL_RADIUS;
+    int color = getResources().getColor(R.color.coin);
+
+    for (int i = 0; i < level; i++) {
+      topBound = random.nextInt(mHeight - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
+      leftBound = random.nextInt(mWidth - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
+      int speed = 3;
+      //int speed = new Random().nextInt(20) + 2;
+
+      ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(ExplodingType.NORMAL,
+              mContext, mDisplay, color, topBound - DEFAULT_BALL_RADIUS,
+              leftBound - DEFAULT_BALL_RADIUS, speed, 0,
+              mHeight, 0,
+              mWidth, (int)(defaultRadius / mDifficultyScale));
+      mCoinSprites.add(cNew);
     }
   }
 

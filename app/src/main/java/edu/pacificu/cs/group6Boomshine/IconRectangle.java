@@ -101,14 +101,9 @@ public class IconRectangle {
     public boolean checkPress (int xPressPos, int yPressPos)
     {
         if (xPressPos > this.mcBoundingRect.left && xPressPos < this.mcBoundingRect.right &&
-                yPressPos < this.mcBoundingRect.bottom && yPressPos > this.mcBoundingRect.top &&
-                !this.mbIsSelected && this.mNum > 0)
+                yPressPos < this.mcBoundingRect.bottom && yPressPos > this.mcBoundingRect.top && this.mNum > 0)
         {
-            this.mbIsSelected = true;
-        }
-        else
-        {
-            this.mbIsSelected = false;
+            this.mbIsSelected = !mbIsSelected;
         }
 
         return mbIsSelected;

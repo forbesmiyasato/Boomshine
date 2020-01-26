@@ -70,7 +70,6 @@ public class BoomshineGame extends AppCompatActivity {
 
     String username = cIntent.getStringExtra("Username");
     String maintainUsername = cIntent.getStringExtra("player_name");
-
     if (maintainUsername != null) {
       mName = maintainUsername;
     }
