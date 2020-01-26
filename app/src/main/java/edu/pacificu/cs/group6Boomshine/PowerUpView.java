@@ -15,8 +15,6 @@ import android.widget.ImageView;
 
 import java.util.Random;
 
-import static edu.pacificu.cs.group6Boomshine.FixedSprite.DEFAULT_BALL_RADIUS;
-
 public class PowerUpView extends ImageView {
 
   final int PIC_WIDTH = 150;

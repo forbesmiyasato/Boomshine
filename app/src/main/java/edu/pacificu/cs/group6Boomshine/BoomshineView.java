@@ -3,20 +3,17 @@ package edu.pacificu.cs.group6Boomshine;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import static edu.pacificu.cs.group6Boomshine.FixedSprite.DEFAULT_BALL_RADIUS;
 
 /**
  * Defines the View for displaying the animation.
@@ -29,6 +26,7 @@ import static edu.pacificu.cs.group6Boomshine.FixedSprite.DEFAULT_BALL_RADIUS;
 public class BoomshineView extends ImageView {
   private final int MAX_LEVEL_ATTEMPTS = 3;
   private final int CIRCLE_LEVEL_MULTIPLIER = 5;
+
   ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
   ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;
   ExplodingCircleFactory mcFactory;
@@ -49,7 +47,7 @@ public class BoomshineView extends ImageView {
   private int mCurrentLevel;
   private boolean mGameEnd;
   private ExplodingType meType;
-
+  static int DEFAULT_BALL_RADIUS;
   /**
    * Constructor that initializes the values associated with the sprite.
    *
@@ -92,6 +90,7 @@ public class BoomshineView extends ImageView {
       mHeight = getHeight();
       mWidth = getWidth();
 
+      DEFAULT_BALL_RADIUS = mHeight / 60;
       if (firstRender) {
         setCircles(mLevel.getLevelNumber());
         firstRender = false;
@@ -154,6 +153,7 @@ public class BoomshineView extends ImageView {
       gameOverIntent.putExtra ("player_score", mTotalScore);
       mContext.startActivity(gameOverIntent);
     }
+    Log.d("Height", String.valueOf(mHeight));
   }
 
 
