@@ -37,7 +37,7 @@ public class BoomshineGame extends AppCompatActivity {
   private JSONObject mUserData;
   private String mName;
   private int mHighScore = 0;
-  private int mPoints = 100;
+  private int mPoints = 0;
   private int mPWSuper = 0;
   private int mPWMulti = 0;
   private int mPWUlti = 0;
@@ -68,20 +68,27 @@ public class BoomshineGame extends AppCompatActivity {
     Intent cIntent = getIntent();
 
     String username = cIntent.getStringExtra("Username");
+    String maintainUsername = cIntent.getStringExtra("player_name");
 
-    mName = username;
-    if (username != null) {
-      getUserData(username);
+    if (maintainUsername != null) {
+      mName = maintainUsername;
     }
+    else {
+      mName = username;
+    }
+    if (mName != null) {
+      getUserData(mName);
+    }
+
+
   }
 
   @Override
   protected void onStop() {
     Log.d("GAME", "ONSTOP CALLED");
-    if (mName != null)
-  {
-    updateUserData();
-  }
+    if (mName != null) {
+      updateUserData();
+    }
     super.onStop();
   }
 
@@ -89,8 +96,7 @@ public class BoomshineGame extends AppCompatActivity {
     setContentView(mGraphicsView);
   }
 
-  public void onBackClicked()
-  {
+  public void onBackClicked() {
     setContentView(R.layout.activity_boomshine_game);
   }
 
@@ -132,10 +138,10 @@ public class BoomshineGame extends AppCompatActivity {
     setContentView(mPowerUpView);
   }
 
-  public void onHighScoresClicked (View cView)
-  {
+  public void onHighScoresClicked(View cView) {
     setContentView(mHighScoreView);
   }
+
   public boolean onMultiBuy() {
     mPWMulti++;
     mPoints -= MULTI_PRICE;
@@ -197,29 +203,28 @@ public class BoomshineGame extends AppCompatActivity {
     mPWUlti = pwUlti;
   }
 
-  public boolean canBuyMulti ()
-  {
+  public boolean canBuyMulti() {
     return mPoints >= MULTI_PRICE;
   }
 
-  public boolean canBuySuper ()
-  {
+  public boolean canBuySuper() {
     return mPoints >= SUPER_PRICE;
   }
 
-  public boolean canBuyUlti ()
-  {
+  public boolean canBuyUlti() {
     return mPoints >= ULTI_PRICE;
   }
 
   public void onGameOver(int totalScore, int userMultiPowerups, int userSuperPowerups,
-                         int userUltraPowerups)
-  {
-    Intent gameOverIntent = new Intent (BoomshineGame.this, GameOverActivity.class);
-    gameOverIntent.putExtra ("player_score", totalScore);
-
-    if (getHighScore() < totalScore)
+                         int userUltraPowerups) {
+    Intent gameOverIntent = new Intent(BoomshineGame.this, GameOverActivity.class);
+    gameOverIntent.putExtra("player_score", totalScore);
+    if (mName != null)
     {
+      gameOverIntent.putExtra("player_name", mName);
+    }
+
+    if (getHighScore() < totalScore) {
       setHighScore(totalScore);
     }
 
