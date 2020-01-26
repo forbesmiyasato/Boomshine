@@ -30,7 +30,7 @@ public class BoomshineView extends ImageView {
   ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
   ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;
   ExplodingCircleFactory mcFactory;
-  private int mDifficultyScale;
+  private double mDifficultyScale;
   private int mHeight;
   private int mWidth;
   private boolean firstClick = true;
@@ -154,7 +154,6 @@ public class BoomshineView extends ImageView {
       gameOverIntent.putExtra ("player_score", mTotalScore);
       mContext.startActivity(gameOverIntent);
     }
-    Log.d("Height", String.valueOf(mHeight));
   }
 
 
@@ -203,14 +202,16 @@ public class BoomshineView extends ImageView {
     int leftBound;
     Random random = new Random();
     int color;
+    float defaultRadius = DEFAULT_BALL_RADIUS;
     if (level > 6 && level < 10)
     {
-      mDifficultyScale = 2;
+      mDifficultyScale = 1.5;
     }
     if (level > 10)
     {
-      mDifficultyScale = 3;
+      mDifficultyScale = 2;
     }
+
     for (int i = 0; i < level * CIRCLE_LEVEL_MULTIPLIER; i++) {
       color = getRandomColor();
       topBound = random.nextInt(mHeight - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
@@ -222,8 +223,9 @@ public class BoomshineView extends ImageView {
               mContext, mDisplay, color, topBound - DEFAULT_BALL_RADIUS,
               leftBound - DEFAULT_BALL_RADIUS, speed, 0,
               mHeight, 0,
-              mWidth, DEFAULT_BALL_RADIUS / mDifficultyScale);
+              mWidth, (int)(defaultRadius / mDifficultyScale));
       mMovingSprites.add(cNew);
+      Log.d("Height", String.valueOf((int)(defaultRadius / mDifficultyScale)));
     }
   }
 
