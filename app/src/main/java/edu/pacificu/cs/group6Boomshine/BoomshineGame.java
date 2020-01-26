@@ -3,6 +3,7 @@ package edu.pacificu.cs.group6Boomshine;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +26,9 @@ import retrofit2.Retrofit;
 
 public class BoomshineGame extends AppCompatActivity {
 
-  final int MULTI_PRICE = 10;
-  final int SUPER_PRICE = 20;
-  final int ULTI_PRICE = 50;
+  static final int MULTI_PRICE = 10;
+  static final int SUPER_PRICE = 20;
+  static final int ULTI_PRICE = 50;
   CompositeDisposable mcCompositeDisposable;
   private HttpService mService;
   private Display mDisplay;
@@ -80,6 +81,11 @@ public class BoomshineGame extends AppCompatActivity {
     setContentView(mGraphicsView);
   }
 
+  public void onBackClicked()
+  {
+    setContentView(R.layout.activity_boomshine_game);
+  }
+
   private void getUserData(String name) {
     mcCompositeDisposable.add(mService.getUserData(name)
             .subscribeOn(Schedulers.io())
@@ -109,7 +115,7 @@ public class BoomshineGame extends AppCompatActivity {
   public boolean onMultiBuy() {
     mPWMulti++;
     mPoints -= MULTI_PRICE;
-
+    Log.d("BUY", String.valueOf(mPoints));
     return mPoints >= MULTI_PRICE;
   }
 
@@ -165,5 +171,20 @@ public class BoomshineGame extends AppCompatActivity {
 
   public void setPWUlti(int pwUlti) {
     mPWUlti = pwUlti;
+  }
+
+  public boolean canBuyMulti ()
+  {
+    return mPoints >= MULTI_PRICE;
+  }
+
+  public boolean canBuySuper ()
+  {
+    return mPoints >= SUPER_PRICE;
+  }
+
+  public boolean canBuyUlti ()
+  {
+    return mPoints >= ULTI_PRICE;
   }
 }
