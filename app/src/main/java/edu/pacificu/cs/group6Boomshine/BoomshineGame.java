@@ -232,6 +232,7 @@ public class BoomshineGame extends AppCompatActivity {
     setPWSuper(userSuperPowerups);
     setPWUlti(userUltraPowerups);
 
+    //updateUserData();
     startActivity(gameOverIntent);
   }
 }
