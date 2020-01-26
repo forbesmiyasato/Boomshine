@@ -77,9 +77,6 @@ public class BoomshineView extends ImageView {
     meType = ExplodingType.NORMAL;
     mDifficultyScale = 1;
     mcGameReference = (BoomshineGame) context;
-    mUserMultiPowerups = ((BoomshineGame) context).getPWMulti();
-    mUserSuperPowerups = ((BoomshineGame) context).getPWSuper();
-    mUserUltraPowerups = ((BoomshineGame) context).getPWUlti();
   }
 
   /**
@@ -92,6 +89,9 @@ public class BoomshineView extends ImageView {
   @Override
   public void onDraw(Canvas canvas) {
     if (!mGameEnd){
+      mUserMultiPowerups = ((BoomshineGame) mContext).getPWMulti();
+      mUserSuperPowerups = ((BoomshineGame) mContext).getPWSuper();
+      mUserUltraPowerups = ((BoomshineGame) mContext).getPWUlti();
       ExplodingBoundedMovingCircle cCollidedMovingCircle = null;
       ExplodingBoundedMovingCircle cExplodedCircle = null;
       mHeight = getHeight();
@@ -197,12 +197,15 @@ public class BoomshineView extends ImageView {
           {
             case MULTI:
               mUserMultiPowerups--;
+              ((BoomshineGame) mContext).setPWMulti(mUserMultiPowerups);
               break;
             case SUPER:
               mUserSuperPowerups--;
+              ((BoomshineGame) mContext).setPWSuper(mUserSuperPowerups);
               break;
             case ULTIMATE:
               mUserUltraPowerups--;
+              ((BoomshineGame) mContext).setPWUlti(mUserUltraPowerups);
               break;
             default:
               break;
