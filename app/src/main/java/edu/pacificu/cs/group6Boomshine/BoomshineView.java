@@ -77,9 +77,14 @@ public class BoomshineView extends ImageView {
     meType = ExplodingType.NORMAL;
     mDifficultyScale = 1;
     mcGameReference = (BoomshineGame) context;
-    mUserMultiPowerups = ((BoomshineGame) context).getPWMulti();
+/*    mUserMultiPowerups = ((BoomshineGame) context).getPWMulti();
     mUserSuperPowerups = ((BoomshineGame) context).getPWSuper();
-    mUserUltraPowerups = ((BoomshineGame) context).getPWUlti();
+    mUserUltraPowerups = ((BoomshineGame) context).getPWUlti();*/
+
+
+    mUserMultiPowerups = 2;
+    mUserSuperPowerups = 2;
+    mUserUltraPowerups = 2;
   }
 
   /**
@@ -190,6 +195,23 @@ public class BoomshineView extends ImageView {
       }
       else
       {
+        if (meType != ExplodingType.NORMAL)
+        {
+          switch (meType)
+          {
+            case MULTI:
+              mUserMultiPowerups--;
+              break;
+            case SUPER:
+              mUserSuperPowerups--;
+              break;
+            case ULTIMATE:
+              mUserUltraPowerups--;
+              break;
+            default:
+              break;
+          }
+        }
         mExplodingSprites.addAll(mcFactory.create(meType, getContext(), getDisplay(),
                 color, (int) event.getY() + DEFAULT_BALL_RADIUS / 2,
                 (int) event.getX() + DEFAULT_BALL_RADIUS / 2, 0, 0, mHeight,

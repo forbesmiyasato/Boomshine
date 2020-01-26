@@ -102,7 +102,7 @@ public class IconRectangle {
     {
         if (xPressPos > this.mcBoundingRect.left && xPressPos < this.mcBoundingRect.right &&
                 yPressPos < this.mcBoundingRect.bottom && yPressPos > this.mcBoundingRect.top &&
-                !this.mbIsSelected)
+                !this.mbIsSelected && this.mNum > 0)
         {
             this.mbIsSelected = true;
         }
@@ -127,5 +127,10 @@ public class IconRectangle {
     public void setNum(int numPowerup)
     {
         this.mNum = numPowerup;
+    }
+
+    public int getCount()
+    {
+        return this.mNum;
     }
 }

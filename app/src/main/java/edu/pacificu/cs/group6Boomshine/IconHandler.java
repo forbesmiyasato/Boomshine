@@ -111,7 +111,7 @@ public class IconHandler {
 
         for (IconRectangle cIconRect : mcIcons)
         {
-            if (cIconRect.checkPress(xTouchPos, yTouchPos))
+            if (cIconRect.checkPress(xTouchPos, yTouchPos) && (cIconRect.getCount() > 0))
             {
                 return cIconRect.getExplodingType();
             }
