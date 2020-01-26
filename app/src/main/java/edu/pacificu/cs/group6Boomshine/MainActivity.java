@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   /**
-   * Overrides the super.onCreateOptionsMenu method.Inflates the
+   * Overrides the superball.onCreateOptionsMenu method.Inflates the
    * options menu contained in res/menu/menu.
    *
    * @param menu The menu to inflate into. The items and
