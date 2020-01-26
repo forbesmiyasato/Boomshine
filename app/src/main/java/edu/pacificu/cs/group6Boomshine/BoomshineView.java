@@ -84,13 +84,14 @@ public class BoomshineView extends ImageView {
 
   @Override
   public void onDraw(Canvas canvas) {
+    final int BALL_SCALE_FACTOR = 60;
     if (!mGameEnd){
       ExplodingBoundedMovingCircle cCollidedMovingCircle = null;
       ExplodingBoundedMovingCircle cExplodedCircle = null;
       mHeight = getHeight();
       mWidth = getWidth();
 
-      DEFAULT_BALL_RADIUS = mHeight / 60;
+      DEFAULT_BALL_RADIUS = mHeight / BALL_SCALE_FACTOR;
       if (firstRender) {
         setCircles(mLevel.getLevelNumber());
         firstRender = false;
