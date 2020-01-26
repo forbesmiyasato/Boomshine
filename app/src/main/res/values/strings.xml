@@ -24,4 +24,10 @@
     <string name="game_over_quit">Quit</string>
     <string name="password">Password</string>
     <string name="name">Name</string>
+    <string name="points_text">Points:</string>
+    <string name="buy">Buy</string>
+    <string name="multi_cost">10 Points</string>
+    <string name="super_cost">20 Points</string>
+    <string name="ulti_cost">50 Points</string>
+    <string name="power_ups">Power Ups</string>
 </resources>
