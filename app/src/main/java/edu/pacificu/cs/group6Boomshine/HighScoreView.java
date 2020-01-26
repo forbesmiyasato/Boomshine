@@ -125,7 +125,6 @@ public class HighScoreView extends ImageView
               public void accept(String response) throws Exception {
                 response = response.replace("\"", ""); //Returned response has ""x"" format
                 mHighScores = new JSONArray(response);
-                Log.d("HIGHSCORE", response);
               }
             }));
   }
