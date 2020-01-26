@@ -32,10 +32,12 @@ public class IconHandler {
         }
     }
 
-    public void drawIcons (Canvas canvas)
+    public void drawIcons(Canvas canvas, int userMultiPowerups, int userUltraPowerups,
+                          int userSuperPowerups)
     {
         mWidth = canvas.getWidth();
         mHeight = canvas.getHeight();
+        int numCurrent;
         int inc = 0;
 
         for (IconRectangle cIconRect : mcIcons)
@@ -66,6 +68,21 @@ public class IconHandler {
                 {
                     mcIconPanel.set(mcIconPanel.left, mcIconPanel.top, mcIconPanel.right, bottom);
                 }
+            }
+
+            switch(cIconRect.getExplodingType())
+            {
+                case MULTI:
+                    cIconRect.setNum(userMultiPowerups);
+                    break;
+                case SUPER:
+                    cIconRect.setNum(userSuperPowerups);
+                    break;
+                case ULTIMATE:
+                    cIconRect.setNum(userUltraPowerups);
+                    break;
+                default:
+                    break;
             }
             cIconRect.draw(canvas);
         }

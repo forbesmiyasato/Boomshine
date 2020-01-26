@@ -4,12 +4,17 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.Paint;
 
 public class IconRectangle {
+    private final float TEXT_SIZE = 45f;
     private Rect mcBoundingRect;
     private Bitmap mPassiveBitmap;
     private Bitmap mSelectedBitmap;
+    private int mNum;
+    private Paint mTextPaint;
     private ExplodingType meType;
     private boolean mbSet;
     private boolean mbIsSelected;
@@ -18,8 +23,12 @@ public class IconRectangle {
     {
         this.mcBoundingRect = new Rect();
         this.meType = eType;
-        mbSet = false;
-        mbIsSelected = false;
+        this.mNum = 0;
+        this.mbSet = false;
+        this.mbIsSelected = false;
+        this.mTextPaint = new Paint();
+        mTextPaint.setColor(Color.WHITE);
+        mTextPaint.setTextSize(TEXT_SIZE);
 
         switch (meType)
         {
@@ -59,10 +68,14 @@ public class IconRectangle {
         if (this.mbIsSelected)
         {
             canvas.drawBitmap(this.mSelectedBitmap, null, this.mcBoundingRect, null);
+            canvas.drawText(Integer.toString(this.mNum), mcBoundingRect.left, mcBoundingRect.top,
+                    mTextPaint);
         }
         else
         {
             canvas.drawBitmap(this.mPassiveBitmap, null, this.mcBoundingRect, null);
+            canvas.drawText(Integer.toString(this.mNum), mcBoundingRect.left, mcBoundingRect.top,
+                    mTextPaint);
         }
     }
 
@@ -109,5 +122,10 @@ public class IconRectangle {
     public boolean isSelected ()
     {
         return this.mbIsSelected;
+    }
+
+    public void setNum(int numPowerup)
+    {
+        this.mNum = numPowerup;
     }
 }

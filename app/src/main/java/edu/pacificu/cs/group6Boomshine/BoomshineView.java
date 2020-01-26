@@ -24,6 +24,7 @@ import java.util.Random;
 public class BoomshineView extends ImageView {
   private final int MAX_LEVEL_ATTEMPTS = 3;
   private final int CIRCLE_LEVEL_MULTIPLIER = 5;
+  final int BALL_SCALE_FACTOR = 60;
   private final BoomshineGame mcGameReference;
   ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
   ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;
@@ -46,6 +47,10 @@ public class BoomshineView extends ImageView {
   private boolean mGameEnd;
   private ExplodingType meType;
   static int DEFAULT_BALL_RADIUS;
+  private int mUserMultiPowerups;
+  private int mUserSuperPowerups;
+  private int mUserUltraPowerups;
+
   /**
    * Constructor that initializes the values associated with the sprite.
    *
@@ -72,6 +77,9 @@ public class BoomshineView extends ImageView {
     meType = ExplodingType.NORMAL;
     mDifficultyScale = 1;
     mcGameReference = (BoomshineGame) context;
+    mUserMultiPowerups = ((BoomshineGame) context).getPWMulti();
+    mUserSuperPowerups = ((BoomshineGame) context).getPWSuper();
+    mUserUltraPowerups = ((BoomshineGame) context).getPWUlti();
   }
 
   /**
@@ -83,7 +91,6 @@ public class BoomshineView extends ImageView {
 
   @Override
   public void onDraw(Canvas canvas) {
-    final int BALL_SCALE_FACTOR = 60;
     if (!mGameEnd){
       ExplodingBoundedMovingCircle cCollidedMovingCircle = null;
       ExplodingBoundedMovingCircle cExplodedCircle = null;
@@ -142,7 +149,7 @@ public class BoomshineView extends ImageView {
 
       canvas.drawText("Total Score: " + mTotalScore, 10,mHeight - 50, mPaint);
 
-      mcIconHandler.drawIcons(canvas);
+      mcIconHandler.drawIcons(canvas, mUserMultiPowerups, mUserUltraPowerups, mUserSuperPowerups);
 
       super.onDraw(canvas);
       invalidate();
