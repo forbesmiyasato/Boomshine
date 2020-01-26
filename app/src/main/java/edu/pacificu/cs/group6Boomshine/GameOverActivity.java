@@ -45,4 +45,10 @@ public class GameOverActivity extends AppCompatActivity {
         }
         startActivity (playAgain);
     }
+
+    public void onQuitClicked (View view)
+    {
+        Intent quit = new Intent(this, MainActivity.class);
+        startActivity(quit);
+    }
 }
