@@ -1,4 +1,4 @@
-package edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.userauth;
+package edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.httprequests;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -28,4 +28,7 @@ public interface HttpService {
                                 @Field("PWUlti") int PWUlti);
   @GET("GetUserData/")
   Observable<String> getUserData(@Query(value = "Name", encoded = true) String Name);
+
+  @GET("GetHighScore/")
+  Observable<String> getHighScores();
 }

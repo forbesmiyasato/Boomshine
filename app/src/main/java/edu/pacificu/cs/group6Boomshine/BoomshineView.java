@@ -2,12 +2,10 @@ package edu.pacificu.cs.group6Boomshine;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -26,7 +24,7 @@ import java.util.Random;
 public class BoomshineView extends ImageView {
   private final int MAX_LEVEL_ATTEMPTS = 3;
   private final int CIRCLE_LEVEL_MULTIPLIER = 5;
-
+  private final BoomshineGame mcGameReference;
   ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
   ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;
   ExplodingCircleFactory mcFactory;
@@ -73,6 +71,7 @@ public class BoomshineView extends ImageView {
     mcIconHandler = new IconHandler(context);
     meType = ExplodingType.NORMAL;
     mDifficultyScale = 1;
+    mcGameReference = (BoomshineGame) context;
   }
 
   /**
@@ -150,9 +149,7 @@ public class BoomshineView extends ImageView {
     }
     else
     {
-      Intent gameOverIntent = new Intent (this.mContext, GameOverActivity.class);
-      gameOverIntent.putExtra ("player_score", mTotalScore);
-      mContext.startActivity(gameOverIntent);
+      mcGameReference.onGameOver(mTotalScore);
     }
   }
 
@@ -225,7 +222,6 @@ public class BoomshineView extends ImageView {
               mHeight, 0,
               mWidth, (int)(defaultRadius / mDifficultyScale));
       mMovingSprites.add(cNew);
-      Log.d("Height", String.valueOf((int)(defaultRadius / mDifficultyScale)));
     }
   }
 

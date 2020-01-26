@@ -1,4 +1,4 @@
-package edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.userauth;
+package edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.httprequests;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
