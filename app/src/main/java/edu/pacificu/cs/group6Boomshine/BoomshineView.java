@@ -121,7 +121,7 @@ public class BoomshineView extends ImageView {
         for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
           if (coin.collide(explodingSprite)) {
             cCollidedCoin = coin;
-            mcGameReference.setPoints(mcGameReference.getPoints() + 1);
+            coinCollision();
           }
         }
       }
@@ -384,5 +384,11 @@ public class BoomshineView extends ImageView {
 
     // Set the paint for that size.
     paint.setTextSize(desiredTextSize);
+  }
+
+  public void coinCollision () {
+    mcGameReference.setPoints(mcGameReference.getPoints() + 1);
+    mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.win_sound);
+    mcMediaPlayer.start();
   }
 }
