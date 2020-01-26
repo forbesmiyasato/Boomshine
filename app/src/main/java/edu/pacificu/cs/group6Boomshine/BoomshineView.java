@@ -388,7 +388,7 @@ public class BoomshineView extends ImageView {
 
   public void coinCollision () {
     mcGameReference.setPoints(mcGameReference.getPoints() + 1);
-    mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.win_sound);
+    mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.coin_collision);
     mcMediaPlayer.start();
   }
 }
