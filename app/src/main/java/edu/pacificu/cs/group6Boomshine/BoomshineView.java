@@ -96,6 +96,7 @@ public class BoomshineView extends ImageView {
       mUserUltraPowerups = ((BoomshineGame) mContext).getPWUlti();
       ExplodingBoundedMovingCircle cCollidedMovingCircle = null;
       ExplodingBoundedMovingCircle cExplodedCircle = null;
+      ExplodingBoundedMovingCircle cCollidedCoin = null;
       mHeight = getHeight();
       mWidth = getWidth();
 
@@ -117,6 +118,11 @@ public class BoomshineView extends ImageView {
         coin.move();
         coin.doDraw(canvas);
         coin.hitBound();
+        for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
+          if (coin.collide(explodingSprite)) {
+            cCollidedCoin = coin;
+          }
+        }
       }
 
       for (ExplodingBoundedMovingCircle movingSprite : mMovingSprites) {
@@ -137,6 +143,11 @@ public class BoomshineView extends ImageView {
         mExplodingSprites.add(cCollidedMovingCircle);
         mLevel.incrememtCirclesHit();
         mMovingSprites.remove(cCollidedMovingCircle);
+      }
+
+      if (cCollidedCoin != null) {
+//        mLevel.incrememtCirclesHit();
+        mCoinSprites.remove(cCollidedCoin);
       }
 
       if (!firstClick && mExplodingSprites.isEmpty()) {
@@ -266,7 +277,6 @@ public class BoomshineView extends ImageView {
     int topBound;
     int leftBound;
     Random random = new Random();
-    float defaultRadius = DEFAULT_BALL_RADIUS;
     int color = getResources().getColor(R.color.coin);
 
     for (int i = 0; i < level; i++) {
@@ -279,7 +289,7 @@ public class BoomshineView extends ImageView {
               mContext, mDisplay, color, topBound - DEFAULT_BALL_RADIUS,
               leftBound - DEFAULT_BALL_RADIUS, speed, 0,
               mHeight, 0,
-              mWidth, (int)(defaultRadius / mDifficultyScale));
+              mWidth, 21);
       mCoinSprites.add(cNew);
     }
   }
@@ -347,6 +357,7 @@ public class BoomshineView extends ImageView {
     firstClick = true;
     mMovingSprites.clear();
     mExplodingSprites.clear();
+    mCoinSprites.clear();
     meType = ExplodingType.NORMAL;
     mcIconHandler.resetIcons();
   }
