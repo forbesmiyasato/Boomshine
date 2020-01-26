@@ -164,7 +164,7 @@
             if (err) {
                 console.log("Something wrong when updating data!");
             }
-        
+            res.json("Update successful");
             console.log(doc);
     })
 })

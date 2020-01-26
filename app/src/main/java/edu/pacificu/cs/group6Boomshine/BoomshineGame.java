@@ -75,12 +75,13 @@ public class BoomshineGame extends AppCompatActivity {
   }
 
   @Override
-  protected void onStop() {
+  protected void onDestroy() {
+    Log.d("ON DESTROY", "DESTROY");
     if (mName != null)
   {
     updateUserData();
   }
-    super.onStop();
+    super.onDestroy();
 
   }
 
