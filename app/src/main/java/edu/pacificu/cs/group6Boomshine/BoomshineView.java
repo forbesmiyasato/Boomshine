@@ -28,9 +28,11 @@ import static edu.pacificu.cs.group6Boomshine.FixedSprite.DEFAULT_BALL_RADIUS;
 @SuppressLint("AppCompatCustomView")
 public class BoomshineView extends ImageView {
   private final int MAX_LEVEL_ATTEMPTS = 3;
+  private final int CIRCLE_LEVEL_MULTIPLIER = 5;
   ArrayList<ExplodingBoundedMovingCircle> mMovingSprites;
   ArrayList<ExplodingBoundedMovingCircle> mExplodingSprites;
   ExplodingCircleFactory mcFactory;
+  private int mDifficultyScale;
   private int mHeight;
   private int mWidth;
   private boolean firstClick = true;
@@ -72,6 +74,7 @@ public class BoomshineView extends ImageView {
     mcFactory = new ExplodingCircleFactory();
     mcIconHandler = new IconHandler(context);
     meType = ExplodingType.NORMAL;
+    mDifficultyScale = 1;
   }
 
   /**
@@ -167,7 +170,6 @@ public class BoomshineView extends ImageView {
     }
 
     int color;
-    ExplodingType eType = ExplodingType.NORMAL;
     int xTouchPos = (int) event.getX();
     int yTouchPos = (int) event.getY();
 
@@ -200,7 +202,15 @@ public class BoomshineView extends ImageView {
     int leftBound;
     Random random = new Random();
     int color;
-    for (int i = 0; i < level * 5; i++) {
+    if (level > 6 && level < 10)
+    {
+      mDifficultyScale = 2;
+    }
+    if (level > 10)
+    {
+      mDifficultyScale = 3;
+    }
+    for (int i = 0; i < level * CIRCLE_LEVEL_MULTIPLIER; i++) {
       color = getRandomColor();
       topBound = random.nextInt(mHeight - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
       leftBound = random.nextInt(mWidth - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
@@ -211,7 +221,7 @@ public class BoomshineView extends ImageView {
               mContext, mDisplay, color, topBound - DEFAULT_BALL_RADIUS,
               leftBound - DEFAULT_BALL_RADIUS, speed, 0,
               mHeight, 0,
-              mWidth, DEFAULT_BALL_RADIUS);
+              mWidth, DEFAULT_BALL_RADIUS / mDifficultyScale);
       mMovingSprites.add(cNew);
     }
   }
@@ -279,6 +289,8 @@ public class BoomshineView extends ImageView {
     firstClick = true;
     mMovingSprites.clear();
     mExplodingSprites.clear();
+    meType = ExplodingType.NORMAL;
+    mcIconHandler.resetIcons();
   }
 
 
