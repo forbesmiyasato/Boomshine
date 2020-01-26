@@ -77,14 +77,9 @@ public class BoomshineView extends ImageView {
     meType = ExplodingType.NORMAL;
     mDifficultyScale = 1;
     mcGameReference = (BoomshineGame) context;
-/*    mUserMultiPowerups = ((BoomshineGame) context).getPWMulti();
+    mUserMultiPowerups = ((BoomshineGame) context).getPWMulti();
     mUserSuperPowerups = ((BoomshineGame) context).getPWSuper();
-    mUserUltraPowerups = ((BoomshineGame) context).getPWUlti();*/
-
-
-    mUserMultiPowerups = 2;
-    mUserSuperPowerups = 2;
-    mUserUltraPowerups = 2;
+    mUserUltraPowerups = ((BoomshineGame) context).getPWUlti();
   }
 
   /**
