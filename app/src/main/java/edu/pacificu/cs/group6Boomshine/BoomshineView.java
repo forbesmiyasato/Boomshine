@@ -46,6 +46,7 @@ public class BoomshineView extends ImageView {
   private int mNumAttempts;
   private int mCurrentLevel;
   private boolean mGameEnd;
+  private ExplodingType meType;
 
   /**
    * Constructor that initializes the values associated with the sprite.
@@ -70,6 +71,7 @@ public class BoomshineView extends ImageView {
     mGameEnd = false;
     mcFactory = new ExplodingCircleFactory();
     mcIconHandler = new IconHandler(context);
+    meType = ExplodingType.NORMAL;
   }
 
   /**
@@ -163,24 +165,33 @@ public class BoomshineView extends ImageView {
       mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.click_sound);
       mcMediaPlayer.start();
     }
+
     int color;
+    ExplodingType eType = ExplodingType.NORMAL;
+    int xTouchPos = (int) event.getX();
+    int yTouchPos = (int) event.getY();
+
     if (event.getAction() != MotionEvent.ACTION_DOWN) {
       return super.onTouchEvent(event);
     }
 
     if (firstClick) {
       color = getRandomColor();
-      /*ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(getContext(), getDisplay(),
-              color, (int) event.getY(),
-              (int) event.getX(), 0, 0, mHeight,
-              0, mWidth, 0, 25);*/
-      mExplodingSprites.addAll(mcFactory.create(ExplodingType.SUPER, getContext(), getDisplay(),
-              color, (int) event.getY() + DEFAULT_BALL_RADIUS / 2,
-              (int) event.getX() + DEFAULT_BALL_RADIUS / 2, 0, 0, mHeight,
-              0, mWidth, DEFAULT_BALL_RADIUS));
+
+      if (mcIconHandler.checkIconBounds(xTouchPos, yTouchPos))
+      {
+        meType = mcIconHandler.checkPress(xTouchPos, yTouchPos);
+      }
+      else
+      {
+        mExplodingSprites.addAll(mcFactory.create(meType, getContext(), getDisplay(),
+                color, (int) event.getY() + DEFAULT_BALL_RADIUS / 2,
+                (int) event.getX() + DEFAULT_BALL_RADIUS / 2, 0, 0, mHeight,
+                0, mWidth, DEFAULT_BALL_RADIUS));
+        firstClick = false;
+      }
     }
 
-    firstClick = false;
     return true;
   }
 

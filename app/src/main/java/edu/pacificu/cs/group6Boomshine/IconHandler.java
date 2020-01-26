@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.Icon;
 
 import java.util.ArrayList;
 
@@ -14,38 +15,83 @@ public class IconHandler {
 
     private int mWidth;
     private int mHeight;
-    private ArrayList<Bitmap> mcPowerupIcons;
-    private ArrayList<Rect> mcBoundingRectangles;
+    private ArrayList<IconRectangle> mcIcons;
+    private Rect mcIconPanel;
 
     IconHandler(Context context)
     {
-        mcPowerupIcons = new ArrayList<>();
-        mcBoundingRectangles = new ArrayList<>();
+        mcIcons = new ArrayList<>();
+        mcIconPanel = new Rect (0, 0, 0, 0);
+        IconRectangle cIconRect;
 
-        Bitmap multiBallIcon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.multi_ball);
-        Bitmap superBallIcon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.super_ball);
-        Bitmap ultimateBallIcon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.ultimate_ball);
-        mcPowerupIcons.add(multiBallIcon);
-        mcPowerupIcons.add(superBallIcon);
-        mcPowerupIcons.add(ultimateBallIcon);
+        for (ExplodingType eType : ExplodingType.values())
+        {
+            if (eType != ExplodingType.NORMAL)
+            {
+                cIconRect = new IconRectangle(eType, context);
+                mcIcons.add(cIconRect);
+            }
+        }
     }
 
     public void drawIcons (Canvas canvas)
     {
         mWidth = canvas.getWidth();
         mHeight = canvas.getHeight();
-        int count = 0;
-        for (Bitmap cBitmap : mcPowerupIcons)
-        {
-            Rect spot = new Rect (mWidth - (mWidth / 15) * (count + 2),
-                    mHeight - 150, (mWidth - (mWidth / 15) * (count + 2)) +
-                    cBitmap.getWidth(), (mHeight - 150) + cBitmap.getHeight());
+        int inc = 0;
 
-            canvas.drawBitmap(cBitmap,null,  spot, null);
-            count+= 2;
+        for (IconRectangle cIconRect : mcIcons)
+        {
+            if (!cIconRect.isSet())
+            {
+                int left = mWidth - (mWidth / 15) * (inc + 2);
+                int right = mHeight - 150;
+                int top = (mWidth - (mWidth / 15) * (inc + 2)) + cIconRect.getWidth();
+                int bottom = (mHeight - 150) + cIconRect.getHeight();
+
+                cIconRect.setRect(left, right, top, bottom);
+                inc += 2;
+
+                if (left < mcIconPanel.left)
+                {
+                    mcIconPanel.set(left, mcIconPanel.top, mcIconPanel.right, mcIconPanel.bottom);
+                }
+                if (right > mcIconPanel.right)
+                {
+                    mcIconPanel.set(mcIconPanel.left, mcIconPanel.top, right, mcIconPanel.bottom);
+                }
+                if (top < mcIconPanel.top)
+                {
+                    mcIconPanel.set(mcIconPanel.left, top, mcIconPanel.right, mcIconPanel.bottom);
+                }
+                if (bottom > mcIconPanel.bottom)
+                {
+                    mcIconPanel.set(mcIconPanel.left, mcIconPanel.top, mcIconPanel.right, bottom);
+                }
+            }
+
+            cIconRect.draw(canvas);
         }
+
+
+    }
+
+    public boolean checkIconBounds (int xTouchPos, int yTouchPos)
+    {
+        return xTouchPos > this.mcIconPanel.left && xTouchPos < this.mcIconPanel.right &&
+                yTouchPos > this.mcIconPanel.bottom && yTouchPos < this.mcIconPanel.top;
+    }
+
+    public ExplodingType checkPress(int xTouchPos, int yTouchPos)
+    {
+        for (IconRectangle cIconRect : mcIcons)
+        {
+            if (cIconRect.checkPress(xTouchPos, yTouchPos))
+            {
+                return cIconRect.getExplodingType();
+            }
+        }
+
+        return ExplodingType.NORMAL;
     }
 }
