@@ -37,6 +37,7 @@ public class BoomshineGame extends AppCompatActivity {
 
   //User data
   private JSONObject mUserData;
+  private String mName;
   private int mHighScore = 0;
   private int mPoints = 100;
   private int mPWSuper = 0;
@@ -67,6 +68,7 @@ public class BoomshineGame extends AppCompatActivity {
 
     String username = cIntent.getStringExtra("Username");
 
+    mName = username;
     if (username != null) {
       getUserData(username);
     }
@@ -74,7 +76,12 @@ public class BoomshineGame extends AppCompatActivity {
 
   @Override
   protected void onStop() {
+    if (mName != null)
+  {
+    updateUserData();
+  }
     super.onStop();
+
   }
 
   public void onPlayClicked(View cView) {
@@ -104,6 +111,18 @@ public class BoomshineGame extends AppCompatActivity {
                 } catch (JSONException e) {
                   e.printStackTrace();
                 }
+              }
+            }));
+  }
+
+  private void updateUserData() {
+    mcCompositeDisposable.add(mService.updateUser(mName, mHighScore, mPoints, mPWMulti, mPWSuper, mPWUlti)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<String>() {
+              @Override
+              public void accept(String response) throws Exception {
+
               }
             }));
   }

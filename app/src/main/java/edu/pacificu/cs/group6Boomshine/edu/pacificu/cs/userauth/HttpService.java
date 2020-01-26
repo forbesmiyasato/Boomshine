@@ -16,8 +16,16 @@ public interface HttpService {
   @POST("login/")
   @FormUrlEncoded
   Observable<String> loginUser(@Field("Name") String Name,
-                                  @Field("Password") String Password);
 
+                               @Field("Password") String Password);
+  @POST("UpdateUserData/")
+  @FormUrlEncoded
+  Observable<String> updateUser(@Field("Name") String Name,
+                                @Field("HighScore") int HighScore,
+                                @Field("Points") int Points,
+                                @Field("PWMulti") int PWMulti,
+                                @Field("PWSuper") int PWSuper,
+                                @Field("PWUlti") int PWUlti);
   @GET("GetUserData/")
-  Observable<String> getUserData(@Query(value="Name", encoded =true) String Name);
+  Observable<String> getUserData(@Query(value = "Name", encoded = true) String Name);
 }
