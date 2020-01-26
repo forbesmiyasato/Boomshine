@@ -13,6 +13,9 @@ public class GameOverActivity extends AppCompatActivity {
     TextView mPlayerScoreTextView;
     Button mBtnPlayAgain;
     private int mPlayerScore;
+    private int mMultiPowerups;
+    private int mSuperPowerups;
+    private int mUltraPowerups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,7 @@ public class GameOverActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_over);
 
         Intent tempIntent = getIntent();
+
         mPlayerScore = tempIntent.getIntExtra("player_score", 0);
 
         mPlayerScoreTextView = findViewById(R.id.textViewPlayerscoreFinal);

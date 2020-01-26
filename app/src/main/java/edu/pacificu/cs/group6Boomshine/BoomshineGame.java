@@ -46,6 +46,8 @@ public class BoomshineGame extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    Log.d("GAME", "ONCREATE CALLED");
+
     WindowManager window = getWindowManager();
     mDisplay = window.getDefaultDisplay();
 
@@ -74,13 +76,13 @@ public class BoomshineGame extends AppCompatActivity {
   }
 
   @Override
-  protected void onDestroy() {
+  protected void onStop() {
     Log.d("GAME", "ONSTOP CALLED");
     if (mName != null)
   {
     updateUserData();
   }
-    super.onDestroy();
+    super.onStop();
   }
 
   public void onPlayClicked(View cView) {
@@ -210,10 +212,21 @@ public class BoomshineGame extends AppCompatActivity {
     return mPoints >= ULTI_PRICE;
   }
 
-  public void onGameOver (int totalScore)
+  public void onGameOver(int totalScore, int userMultiPowerups, int userSuperPowerups,
+                         int userUltraPowerups)
   {
     Intent gameOverIntent = new Intent (BoomshineGame.this, GameOverActivity.class);
     gameOverIntent.putExtra ("player_score", totalScore);
+
+    if (getHighScore() < totalScore)
+    {
+      setHighScore(totalScore);
+    }
+
+    setPWMulti(userMultiPowerups);
+    setPWSuper(userSuperPowerups);
+    setPWUlti(userUltraPowerups);
+
     startActivity(gameOverIntent);
   }
 }

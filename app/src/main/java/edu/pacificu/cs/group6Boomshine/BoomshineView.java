@@ -156,7 +156,8 @@ public class BoomshineView extends ImageView {
     }
     else
     {
-      mcGameReference.onGameOver(mTotalScore);
+      mcGameReference.onGameOver(mTotalScore, mUserMultiPowerups, mUserSuperPowerups,
+              mUserUltraPowerups);
     }
   }
 
