@@ -3,9 +3,7 @@ package edu.pacificu.cs.group6Boomshine;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -22,15 +20,25 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
+/**
+ * Defines the BoomshineGame class that contains the view logic
+ * and user data fetching and updating.
+ *
+ * @author Forbes Miyasato
+ * @version 1.0
+ * @since 1.26.2019
+ */
+
 public class BoomshineGame extends AppCompatActivity
 {
-  static final int MULTI_PRICE = 10;
-  static final int SUPER_PRICE = 20;
-  static final int ULTI_PRICE = 50;
-  CompositeDisposable mcCompositeDisposable;
+
+  private static final int MULTI_PRICE = 10;
+  private static final int SUPER_PRICE = 20;
+  private static final int ULTI_PRICE = 50;
+  private CompositeDisposable mcCompositeDisposable;
   private HttpService mService;
   private Display mDisplay;
-  private BoomshineView mGraphicsView;
+  private BoomshineView mcAnimatedView;
   private PowerUpView mPowerUpView;
   private HighScoreView mHighScoreView;
   //User data
@@ -42,33 +50,37 @@ public class BoomshineGame extends AppCompatActivity
   private int mPWMulti = 0;
   private int mPWUlti = 0;
 
+  /**
+   * Initializes member variables to default values.
+   * Gets the user data if wasn't logged in as guest.
+   *
+   * @param savedInstanceState A Bundle containing previously saved
+   *                           Activity state (un-used)
+   */
   @Override
-  protected void onCreate (Bundle savedInstanceState)
+  protected void onCreate(Bundle savedInstanceState)
   {
-    super.onCreate (savedInstanceState);
+    super.onCreate(savedInstanceState);
 
-    WindowManager window = getWindowManager ();
-    mDisplay = window.getDefaultDisplay ();
+    WindowManager window = getWindowManager();
+    mDisplay = window.getDefaultDisplay();
 
-    View mPowerUpLayout = LayoutInflater.from (BoomshineGame.this).inflate (R.layout.activity_powerup, null);
-
-    mPowerUpView = new PowerUpView (this, mDisplay);
-
-    mGraphicsView = new BoomshineView (this, mDisplay);
-    mGraphicsView.setBackgroundColor (Color.BLACK);
-    mHighScoreView = new HighScoreView (this);
-    setContentView (R.layout.activity_boomshine_game);
+    mPowerUpView = new PowerUpView(this, mDisplay);
+    mcAnimatedView = new BoomshineView(this, mDisplay);
+    mcAnimatedView.setBackgroundColor(Color.BLACK);
+    mHighScoreView = new HighScoreView(this);
+    setContentView(R.layout.activity_boomshine_game);
 
     //Init service
-    mcCompositeDisposable = new CompositeDisposable ();
-    Retrofit retrofitClient = RetrofitClient.getInstance ();
-    mService = retrofitClient.create (HttpService.class);
+    mcCompositeDisposable = new CompositeDisposable();
+    Retrofit retrofitClient = RetrofitClient.getInstance();
+    mService = retrofitClient.create(HttpService.class);
 
     //Get user info
-    Intent cIntent = getIntent ();
+    Intent cIntent = getIntent();
 
-    String username = cIntent.getStringExtra ("Username");
-    String maintainUsername = cIntent.getStringExtra ("player_name");
+    String username = cIntent.getStringExtra("Username");
+    String maintainUsername = cIntent.getStringExtra("Username");
     if (maintainUsername != null)
     {
       mName = maintainUsername;
@@ -78,191 +90,283 @@ public class BoomshineGame extends AppCompatActivity
     }
     if (mName != null)
     {
-      getUserData (mName);
+      getUserData(mName);
     }
   }
 
+  /**
+   * Updates the user data whenever the activity is onStop.
+   */
   @Override
-  protected void onStop ()
+  protected void onStop()
   {
     if (mName != null)
     {
-      updateUserData ();
+      updateUserData();
     }
-    super.onStop ();
+    super.onStop();
   }
 
-  public void onPlayClicked (View cView)
+  /**
+   * Changes to game view when play is clicked.
+   */
+  public void onPlayClicked(View cView)
   {
-    setContentView (mGraphicsView);
+    setContentView(mcAnimatedView);
   }
 
-  public void onBackClicked ()
+  /**
+   * Changes back to game menu when back button is clicked
+   */
+  public void onBackClicked()
   {
-    setContentView (R.layout.activity_boomshine_game);
+    setContentView(R.layout.activity_boomshine_game);
   }
 
-  private void getUserData (String name)
+  /**
+   * Gets the user data through http request to server
+   *
+   * @param username The user's username
+   */
+  private void getUserData(String username)
   {
-    mcCompositeDisposable.add (mService.getUserData (name)
-      .subscribeOn (Schedulers.io ())
-      .observeOn (AndroidSchedulers.mainThread ())
-      .subscribe (new Consumer<String> ()
+    mcCompositeDisposable.add(mService.getUserData(username)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(new Consumer<String>()
       {
         @Override
-        public void accept (String response) throws Exception
+        public void accept(String response) throws Exception
         {
-          response = response.replace ("\"", ""); //Returned response has ""x"" format
-          mUserData = new JSONObject (response);
+          //Returned response has ""x"" format
+          response = response.replace("\"", "");
+          mUserData = new JSONObject(response);
           try
           {
-            mHighScore = (mUserData.getInt ("HighScore"));
-            mPoints = (mUserData.getInt ("Points"));
-            mPWSuper = (mUserData.getInt ("PWSuper"));
-            mPWMulti = (mUserData.getInt ("PWMulti"));
-            mPWUlti = (mUserData.getInt ("PWUltimate"));
+            mHighScore = (mUserData.getInt("HighScore"));
+            mPoints = (mUserData.getInt("Points"));
+            mPWSuper = (mUserData.getInt("PWSuper"));
+            mPWMulti = (mUserData.getInt("PWMulti"));
+            mPWUlti = (mUserData.getInt("PWUltimate"));
           } catch (JSONException e)
           {
-            e.printStackTrace ();
+            e.printStackTrace();
           }
         }
       }));
   }
 
-  private void updateUserData ()
+  /**
+   * Updates the user data to database through http request to server
+   */
+  private void updateUserData()
   {
-    mcCompositeDisposable.add (mService.updateUser (mName, mHighScore, mPoints, mPWMulti, mPWSuper, mPWUlti)
-      .subscribeOn (Schedulers.io ())
-      .observeOn (AndroidSchedulers.mainThread ())
-      .subscribe (new Consumer<String> ()
-      {
-        @Override
-        public void accept (String response) throws Exception
-        {
-
-        }
-      }));
+    mcCompositeDisposable.add(mService.updateUser(mName,
+      mHighScore, mPoints, mPWMulti, mPWSuper, mPWUlti)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe());
   }
 
-  public void onPowerupsClicked (View cView)
+  /**
+   * Changes to the power up view when the power up button is clicked
+   *
+   * @param cView The view clicked
+   */
+  public void onPowerupsClicked(View cView)
   {
-    setContentView (mPowerUpView);
+    setContentView(mPowerUpView);
   }
 
-  public void onHighScoresClicked (View cView)
+  /**
+   * Changes to the high score view when the high scores button is clicked
+   *
+   * @param cView The view clicked
+   */
+  public void onHighScoresClicked(View cView)
   {
-    setContentView (mHighScoreView);
+    setContentView(mHighScoreView);
   }
 
-  public boolean onMultiBuy ()
+  /**
+   * Increase the users multi ball power up and decrease their points
+   * accordingly when user clicks to buy multi ball power up
+   *
+   * @return
+   */
+  public void onMultiBuy()
   {
     mPWMulti++;
     mPoints -= MULTI_PRICE;
-    Log.d ("BUY", String.valueOf (mPoints));
-    return mPoints >= MULTI_PRICE;
   }
 
-  public boolean onSuperBuy ()
+  /**
+   * Increase the users super ball power up and decrease their points
+   * accordingly when user clicks to buy super ball power up
+   */
+  public void onSuperBuy()
   {
     mPWSuper++;
     mPoints -= SUPER_PRICE;
-
-    return mPoints >= SUPER_PRICE;
   }
 
-  public boolean onUltiBuy ()
+  /**
+   * Increase the users ulti ball power up and decrease their points
+   * accordingly when user clicks to buy ulti ball power up
+   */
+  public void onUltiBuy()
   {
     mPWUlti++;
     mPoints -= ULTI_PRICE;
-
-    return mPoints >= ULTI_PRICE;
   }
 
-  public int getHighScore ()
+  /**
+   * Gets the user'ss high score
+   *
+   * @return The user's high score
+   */
+  public int getHighScore()
   {
     return mHighScore;
   }
 
-  public int getPoints ()
+  /**
+   * Gets the user's points
+   *
+   * @return The user's points
+   */
+  public int getPoints()
   {
     return mPoints;
   }
 
-  public int getPWMulti ()
+  /**
+   * Gets the user's multi ball power up amount
+   *
+   * @return The user's multi ball power up amount
+   */
+  public int getPWMulti()
   {
     return mPWMulti;
   }
 
-  public int getPWSuper ()
+  /**
+   * Gets the user's super ball power up amount
+   *
+   * @return The user's super ball power up amount
+   */
+  public int getPWSuper()
   {
     return mPWSuper;
   }
 
-  public int getPWUlti ()
+  /**
+   * Gets the user's ulti ball power up amount
+   *
+   * @return The user's ulti ball power up amount
+   */
+  public int getPWUlti()
   {
     return mPWUlti;
   }
 
-  public void setHighScore (int highScore)
+  /**
+   * Sets the user's high score
+   */
+  public void setHighScore(int highScore)
   {
     mHighScore = highScore;
   }
 
-  public void setPoints (int points)
+  /**
+   * Sets the user's points
+   */
+  public void setPoints(int points)
   {
     mPoints = points;
   }
 
-  public void setPWMulti (int pwMulti)
+  /**
+   * Sets the user's multi ball power up amount
+   */
+  public void setPWMulti(int pwMulti)
   {
     mPWMulti = pwMulti;
   }
 
-  public void setPWSuper (int pwSuper)
+  /**
+   * Sets the user's super ball power up amount
+   */
+  public void setPWSuper(int pwSuper)
   {
     mPWSuper = pwSuper;
   }
 
-  public void setPWUlti (int pwUlti)
+  /**
+   * Sets the user's ulti ball power up amount
+   */
+  public void setPWUlti(int pwUlti)
   {
     mPWUlti = pwUlti;
   }
 
-  public boolean canBuyMulti ()
+  /**
+   * Checks if the user has enough points to buy a multi ball power up
+   *
+   * @return true if they have enough points to buy a multiball power up,
+   * false if not
+   */
+  public boolean canBuyMulti()
   {
     return mPoints >= MULTI_PRICE;
   }
 
-  public boolean canBuySuper ()
+  /**
+   * Checks if the user has enough points to buy a super ball power up
+   *
+   * @return true if they have enough points to buy a super ball power up,
+   * false if not
+   */
+  public boolean canBuySuper()
   {
     return mPoints >= SUPER_PRICE;
   }
 
-  public boolean canBuyUlti ()
+  /**
+   * Checks if the user has enough points to buy a super ball power up
+   *
+   * @return true if they have enough points to buy a super ball power up,
+   * false if not
+   */
+  public boolean canBuyUlti()
   {
     return mPoints >= ULTI_PRICE;
   }
 
-  public void onGameOver (int totalScore, int userMultiPowerups, int userSuperPowerups,
-                          int userUltraPowerups)
+  /**
+   * Handles the game over logic.
+   * Updates user data and opens game over activity
+   */
+  public void onGameOver(int totalScore, int userMultiPowerups,
+                         int userSuperPowerups, int userUltraPowerups)
   {
-    Intent gameOverIntent = new Intent (BoomshineGame.this, GameOverActivity.class);
-    gameOverIntent.putExtra ("player_score", totalScore);
+    Intent gameOverIntent = new Intent(BoomshineGame.this,
+      GameOverActivity.class);
+    gameOverIntent.putExtra("player_score", totalScore);
     if (mName != null)
     {
-      gameOverIntent.putExtra ("player_name", mName);
+      gameOverIntent.putExtra("Username", mName);
     }
 
-    if (getHighScore () < totalScore)
+    if (getHighScore() < totalScore)
     {
-      setHighScore (totalScore);
+      setHighScore(totalScore);
     }
 
-    setPWMulti (userMultiPowerups);
-    setPWSuper (userSuperPowerups);
-    setPWUlti (userUltraPowerups);
+    setPWMulti(userMultiPowerups);
+    setPWSuper(userSuperPowerups);
+    setPWUlti(userUltraPowerups);
 
-    //updateUserData();
-    startActivity (gameOverIntent);
+    startActivity(gameOverIntent);
   }
 }
