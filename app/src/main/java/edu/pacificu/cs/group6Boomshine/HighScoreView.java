@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -30,13 +29,13 @@ import retrofit2.Retrofit;
 
 public class HighScoreView extends ImageView
 {
-  private Paint mPaint;
-  private final BoomshineGame mcGame;
+  private Paint mcPaint;
+  private final BoomshineGame mcGameReference;
   private int mHeight;
   private int mWidth;
-  private JSONArray mHighScores;
+  private JSONArray mcHighScores;
   private CompositeDisposable mcCompositeDisposable;
-  private HttpService mService;
+  private HttpService mcService;
   //View placement variables
   private final double X_SCALE_FACTOR = 4; //To make text x position responsive
   private final double Y_SCALE_FACTOR = 4; //To make text y position responsive
@@ -47,15 +46,15 @@ public class HighScoreView extends ImageView
   {
     super(context);
     setFocusable(true); // make sure we get key events
-    mPaint = new Paint();
-    this.mcGame = (BoomshineGame) context;
+    mcPaint = new Paint();
+    this.mcGameReference = (BoomshineGame) context;
     //Init service
     mcCompositeDisposable = new CompositeDisposable();
     Retrofit retrofitClient = RetrofitClient.getInstance();
-    mService = retrofitClient.create(HttpService.class);
+    mcService = retrofitClient.create(HttpService.class);
 
-    mPaint = new Paint();
-    mPaint.setAntiAlias(true);
+    mcPaint = new Paint();
+    mcPaint.setAntiAlias(true);
 
     getHighScores();
   }
@@ -74,25 +73,25 @@ public class HighScoreView extends ImageView
     mHeight = getHeight();
     String HighScore;
     String Name;
-    mPaint.setTextSize(mHeight * 0.05f);
-    mPaint.setColor(getResources().getColor(R.color.cBlack));
-    mPaint.setStyle(Paint.Style.FILL);
-    mPaint.setTextAlign(Paint.Align.CENTER);
+    mcPaint.setTextSize(mHeight * 0.05f);
+    mcPaint.setColor(getResources().getColor(R.color.cBlack));
+    mcPaint.setStyle(Paint.Style.FILL);
+    mcPaint.setTextAlign(Paint.Align.CENTER);
 
     canvas.drawText("High Scores",
-            (int) (mWidth / 2), (int)(mHeight / (Y_SCALE_FACTOR * 2)), mPaint);
+            mWidth / 2, (int)(mHeight / (Y_SCALE_FACTOR * 2)), mcPaint);
 
     for (int i = 1; i <= 5; i++) {
       try {
 
-        HighScore = mHighScores.getJSONObject(i - 1).getString("HighScore");
-        Name = mHighScores.getJSONObject(i - 1).getString("Name");
+        HighScore = mcHighScores.getJSONObject(i - 1).getString("HighScore");
+        Name = mcHighScores.getJSONObject(i - 1).getString("Name");
 
         canvas.drawText(HighScore,
                 (int) (mWidth / X_SCALE_FACTOR), Y_INCREMENT * i
-                        + (int) (mHeight / Y_SCALE_FACTOR), mPaint);
+                        + (int) (mHeight / Y_SCALE_FACTOR), mcPaint);
         canvas.drawText(Name, (int) (mWidth * 3 / X_SCALE_FACTOR),
-                Y_INCREMENT * i + (int) (mHeight / Y_SCALE_FACTOR), mPaint);
+                Y_INCREMENT * i + (int) (mHeight / Y_SCALE_FACTOR), mcPaint);
       } catch (JSONException e) {
         e.printStackTrace();
       }
@@ -118,7 +117,7 @@ public class HighScoreView extends ImageView
     && (y >= Y_INCREMENT * 5 + (int) (mHeight / Y_SCALE_FACTOR)
             && y <= Y_INCREMENT * 5 + (int) (mHeight / Y_SCALE_FACTOR) + BACK_BUTTON_HEIGHT))
     {
-      mcGame.onBackClicked();
+      mcGameReference.onBackClicked();
     }
 
     return true;
@@ -126,14 +125,14 @@ public class HighScoreView extends ImageView
 
   private void getHighScores()
   {
-    mcCompositeDisposable.add(mService.getHighScores()
+    mcCompositeDisposable.add(mcService.getHighScores()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<String>() {
               @Override
               public void accept(String response) throws Exception {
                 response = response.replace("\"", ""); //Returned response has ""x"" format
-                mHighScores = new JSONArray(response);
+                mcHighScores = new JSONArray(response);
               }
             }));
   }
