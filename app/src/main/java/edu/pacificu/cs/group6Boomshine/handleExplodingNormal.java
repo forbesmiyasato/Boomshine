@@ -1,13 +1,40 @@
 package edu.pacificu.cs.group6Boomshine;
 
-public class handleExplodingNormal implements IExpansionStrategy {
+/**
+ * Creates a handleExplodingNormal class that implements the
+ * IExpansionStrategy to define explosion behavior for a
+ * default (Normal) expanding circle.
+ *
+ * @author Thomas Robasciotti
+ * @version 1.0
+ * @since 1.24.2019
+ */
+
+public class handleExplodingNormal implements IExpansionStrategy
+{
+    private final int SPEED_MULTIPLIER = 2;
+    private final int RADIUS_MULTIPLIER = 6;
+
+    /**
+     * Determines how quickly a circle that implements this strategy
+     * will expand/retract when exploding.
+     *
+     * @return An expansion speed multiplier value for a Normal ball
+     */
     @Override
     public int handleExploding() {
-        return 2;
+        return SPEED_MULTIPLIER;
     }
+
+    /**
+     * Determines how large a circle that implements this strategy
+     * will become when exploding.
+     *
+     * @return An expansion radius multiplier value for a Normal ball
+     */
 
     @Override
     public int getRadiusMultiplier() {
-        return 6;
+        return RADIUS_MULTIPLIER;
     }
 }
