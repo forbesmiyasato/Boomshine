@@ -10,7 +10,7 @@ public class RetrofitClient {
   public static Retrofit getInstance() {
     if (cRetrofitInstance == null)
     {
-      cRetrofitInstance = new Retrofit.Builder().baseUrl("http://67953e69.ngrok.io/")
+      cRetrofitInstance = new Retrofit.Builder().baseUrl("http://10.0.2.2:8000/")
               .addConverterFactory(ScalarsConverterFactory.create())
               .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build();
     }

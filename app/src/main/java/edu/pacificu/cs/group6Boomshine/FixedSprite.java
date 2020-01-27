@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.Display;
 import android.widget.ImageView;
 
@@ -28,7 +29,7 @@ public class FixedSprite extends ImageView
   private int mColor;
   private int mLastRadius = 0;
   private int mOpacityAlpha = 255;
-
+  private final int mOpacityDecrement = 5;
 
   /**
    * Constructor that initializes the values associated with the sprite.
@@ -71,9 +72,9 @@ public class FixedSprite extends ImageView
     } else
     {
       mPaint.setColor(mColor);
-      if (mRadius < mLastRadius)
+      if (mRadius < mLastRadius && mOpacityAlpha >= mOpacityDecrement)
       {
-        mOpacityAlpha = mOpacityAlpha - 5;
+        mOpacityAlpha = mOpacityAlpha - mOpacityDecrement;
       }
       mPaint.setStyle(Paint.Style.FILL);
       mPaint.setAlpha(mOpacityAlpha);

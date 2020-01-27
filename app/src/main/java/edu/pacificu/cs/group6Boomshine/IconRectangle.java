@@ -191,12 +191,14 @@ public class IconRectangle {
     {
         if (xPressPos > this.mcBoundingRect.left && xPressPos < this.mcBoundingRect.right &&
                 yPressPos < this.mcBoundingRect.bottom && yPressPos > this.mcBoundingRect.top &&
-                this.mNum > 0)
+                !mbIsSelected && this.mNum > 0)
         {
-            this.mbIsSelected = !mbIsSelected;
+            mbIsSelected = true;
+            return true;
         }
 
-        return mbIsSelected;
+        mbIsSelected = false;
+        return false;
     }
 
     /**
