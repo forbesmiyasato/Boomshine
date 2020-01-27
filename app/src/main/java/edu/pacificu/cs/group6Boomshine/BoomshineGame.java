@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.httprequests.HttpService;
 import edu.pacificu.cs.group6Boomshine.edu.pacificu.cs.httprequests.RetrofitClient;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -58,29 +57,29 @@ public class BoomshineGame extends AppCompatActivity
    *                           Activity state (un-used)
    */
   @Override
-  protected void onCreate(Bundle savedInstanceState)
+  protected void onCreate (Bundle savedInstanceState)
   {
-    super.onCreate(savedInstanceState);
+    super.onCreate (savedInstanceState);
 
-    WindowManager window = getWindowManager();
-    mcDisplay = window.getDefaultDisplay();
+    WindowManager window = getWindowManager ();
+    mcDisplay = window.getDefaultDisplay ();
 
-    mcPowerUpView = new PowerUpView(this, mcDisplay);
-    mcAnimatedView = new BoomshineView(this, mcDisplay);
-    mcAnimatedView.setBackgroundColor(Color.BLACK);
-    mcHighScoreView = new HighScoreView(this);
-    setContentView(R.layout.activity_boomshine_game);
+    mcPowerUpView = new PowerUpView (this, mcDisplay);
+    mcAnimatedView = new BoomshineView (this, mcDisplay);
+    mcAnimatedView.setBackgroundColor (Color.BLACK);
+    mcHighScoreView = new HighScoreView (this);
+    setContentView (R.layout.activity_boomshine_game);
 
     //Init service
-    mcCompositeDisposable = new CompositeDisposable();
-    Retrofit retrofitClient = RetrofitClient.getInstance();
-    mcService = retrofitClient.create(HttpService.class);
+    mcCompositeDisposable = new CompositeDisposable ();
+    Retrofit retrofitClient = RetrofitClient.getInstance ();
+    mcService = retrofitClient.create (HttpService.class);
 
     //Get user info
-    Intent cIntent = getIntent();
+    Intent cIntent = getIntent ();
 
-    String username = cIntent.getStringExtra(sUsername);
-    String maintainUsername = cIntent.getStringExtra(sUsername);
+    String username = cIntent.getStringExtra (sUsername);
+    String maintainUsername = cIntent.getStringExtra (sUsername);
     if (maintainUsername != null)
     {
       mcName = maintainUsername;
@@ -90,7 +89,7 @@ public class BoomshineGame extends AppCompatActivity
     }
     if (mcName != null)
     {
-      getUserData(mcName);
+      getUserData (mcName);
     }
   }
 
@@ -98,29 +97,29 @@ public class BoomshineGame extends AppCompatActivity
    * Updates the user data whenever the activity is onStop.
    */
   @Override
-  protected void onStop()
+  protected void onStop ()
   {
     if (mcName != null)
     {
-      updateUserData();
+      updateUserData ();
     }
-    super.onStop();
+    super.onStop ();
   }
 
   /**
    * Changes to game view when play is clicked.
    */
-  public void onPlayClicked(View cView)
+  public void onPlayClicked (View cView)
   {
-    setContentView(mcAnimatedView);
+    setContentView (mcAnimatedView);
   }
 
   /**
    * Changes back to game menu when back button is clicked
    */
-  public void onBackClicked()
+  public void onBackClicked ()
   {
-    setContentView(R.layout.activity_boomshine_game);
+    setContentView (R.layout.activity_boomshine_game);
   }
 
   /**
@@ -128,49 +127,49 @@ public class BoomshineGame extends AppCompatActivity
    *
    * @param username The user's username
    */
-  private void getUserData(String username)
+  private void getUserData (String username)
   {
     final String sHighScore = "HighScore";
     final String sPoints = "Points";
     final String sPWSuper = "PWSuper";
     final String sPWMulti = "PWMulti";
     final String sPWUltimate = "PwUltimate";
-    mcCompositeDisposable.add(mcService.getUserData(username)
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(new Consumer<String>()
-      {
-        @Override
-        public void accept(String response) throws Exception
-        {
-          //Returned response has ""x"" format
-          response = response.replace("\"", "");
-          mcUserData = new JSONObject(response);
-          try
-          {
-            mHighScore = (mcUserData.getInt(sHighScore));
-            mPoints = (mcUserData.getInt(sPoints));
-            mPWSuper = (mcUserData.getInt(sPWSuper));
-            mPWMulti = (mcUserData.getInt(sPWMulti));
-            mPWUlti = (mcUserData.getInt(sPWUltimate));
-          } catch (JSONException e)
-          {
-            e.printStackTrace();
-          }
-        }
-      }));
+    mcCompositeDisposable.add (mcService.getUserData (username)
+            .subscribeOn (Schedulers.io ())
+            .observeOn (AndroidSchedulers.mainThread ())
+            .subscribe (new Consumer<String> ()
+            {
+              @Override
+              public void accept (String response) throws Exception
+              {
+                //Returned response has ""x"" format
+                response = response.replace ("\"", "");
+                mcUserData = new JSONObject (response);
+                try
+                {
+                  mHighScore = (mcUserData.getInt (sHighScore));
+                  mPoints = (mcUserData.getInt (sPoints));
+                  mPWSuper = (mcUserData.getInt (sPWSuper));
+                  mPWMulti = (mcUserData.getInt (sPWMulti));
+                  mPWUlti = (mcUserData.getInt (sPWUltimate));
+                } catch (JSONException e)
+                {
+                  e.printStackTrace ();
+                }
+              }
+            }));
   }
 
   /**
    * Updates the user data to database through http request to server
    */
-  private void updateUserData()
+  private void updateUserData ()
   {
-    mcCompositeDisposable.add(mcService.updateUser(mcName,
-      mHighScore, mPoints, mPWMulti, mPWSuper, mPWUlti)
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe());
+    mcCompositeDisposable.add (mcService.updateUser (mcName,
+            mHighScore, mPoints, mPWMulti, mPWSuper, mPWUlti)
+            .subscribeOn (Schedulers.io ())
+            .observeOn (AndroidSchedulers.mainThread ())
+            .subscribe ());
   }
 
   /**
@@ -178,9 +177,9 @@ public class BoomshineGame extends AppCompatActivity
    *
    * @param cView The view clicked
    */
-  public void onPowerupsClicked(View cView)
+  public void onPowerupsClicked (View cView)
   {
-    setContentView(mcPowerUpView);
+    setContentView (mcPowerUpView);
   }
 
   /**
@@ -188,9 +187,9 @@ public class BoomshineGame extends AppCompatActivity
    *
    * @param cView The view clicked
    */
-  public void onHighScoresClicked(View cView)
+  public void onHighScoresClicked (View cView)
   {
-    setContentView(mcHighScoreView);
+    setContentView (mcHighScoreView);
   }
 
   /**
@@ -199,7 +198,7 @@ public class BoomshineGame extends AppCompatActivity
    *
    * @return
    */
-  public void onMultiBuy()
+  public void onMultiBuy ()
   {
     mPWMulti++;
     mPoints -= MULTI_PRICE;
@@ -209,7 +208,7 @@ public class BoomshineGame extends AppCompatActivity
    * Increase the users super ball power up and decrease their points
    * accordingly when user clicks to buy super ball power up
    */
-  public void onSuperBuy()
+  public void onSuperBuy ()
   {
     mPWSuper++;
     mPoints -= SUPER_PRICE;
@@ -219,7 +218,7 @@ public class BoomshineGame extends AppCompatActivity
    * Increase the users ulti ball power up and decrease their points
    * accordingly when user clicks to buy ulti ball power up
    */
-  public void onUltiBuy()
+  public void onUltiBuy ()
   {
     mPWUlti++;
     mPoints -= ULTI_PRICE;
@@ -230,7 +229,7 @@ public class BoomshineGame extends AppCompatActivity
    *
    * @return The user's high score
    */
-  public int getHighScore()
+  public int getHighScore ()
   {
     return mHighScore;
   }
@@ -240,7 +239,7 @@ public class BoomshineGame extends AppCompatActivity
    *
    * @return The user's points
    */
-  public int getPoints()
+  public int getPoints ()
   {
     return mPoints;
   }
@@ -250,7 +249,7 @@ public class BoomshineGame extends AppCompatActivity
    *
    * @return The user's multi ball power up amount
    */
-  public int getPWMulti()
+  public int getPWMulti ()
   {
     return mPWMulti;
   }
@@ -260,7 +259,7 @@ public class BoomshineGame extends AppCompatActivity
    *
    * @return The user's super ball power up amount
    */
-  public int getPWSuper()
+  public int getPWSuper ()
   {
     return mPWSuper;
   }
@@ -270,7 +269,7 @@ public class BoomshineGame extends AppCompatActivity
    *
    * @return The user's ulti ball power up amount
    */
-  public int getPWUlti()
+  public int getPWUlti ()
   {
     return mPWUlti;
   }
@@ -278,7 +277,7 @@ public class BoomshineGame extends AppCompatActivity
   /**
    * Sets the user's high score
    */
-  public void setHighScore(int highScore)
+  public void setHighScore (int highScore)
   {
     mHighScore = highScore;
   }
@@ -286,7 +285,7 @@ public class BoomshineGame extends AppCompatActivity
   /**
    * Sets the user's points
    */
-  public void setPoints(int points)
+  public void setPoints (int points)
   {
     mPoints = points;
   }
@@ -294,7 +293,7 @@ public class BoomshineGame extends AppCompatActivity
   /**
    * Sets the user's multi ball power up amount
    */
-  public void setPWMulti(int pwMulti)
+  public void setPWMulti (int pwMulti)
   {
     mPWMulti = pwMulti;
   }
@@ -302,7 +301,7 @@ public class BoomshineGame extends AppCompatActivity
   /**
    * Sets the user's super ball power up amount
    */
-  public void setPWSuper(int pwSuper)
+  public void setPWSuper (int pwSuper)
   {
     mPWSuper = pwSuper;
   }
@@ -310,7 +309,7 @@ public class BoomshineGame extends AppCompatActivity
   /**
    * Sets the user's ulti ball power up amount
    */
-  public void setPWUlti(int pwUlti)
+  public void setPWUlti (int pwUlti)
   {
     mPWUlti = pwUlti;
   }
@@ -321,7 +320,7 @@ public class BoomshineGame extends AppCompatActivity
    * @return true if they have enough points to buy a multiball power up,
    * false if not
    */
-  public boolean canBuyMulti()
+  public boolean canBuyMulti ()
   {
     return mPoints >= MULTI_PRICE;
   }
@@ -332,7 +331,7 @@ public class BoomshineGame extends AppCompatActivity
    * @return true if they have enough points to buy a super ball power up,
    * false if not
    */
-  public boolean canBuySuper()
+  public boolean canBuySuper ()
   {
     return mPoints >= SUPER_PRICE;
   }
@@ -343,7 +342,7 @@ public class BoomshineGame extends AppCompatActivity
    * @return true if they have enough points to buy a super ball power up,
    * false if not
    */
-  public boolean canBuyUlti()
+  public boolean canBuyUlti ()
   {
     return mPoints >= ULTI_PRICE;
   }
@@ -352,27 +351,27 @@ public class BoomshineGame extends AppCompatActivity
    * Handles the game over logic.
    * Updates user data and opens game over activity
    */
-  public void onGameOver(int totalScore, int userMultiPowerups,
-                         int userSuperPowerups, int userUltraPowerups)
+  public void onGameOver (int totalScore, int userMultiPowerups,
+                          int userSuperPowerups, int userUltraPowerups)
   {
     final String sPlayerScore = "player_score";
-    Intent gameOverIntent = new Intent(BoomshineGame.this,
-      GameOverActivity.class);
-    gameOverIntent.putExtra(sPlayerScore, totalScore);
+    Intent gameOverIntent = new Intent (BoomshineGame.this,
+            GameOverActivity.class);
+    gameOverIntent.putExtra (sPlayerScore, totalScore);
     if (mcName != null)
     {
-      gameOverIntent.putExtra(sUsername, mcName);
+      gameOverIntent.putExtra (sUsername, mcName);
     }
 
-    if (getHighScore() < totalScore)
+    if (getHighScore () < totalScore)
     {
-      setHighScore(totalScore);
+      setHighScore (totalScore);
     }
 
-    setPWMulti(userMultiPowerups);
-    setPWSuper(userSuperPowerups);
-    setPWUlti(userUltraPowerups);
+    setPWMulti (userMultiPowerups);
+    setPWSuper (userSuperPowerups);
+    setPWUlti (userUltraPowerups);
 
-    startActivity(gameOverIntent);
+    startActivity (gameOverIntent);
   }
 }
