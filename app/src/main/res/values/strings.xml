@@ -32,4 +32,5 @@
     <string name="power_ups">Power Ups</string>
     <string name="highscores">HighScores</string>
     <string name="coin_source">Coin Icon by Ravindra Kalkani on Iconscout</string>
+    <string name="zap_splat_link">Sound effects obtained from https://www.zapsplat.com</string>
 </resources>
