@@ -17,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class About extends AppCompatActivity {
 
     /**
-     * Overrides the superball.onCreate method to define activity creation.
-     * CSets the content view to the About activity.
+     * Overrides the super.onCreate method to define activity creation.
+     * Sets the content view to the About activity.
      *
      * @param savedInstanceState a bundle containing any saved state from a
      *                           previous instance of this activity
