@@ -5,7 +5,7 @@ import android.view.Display;
 import java.util.ArrayList;
 
 /**
- * Creates an SuperballExplode class that defines creation of
+ * Creates a SuperballExplode class that defines creation of
  * the Super Ball ExplodingBoundedMovingCircle power up.
  *
  * @author Thomas Robasciotti

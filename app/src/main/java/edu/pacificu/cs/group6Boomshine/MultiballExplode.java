@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Creates an MultiballExplode class that defines creation of
+ * Creates a MultiballExplode class that defines creation of
  * the Multi Ball ExplodingBoundedMovingCircle power up.
  *
  * @author Thomas Robasciotti

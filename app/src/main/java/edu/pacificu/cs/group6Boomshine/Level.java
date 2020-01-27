@@ -6,8 +6,8 @@ package edu.pacificu.cs.group6Boomshine;
  * and a level score that is added to the overall game score.
  *
  * @author Thomas Robasciotti
- *
  * @version 1.0
+ * @since 1/24/2019
  */
 
 public class Level {
@@ -82,6 +82,13 @@ public class Level {
         this.mCirclesHit++;
     }
 
+    /**
+     * Handles moving from one level to another by
+     * incrementing the level and resetting level-specific
+     * values to defaults.
+     *
+     */
+
     public void nextLevel () {
         this.mLevelNumber++;
         this.mLevelScore = 0;
@@ -90,9 +97,24 @@ public class Level {
         this.mTotalCircles = mLevelNumber * CIRCLE_MULTIPLIER;
     }
 
+    /**
+     * Retrieves the current level number
+     *
+     * @return The current level number
+     */
+
     public int getLevelNumber () {
         return this.mLevelNumber;
     }
+
+    /**
+     * Retrieves the current number of circles hit, the number
+     * of circles required, and the total number of circles
+     * in a formatted string
+     *
+     * @return A formatted string containing the circles hit,
+     * the hits required, and the total number of circles.
+     */
 
     public String getHitInfo () {
         String sHitInfo = "Hit: " + mCirclesHit + "/" + mHitsRequired + " from " + mTotalCircles;

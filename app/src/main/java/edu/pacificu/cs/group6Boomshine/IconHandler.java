@@ -2,11 +2,19 @@ package edu.pacificu.cs.group6Boomshine;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.Paint;
-
 import java.util.ArrayList;
+
+/**
+ * Defines the IconHandler class that contains all selectable icons
+ * that will be displayed during game play. Exposes IconRectangle behavior
+ * and scales the icon region of the screen based on device screen
+ * size.
+ *
+ * @author Thomas Robasciotti
+ * @version 1.0
+ * @since 1.25.2019
+ */
 
 public class IconHandler {
 
@@ -14,6 +22,14 @@ public class IconHandler {
     private int mHeight;
     private ArrayList<IconRectangle> mcIcons;
     private Rect mcIconPanel;
+
+    /**
+     * Initializes member variables to default values.
+     * Creates an array of IconRectangles based on values
+     * contained in the ExplodingType enumeration.
+     *
+     * @param context The calling context object
+     */
 
     IconHandler(Context context)
     {
