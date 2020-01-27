@@ -55,30 +55,31 @@ public class BoomshineView extends ImageView
   private int mUserMultiPowerups;
   private int mUserSuperPowerups;
   private int mUserUltraPowerups;
+
   /**
    * Constructor that initializes the BoomshineView
    *
    * @param context reference to application-specific resources
    * @param display the display
    */
-  public BoomshineView(Context context, Display display)
+  public BoomshineView (Context context, Display display)
   {
-    super(context);
-    setFocusable(true); // make sure we get key events
-    mcMovingSprites = new ArrayList<>();
-    mcExplodingSprites = new ArrayList<>();
-    mcCoinSprites = new ArrayList<>();
+    super (context);
+    setFocusable (true); // make sure we get key events
+    mcMovingSprites = new ArrayList<> ();
+    mcExplodingSprites = new ArrayList<> ();
+    mcCoinSprites = new ArrayList<> ();
     mcContext = context;
     mcDisplay = display;
-    mcLevel = new Level(1);
+    mcLevel = new Level (1);
     mCurrentLevel = 1;
-    mcPaint = new Paint();
-    mcPaint.setAntiAlias(true);
+    mcPaint = new Paint ();
+    mcPaint.setAntiAlias (true);
     mTotalScore = 0;
     mNumAttempts = 0;
     mGameEnd = false;
-    mcFactory = new ExplodingCircleFactory();
-    mcIconHandler = new IconHandler(context);
+    mcFactory = new ExplodingCircleFactory ();
+    mcIconHandler = new IconHandler (context);
     meType = ExplodingType.NORMAL;
     mDifficultyScale = 1;
     mcGameReference = (BoomshineGame) context;
@@ -90,7 +91,7 @@ public class BoomshineView extends ImageView
    * @param canvas used to host the draw calls
    */
   @Override
-  public void onDraw(Canvas canvas)
+  public void onDraw (Canvas canvas)
   {
     //Constants for drawing components on view
     final int POSITION_FIFTY = 50;
@@ -104,29 +105,29 @@ public class BoomshineView extends ImageView
     final String sTotalScore = "Total Score: ";
     final String sPoints = "Points: ";
     final String sSlash = " / ";
-    if (!mGameEnd)
+    if (! mGameEnd)
     {
-      mUserMultiPowerups = ((BoomshineGame) mcContext).getPWMulti();
-      mUserSuperPowerups = ((BoomshineGame) mcContext).getPWSuper();
-      mUserUltraPowerups = ((BoomshineGame) mcContext).getPWUlti();
+      mUserMultiPowerups = ((BoomshineGame) mcContext).getPWMulti ();
+      mUserSuperPowerups = ((BoomshineGame) mcContext).getPWSuper ();
+      mUserUltraPowerups = ((BoomshineGame) mcContext).getPWUlti ();
       ExplodingBoundedMovingCircle cCollidedMovingCircle = null;
       ExplodingBoundedMovingCircle cExplodedCircle = null;
       ExplodingBoundedMovingCircle cCollidedCoin = null;
-      mHeight = getHeight();
-      mWidth = getWidth();
+      mHeight = getHeight ();
+      mWidth = getWidth ();
 
       DEFAULT_BALL_RADIUS = mHeight / BALL_SCALE_FACTOR;
       if (firstRender)
       {
-        setCircles(mcLevel.getLevelNumber());
-        setCoin(mcLevel.getLevelNumber());
+        setCircles (mcLevel.getLevelNumber ());
+        setCoin (mcLevel.getLevelNumber ());
         firstRender = false;
       }
 
       for (ExplodingBoundedMovingCircle cExplodingSprite : mcExplodingSprites)
       {
-        cExplodingSprite.doDraw(canvas);
-        if (cExplodingSprite.handleExploding())
+        cExplodingSprite.doDraw (canvas);
+        if (cExplodingSprite.handleExploding ())
         {
           cExplodedCircle = cExplodingSprite;
         }
@@ -134,29 +135,29 @@ public class BoomshineView extends ImageView
 
       for (ExplodingBoundedMovingCircle cCoin : mcCoinSprites)
       {
-        cCoin.move();
-        cCoin.hitBound();
-        cCoin.doDraw(canvas);
+        cCoin.move ();
+        cCoin.hitBound ();
+        cCoin.doDraw (canvas);
         for (ExplodingBoundedMovingCircle cExplodingSprite
                 : mcExplodingSprites)
         {
-          if (cCoin.collide(cExplodingSprite))
+          if (cCoin.collide (cExplodingSprite))
           {
             cCollidedCoin = cCoin;
-            coinCollision();
+            coinCollision ();
           }
         }
       }
 
       for (ExplodingBoundedMovingCircle cMovingSprite : mcMovingSprites)
       {
-        cMovingSprite.move();
-        cMovingSprite.hitBound();
-        cMovingSprite.doDraw(canvas);
+        cMovingSprite.move ();
+        cMovingSprite.hitBound ();
+        cMovingSprite.doDraw (canvas);
         for (ExplodingBoundedMovingCircle cExplodingSprite
                 : mcExplodingSprites)
         {
-          if (cMovingSprite.collide(cExplodingSprite))
+          if (cMovingSprite.collide (cExplodingSprite))
           {
             cCollidedMovingCircle = cMovingSprite;
           }
@@ -165,57 +166,57 @@ public class BoomshineView extends ImageView
 
       if (cExplodedCircle != null)
       {
-        mcExplodingSprites.remove(cExplodedCircle);
+        mcExplodingSprites.remove (cExplodedCircle);
       }
       if (cCollidedMovingCircle != null)
       {
-        mcExplodingSprites.add(cCollidedMovingCircle);
-        mcLevel.incrememtCirclesHit(mcMediaPlayer, mcContext);
-        mcMovingSprites.remove(cCollidedMovingCircle);
+        mcExplodingSprites.add (cCollidedMovingCircle);
+        mcLevel.incrememtCirclesHit (mcMediaPlayer, mcContext);
+        mcMovingSprites.remove (cCollidedMovingCircle);
       }
 
       if (cCollidedCoin != null)
       {
-        mcCoinSprites.remove(cCollidedCoin);
+        mcCoinSprites.remove (cCollidedCoin);
       }
 
-      if (!mbFirstClick && mcExplodingSprites.isEmpty())
+      if (! mbFirstClick && mcExplodingSprites.isEmpty ())
       {
-        if (mcLevel.levelOver())
+        if (mcLevel.levelOver ())
         {
-          levelPassed();
+          levelPassed ();
         } else
         {
-          levelFailed();
+          levelFailed ();
         }
       }
 
       //Paint Score on screen
-      mcPaint.setColor(getResources().getColor(R.color.cWhite));
-      setTextSizeForWidth(mcPaint, mWidth / SCALE_FOUR, mcLevel.getHitInfo());
-      //mcPaint.setTextSize(50);
-      canvas.drawText(mcLevel.getHitInfo(), POSITION_TEN,
+      mcPaint.setColor (getResources ().getColor (R.color.cWhite));
+      setTextSizeForWidth (mcPaint, mWidth / SCALE_FOUR,
+              mcLevel.getHitInfo ());
+      canvas.drawText (mcLevel.getHitInfo (), POSITION_TEN,
               POSITION_FIFTY, mcPaint);
-      canvas.drawText(sLevel + mCurrentLevel, mWidth - SCALE_EIGHT *
+      canvas.drawText (sLevel + mCurrentLevel, mWidth - SCALE_EIGHT *
               (mWidth / SCALE_FIFTEEN), POSITION_FIFTY, mcPaint);
-      canvas.drawText(sAttempts + (mNumAttempts + 1) + sSlash
+      canvas.drawText (sAttempts + (mNumAttempts + 1) + sSlash
                       + MAX_LEVEL_ATTEMPTS,
               mWidth - (mWidth / SCALE_FOUR), POSITION_FIFTY, mcPaint);
 
-      canvas.drawText(sTotalScore + mTotalScore, POSITION_TEN,
+      canvas.drawText (sTotalScore + mTotalScore, POSITION_TEN,
               mHeight - POSITION_FIFTY, mcPaint);
-      canvas.drawText(sPoints + mcGameReference.getPoints(), POSITION_TEN,
-              mHeight - POSITION_HUNDRED, mcPaint);
+      canvas.drawText (sPoints + mcGameReference.getPoints (),
+              POSITION_TEN, mHeight - POSITION_HUNDRED, mcPaint);
 
-      mcIconHandler.drawIcons(canvas, mUserMultiPowerups, mUserUltraPowerups,
+      mcIconHandler.drawIcons (canvas, mUserMultiPowerups, mUserUltraPowerups,
               mUserSuperPowerups);
 
-      super.onDraw(canvas);
-      invalidate();
+      super.onDraw (canvas);
+      invalidate ();
     } else
     {
-      mcGameReference.onGameOver(mTotalScore, mUserMultiPowerups, mUserSuperPowerups,
-              mUserUltraPowerups);
+      mcGameReference.onGameOver (mTotalScore, mUserMultiPowerups,
+              mUserSuperPowerups, mUserUltraPowerups);
     }
   }
 
@@ -226,25 +227,25 @@ public class BoomshineView extends ImageView
    * @param event event input details from the touch screen event
    */
   @Override
-  public boolean onTouchEvent(MotionEvent event)
+  public boolean onTouchEvent (MotionEvent event)
   {
     if (mcMediaPlayer != null)
     {
-      mcMediaPlayer.release();
+      mcMediaPlayer.release ();
     }
-    if (!donePlayingSound)
+    if (! donePlayingSound)
     {
-      mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.click_sound);
-      mcMediaPlayer.start();
+      mcMediaPlayer = MediaPlayer.create (getContext (), R.raw.click_sound);
+      mcMediaPlayer.start ();
     }
 
     int color;
-    int xTouchPos = (int) event.getX();
-    int yTouchPos = (int) event.getY();
+    int xTouchPos = (int) event.getX ();
+    int yTouchPos = (int) event.getY ();
 
-    if (event.getAction() != MotionEvent.ACTION_DOWN)
+    if (event.getAction () != MotionEvent.ACTION_DOWN)
     {
-      return super.onTouchEvent(event);
+      return super.onTouchEvent (event);
     }
 
     //If first click, check if selected power up or placed ball
@@ -252,11 +253,11 @@ public class BoomshineView extends ImageView
     //player places ball on screen.
     if (mbFirstClick)
     {
-      color = getRandomColor();
+      color = getRandomColor ();
 
-      if (mcIconHandler.checkIconBounds(xTouchPos, yTouchPos))
+      if (mcIconHandler.checkIconBounds (xTouchPos, yTouchPos))
       {
-        meType = mcIconHandler.checkPress(xTouchPos, yTouchPos);
+        meType = mcIconHandler.checkPress (xTouchPos, yTouchPos);
       } else
       {
         if (meType != ExplodingType.NORMAL)
@@ -265,26 +266,26 @@ public class BoomshineView extends ImageView
           {
             case MULTI:
               mUserMultiPowerups--;
-              ((BoomshineGame) mcContext).setPWMulti(mUserMultiPowerups);
+              ((BoomshineGame) mcContext).setPWMulti (mUserMultiPowerups);
               break;
             case SUPER:
               mUserSuperPowerups--;
-              ((BoomshineGame) mcContext).setPWSuper(mUserSuperPowerups);
+              ((BoomshineGame) mcContext).setPWSuper (mUserSuperPowerups);
               break;
             case ULTIMATE:
               mUserUltraPowerups--;
-              ((BoomshineGame) mcContext).setPWUlti(mUserUltraPowerups);
+              ((BoomshineGame) mcContext).setPWUlti (mUserUltraPowerups);
               break;
             default:
               break;
           }
         }
-        mcExplodingSprites.addAll(mcFactory.create(meType, getContext(),
-                getDisplay(), color, (int) event.getY() +
+        mcExplodingSprites.addAll (mcFactory.create (meType, getContext (),
+                getDisplay (), color, (int) event.getY () +
                         DEFAULT_BALL_RADIUS / SCALE_BY_TWO,
-                (int) event.getX() + DEFAULT_BALL_RADIUS / SCALE_BY_TWO,
-                0, 0, mHeight,
-                0, mWidth, DEFAULT_BALL_RADIUS));
+                (int) event.getX () +
+                        DEFAULT_BALL_RADIUS / SCALE_BY_TWO, 0,
+                0, mHeight, 0, mWidth, DEFAULT_BALL_RADIUS));
         mbFirstClick = false;
       }
     }
@@ -297,7 +298,7 @@ public class BoomshineView extends ImageView
    *
    * @param level The current game level
    */
-  void setCircles(int level)
+  void setCircles (int level)
   {
     final int MEDIUM_DIFFICULTY = 6;
     final double MEDIUM_SCALE = 1.5;
@@ -306,7 +307,7 @@ public class BoomshineView extends ImageView
     final int CIRCLE_SPEED = 3;
     int topBound;
     int leftBound;
-    Random cRandom = new Random();
+    Random cRandom = new Random ();
     int color;
     float defaultRadius = DEFAULT_BALL_RADIUS;
     if (level > MEDIUM_DIFFICULTY && level < HARD_DIFFICULTY)
@@ -320,20 +321,20 @@ public class BoomshineView extends ImageView
 
     for (int i = 0; i < level * CIRCLE_LEVEL_MULTIPLIER; i++)
     {
-      color = getRandomColor();
-      topBound = cRandom.nextInt(mHeight - DEFAULT_BALL_RADIUS * SCALE_BY_TWO)
-              + DEFAULT_BALL_RADIUS;
-      leftBound = cRandom.nextInt(mWidth - DEFAULT_BALL_RADIUS * SCALE_BY_TWO)
-              + DEFAULT_BALL_RADIUS;
+      color = getRandomColor ();
+      topBound = cRandom.nextInt (mHeight -
+              DEFAULT_BALL_RADIUS * SCALE_BY_TWO) + DEFAULT_BALL_RADIUS;
+      leftBound = cRandom.nextInt (mWidth -
+              DEFAULT_BALL_RADIUS * SCALE_BY_TWO) + DEFAULT_BALL_RADIUS;
       int speed = CIRCLE_SPEED;
 
       ExplodingBoundedMovingCircle cNew
-              = new ExplodingBoundedMovingCircle(ExplodingType.NORMAL,
-              mcContext, mcDisplay, color, topBound - DEFAULT_BALL_RADIUS,
-              leftBound - DEFAULT_BALL_RADIUS, speed, 0,
-              mHeight, 0,
-              mWidth, (int) (defaultRadius / mDifficultyScale));
-      mcMovingSprites.add(cNew);
+              = new ExplodingBoundedMovingCircle (ExplodingType.NORMAL,
+              mcContext, mcDisplay, color, topBound -
+              DEFAULT_BALL_RADIUS, leftBound - DEFAULT_BALL_RADIUS,
+              speed, 0, mHeight, 0, mWidth,
+              (int) (defaultRadius / mDifficultyScale));
+      mcMovingSprites.add (cNew);
     }
   }
 
@@ -342,59 +343,58 @@ public class BoomshineView extends ImageView
    *
    * @param level The current game level
    */
-  void setCoin(int level)
+  void setCoin (int level)
   {
     final int DEFAUlT_COIN_WIDTH = 58;
     final int COIN_SPEED = 3;
     int topBound;
     int leftBound;
-    Random cRandom = new Random();
-    int color = getResources().getColor(R.color.coin);
+    Random cRandom = new Random ();
+    int color = getResources ().getColor (R.color.coin);
 
     for (int i = 0; i < level; i++)
     {
-      topBound = cRandom.nextInt(mHeight - DEFAUlT_COIN_WIDTH * SCALE_BY_TWO)
-              + DEFAUlT_COIN_WIDTH;
-      leftBound = cRandom.nextInt(mWidth - DEFAUlT_COIN_WIDTH * SCALE_BY_TWO)
-              + DEFAUlT_COIN_WIDTH;
+      topBound = cRandom.nextInt (mHeight - DEFAUlT_COIN_WIDTH *
+              SCALE_BY_TWO) + DEFAUlT_COIN_WIDTH;
+      leftBound = cRandom.nextInt (mWidth - DEFAUlT_COIN_WIDTH *
+              SCALE_BY_TWO) + DEFAUlT_COIN_WIDTH;
       int speed = COIN_SPEED;
 
       ExplodingBoundedMovingCircle cNew
-              = new ExplodingBoundedMovingCircle(ExplodingType.NORMAL,
+              = new ExplodingBoundedMovingCircle (ExplodingType.NORMAL,
               mcContext, mcDisplay, color,
               topBound - DEFAUlT_COIN_WIDTH / SCALE_BY_TWO,
-              leftBound - DEFAUlT_COIN_WIDTH / SCALE_BY_TWO, speed, 0,
-              mHeight, 0,
-              mWidth, 0);
-      mcCoinSprites.add(cNew);
+              leftBound - DEFAUlT_COIN_WIDTH / SCALE_BY_TWO, speed,
+              0, mHeight, 0, mWidth, 0);
+      mcCoinSprites.add (cNew);
     }
   }
 
   /**
    * Utility function to get random colors for the balls
    */
-  public int getRandomColor()
+  public int getRandomColor ()
   {
     final int FIVE_COLORS = 5;
-    Random cRandom = new Random();
-    int randomColor = cRandom.nextInt(FIVE_COLORS);
+    Random cRandom = new Random ();
+    int randomColor = cRandom.nextInt (FIVE_COLORS);
     int color = 0;
     switch (randomColor)
     {
       case 0:
-        color = getResources().getColor(R.color.cGrass1);
+        color = getResources ().getColor (R.color.cGrass1);
         break;
       case 1:
-        color = getResources().getColor(R.color.cYellow);
+        color = getResources ().getColor (R.color.cYellow);
         break;
       case 2:
-        color = getResources().getColor(R.color.cBlue);
+        color = getResources ().getColor (R.color.cBlue);
         break;
       case 3:
-        color = getResources().getColor(R.color.cOrange);
+        color = getResources ().getColor (R.color.cOrange);
         break;
       case 4:
-        color = getResources().getColor(R.color.cPurple);
+        color = getResources ().getColor (R.color.cPurple);
         break;
     }
     return color;
@@ -403,37 +403,37 @@ public class BoomshineView extends ImageView
   /**
    * Handles the logic when the level is passed
    */
-  public void levelPassed()
+  public void levelPassed ()
   {
-    mTotalScore += mcLevel.getLevelScore();
+    mTotalScore += mcLevel.getLevelScore ();
     mNumAttempts = 0;
-    mcLevel.nextLevel();
+    mcLevel.nextLevel ();
     mCurrentLevel++;
-    resetLevelFlags();
+    resetLevelFlags ();
     if (mcMediaPlayer != null)
     {
-      mcMediaPlayer.release();
+      mcMediaPlayer.release ();
     }
-    mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.win_sound);
-    mcMediaPlayer.start();
+    mcMediaPlayer = MediaPlayer.create (getContext (), R.raw.win_sound);
+    mcMediaPlayer.start ();
   }
 
   /**
    * Handles the logic when the level is failed
    */
-  public void levelFailed()
+  public void levelFailed ()
   {
     mNumAttempts++;
-    if (!donePlayingSound)
+    if (! donePlayingSound)
     {
-      mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.lose_sound);
-      mcMediaPlayer.start();
+      mcMediaPlayer = MediaPlayer.create (getContext (), R.raw.lose_sound);
+      mcMediaPlayer.start ();
     }
     donePlayingSound = true;
     if (mNumAttempts < MAX_LEVEL_ATTEMPTS)
     {
-      resetLevelFlags();
-      mcLevel = new Level(mCurrentLevel);
+      resetLevelFlags ();
+      mcLevel = new Level (mCurrentLevel);
       donePlayingSound = false;
     } else
     {
@@ -444,26 +444,26 @@ public class BoomshineView extends ImageView
   /**
    * Resets and cleans up data when the level is over
    */
-  private void resetLevelFlags()
+  private void resetLevelFlags ()
   {
     firstRender = true;
     mbFirstClick = true;
-    mcMovingSprites.clear();
-    mcExplodingSprites.clear();
-    mcCoinSprites.clear();
+    mcMovingSprites.clear ();
+    mcExplodingSprites.clear ();
+    mcCoinSprites.clear ();
     meType = ExplodingType.NORMAL;
-    mcIconHandler.resetIcons();
+    mcIconHandler.resetIcons ();
   }
 
   /**
    * Makes the text size responsive based on the canvas width
    *
-   * @param paint the paint object we use to paint the text
+   * @param paint        the paint object we use to paint the text
    * @param desiredWidth The desired width for the text
-   * @param text The text we want to render on the view
+   * @param text         The text we want to render on the view
    */
-  private static void setTextSizeForWidth(Paint paint, float desiredWidth,
-                                          String text)
+  private static void setTextSizeForWidth (Paint paint, float desiredWidth,
+                                           String text)
   {
 
     // Pick a reasonably large value for the test. Larger values produce
@@ -474,24 +474,24 @@ public class BoomshineView extends ImageView
     final float testTextSize = 48f;
 
     // Get the bounds of the text, using our testTextSize.
-    paint.setTextSize(testTextSize);
-    Rect bounds = new Rect();
-    paint.getTextBounds(text, 0, text.length(), bounds);
+    paint.setTextSize (testTextSize);
+    Rect bounds = new Rect ();
+    paint.getTextBounds (text, 0, text.length (), bounds);
 
     // Calculate the desired size as a proportion of our testTextSize.
-    float desiredTextSize = testTextSize * desiredWidth / bounds.width();
+    float desiredTextSize = testTextSize * desiredWidth / bounds.width ();
 
     // Set the paint for that size.
-    paint.setTextSize(desiredTextSize);
+    paint.setTextSize (desiredTextSize);
   }
 
   /**
    * Handles the logic when the coin collides with the exploding circles
    */
-  public void coinCollision()
+  public void coinCollision ()
   {
-    mcGameReference.setPoints(mcGameReference.getPoints() + 1);
-    mcMediaPlayer = MediaPlayer.create(getContext(), R.raw.coin_collision);
-    mcMediaPlayer.start();
+    mcGameReference.setPoints (mcGameReference.getPoints () + 1);
+    mcMediaPlayer = MediaPlayer.create (getContext (), R.raw.coin_collision);
+    mcMediaPlayer.start ();
   }
 }
