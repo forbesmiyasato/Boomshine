@@ -178,7 +178,7 @@ public class PowerUpView extends ImageView
             picWidth * SHIFT_THREE + mPicSpacing * SHIFT_THREE,
             picYStart + picHeight);
     ultiBallPic.draw(canvas);
-    //Draw multi ball amount
+    //Draw ulti ball amount
     mcPaint.setColor(getResources().getColor(R.color.cBlack));
     canvas.drawText(String.valueOf(mcGameReference.getPWUlti()),
             picWidth * SHIFT_TWO + mPicSpacing * SHIFT_THREE,

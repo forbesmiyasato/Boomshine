@@ -133,7 +133,7 @@ public class BoomshineGame extends AppCompatActivity
     final String sPoints = "Points";
     final String sPWSuper = "PWSuper";
     final String sPWMulti = "PWMulti";
-    final String sPWUltimate = "PwUltimate";
+    final String sPWUltimate = "PWUltimate";
     mcCompositeDisposable.add (mcService.getUserData (username)
             .subscribeOn (Schedulers.io ())
             .observeOn (AndroidSchedulers.mainThread ())
