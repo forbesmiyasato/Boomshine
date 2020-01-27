@@ -57,14 +57,13 @@ public class FixedSprite extends ImageView {
    * @since 1.0
    */
   public void doDraw(Canvas canvas) {
-//    canvas.drawBitmap (mBitmapImage, (this.mLeftCoordinate),
-//            this.mTopCoordinate, null);
     if (mColor == getResources().getColor(R.color.coin)) {
       mBitmapImage = BitmapFactory.decodeResource(getContext().getResources(),
               R.drawable.coin);
       canvas.drawBitmap(mBitmapImage, (this.mLeftCoordinate),
               this.mTopCoordinate, null);
-      mRadius = mBitmapImage.getWidth () / 2;
+      mRadius = mBitmapImage.getWidth ();
+//      Log.d("ONDRAW", String.valueOf(mRadius));
     } else {
       mPaint.setColor(mColor);
       canvas.drawCircle(mLeftCoordinate, mTopCoordinate, mRadius, mPaint);

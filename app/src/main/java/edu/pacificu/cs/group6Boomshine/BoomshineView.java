@@ -116,8 +116,8 @@ public class BoomshineView extends ImageView {
 
       for (ExplodingBoundedMovingCircle coin : mCoinSprites) {
         coin.move();
-        coin.doDraw(canvas);
         coin.hitBound();
+        coin.doDraw(canvas);
         for (ExplodingBoundedMovingCircle explodingSprite : mExplodingSprites) {
           if (coin.collide(explodingSprite)) {
             cCollidedCoin = coin;
@@ -276,22 +276,23 @@ public class BoomshineView extends ImageView {
   }
 
   void setCoin(int level) {
+    final int DEFAUlT_COIN_WIDTH = 58;
     int topBound;
     int leftBound;
     Random random = new Random();
     int color = getResources().getColor(R.color.coin);
 
     for (int i = 0; i < level; i++) {
-      topBound = random.nextInt(mHeight - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
-      leftBound = random.nextInt(mWidth - DEFAULT_BALL_RADIUS * 2) + DEFAULT_BALL_RADIUS;
+      topBound = random.nextInt(mHeight - DEFAUlT_COIN_WIDTH* 2) + DEFAUlT_COIN_WIDTH;
+      leftBound = random.nextInt(mWidth - DEFAUlT_COIN_WIDTH * 2) + DEFAUlT_COIN_WIDTH;
       int speed = 3;
       //int speed = new Random().nextInt(20) + 2;
 
       ExplodingBoundedMovingCircle cNew = new ExplodingBoundedMovingCircle(ExplodingType.NORMAL,
-              mContext, mDisplay, color, topBound - DEFAULT_BALL_RADIUS,
-              leftBound - DEFAULT_BALL_RADIUS, speed, 0,
+              mContext, mDisplay, color, topBound - DEFAUlT_COIN_WIDTH / 2,
+              leftBound - DEFAUlT_COIN_WIDTH / 2, speed, 0,
               mHeight, 0,
-              mWidth, 21);
+              mWidth, 0);
       mCoinSprites.add(cNew);
     }
   }

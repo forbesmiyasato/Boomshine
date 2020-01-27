@@ -1,6 +1,7 @@
 package edu.pacificu.cs.group6Boomshine;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Display;
 
 public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
@@ -57,7 +58,6 @@ public class ExplodingBoundedMovingCircle extends BoundedMovingSprite {
       mSpeed = 0;
       bCollided = true;
     }
-
 
     return bCollided;
   }
