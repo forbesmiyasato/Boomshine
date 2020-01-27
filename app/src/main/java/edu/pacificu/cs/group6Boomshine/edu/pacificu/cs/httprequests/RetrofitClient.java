@@ -12,7 +12,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  * @version 1.0
  * @since 1.26.2019
  */
-public class RetrofitClient {
+public class RetrofitClient
+{
   private static Retrofit cRetrofitInstance;
 
   /**
@@ -21,10 +22,11 @@ public class RetrofitClient {
    *
    * @return The retrofit instance.
    */
-  public static Retrofit getInstance() {
+  public static Retrofit getInstance()
+  {
     if (cRetrofitInstance == null)
     {
-      cRetrofitInstance = new Retrofit.Builder().baseUrl("http://10.0.2.2:8000.io/")
+      cRetrofitInstance = new Retrofit.Builder().baseUrl("http://10.0.2.2:8000/")
               .addConverterFactory(ScalarsConverterFactory.create())
               .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build();
     }
