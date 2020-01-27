@@ -48,6 +48,16 @@ public class IconHandler {
         }
     }
 
+    /**
+     * Sets the overall icon panel bounding rectangle (if it has not been set)
+     * and calls each IconRectangle's draw function passing in the canvas
+     * argument.
+     *
+     * @param canvas The Canvas object reference to draw the IconRectangle's to
+     * @param userMultiPowerups The current number of Multi ball power ups
+     * @param userUltraPowerups The current number of Ultimate ball power ups
+     * @param userSuperPowerups The current number of Super ball power ups
+     */
     public void drawIcons(Canvas canvas, int userMultiPowerups, int userUltraPowerups,
                           int userSuperPowerups)
     {
@@ -104,6 +114,11 @@ public class IconHandler {
         }
     }
 
+    /**
+     * Forces all IconRectangles to become unselected.
+     * Used on level reset / game over
+     */
+
     public void resetIcons()
     {
         for (IconRectangle cIconRect : mcIcons)
@@ -112,11 +127,38 @@ public class IconHandler {
         }
     }
 
+    /**
+     * Checks if passed-in x and y coordinate values fall within the
+     * overall icon panel bounding rectangle.
+     *
+     * @param xTouchPos The x-position to check
+     * @param yTouchPos The y-position to check
+     *
+     * @return True if the coordinates fall within the icon panel,
+     * otherwise returns false
+     */
+
     public boolean checkIconBounds (int xTouchPos, int yTouchPos)
     {
         return xTouchPos > this.mcIconPanel.left && xTouchPos < this.mcIconPanel.right &&
                 yTouchPos < this.mcIconPanel.bottom && yTouchPos > this.mcIconPanel.top;
     }
+
+    /**
+     * Only called if a touch event occurs within the IconHandler bounding
+     * rectangle to determine which power up was selected.
+     *
+     * Loops through each icon contained in the handler's collection
+     * and sets it to active if the passed-in coordinates fall within
+     * that IconRectangle's bounding rectangle. If that icon was already
+     * activated, resets it to passive.
+     *
+     * @param xTouchPos The x-position to check
+     * @param yTouchPos The y-position to check
+     *
+     * @return The ExplodingType value associated with the selected
+     * power up. If a power up was de-selected, returns NORMAL
+     */
 
     public ExplodingType checkPress(int xTouchPos, int yTouchPos)
     {
