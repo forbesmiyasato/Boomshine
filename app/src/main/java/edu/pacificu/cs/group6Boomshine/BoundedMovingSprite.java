@@ -15,33 +15,35 @@ import android.view.Display;
  */
 
 
-public class BoundedMovingSprite extends MovingSprite {
+public class BoundedMovingSprite extends MovingSprite
+{
   private int mTopBound;
   private int mBottomBound;
   private int mLeftBound;
   private int mRightBound;
   private int mDrawable;
 
-/**
- * Initializes bounding member variables with passed-in values
- * after calling superclass constructor.
- *
- * @param context The calling context object
- * @param display The calling display object
- * @param drawable The drawable id value
- * @param topCoord The top coordinate of created circle
- * @param leftCoord The left coordinate of created circle
- * @param speed The initial speed of the created circle
- * @param topBound The top bound for the created circle
- * @param bottomBound The bottom bound for the created circle
- * @param leftBound The left bound for the created circle
- * @param rightBound The right bound for the created circle
- */
+  /**
+   * Initializes bounding member variables with passed-in values
+   * after calling superclass constructor.
+   *
+   * @param context     The calling context object
+   * @param display     The calling display object
+   * @param drawable    The drawable id value
+   * @param topCoord    The top coordinate of created circle
+   * @param leftCoord   The left coordinate of created circle
+   * @param speed       The initial speed of the created circle
+   * @param topBound    The top bound for the created circle
+   * @param bottomBound The bottom bound for the created circle
+   * @param leftBound   The left bound for the created circle
+   * @param rightBound  The right bound for the created circle
+   */
 
-  BoundedMovingSprite(Context context, Display display, int drawable, int topCoord, int leftCoord,
-                      int speed, int topBound, int bottomBound, int leftBound, int rightBound)
+  BoundedMovingSprite (Context context, Display display, int drawable,
+                       int topCoord, int leftCoord, int speed, int topBound,
+                       int bottomBound, int leftBound, int rightBound)
   {
-    super(context, display, drawable, topCoord, leftCoord, speed);
+    super (context, display, drawable, topCoord, leftCoord, speed);
     mTopBound = topBound;
     mBottomBound = bottomBound;
     mLeftBound = leftBound;
@@ -52,24 +54,25 @@ public class BoundedMovingSprite extends MovingSprite {
   /**
    * Changes moving sprite direction based on current direction and
    * which bound limit was contacted.
-   *
    */
 
-  public void hitBound () {
-    if (getTopCoordinate() <= mTopBound) {
-      mDy = mDy * -1;
-    }
-    if (getLeftCoordinate() <= mLeftBound)
+  public void hitBound ()
+  {
+    if (getTopCoordinate () <= mTopBound)
     {
-      mDx = mDx * -1;
+      mDy = mDy * - 1;
     }
-    if (mRadius * 2 + getTopCoordinate() >= mBottomBound)
+    if (getLeftCoordinate () <= mLeftBound)
     {
-      mDy = mDy * -1;
+      mDx = mDx * - 1;
     }
-    if (mRadius * 2 + getLeftCoordinate() >= mRightBound)
+    if (mRadius * 2 + getTopCoordinate () >= mBottomBound)
     {
-      mDx = mDx * -1;
+      mDy = mDy * - 1;
+    }
+    if (mRadius * 2 + getLeftCoordinate () >= mRightBound)
+    {
+      mDx = mDx * - 1;
     }
   }
 }

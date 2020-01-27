@@ -43,21 +43,22 @@ public class HighScoreView extends ImageView
   private final int BACK_BUTTON_WIDTH = 400;
   private final int BACK_BUTTON_HEIGHT = 200;
   private final int Y_INCREMENT = 100;
-  public HighScoreView(Context context)
+
+  public HighScoreView (Context context)
   {
-    super(context);
-    setFocusable(true); // make sure we get key events
-    mPaint = new Paint();
+    super (context);
+    setFocusable (true); // make sure we get key events
+    mPaint = new Paint ();
     this.mcGame = (BoomshineGame) context;
     //Init service
-    mcCompositeDisposable = new CompositeDisposable();
-    Retrofit retrofitClient = RetrofitClient.getInstance();
-    mService = retrofitClient.create(HttpService.class);
+    mcCompositeDisposable = new CompositeDisposable ();
+    Retrofit retrofitClient = RetrofitClient.getInstance ();
+    mService = retrofitClient.create (HttpService.class);
 
-    mPaint = new Paint();
-    mPaint.setAntiAlias(true);
+    mPaint = new Paint ();
+    mPaint.setAntiAlias (true);
 
-    getHighScores();
+    getHighScores ();
   }
 
   /**
@@ -68,74 +69,80 @@ public class HighScoreView extends ImageView
    */
 
   @Override
-  public void onDraw(Canvas canvas)
+  public void onDraw (Canvas canvas)
   {
-    mWidth = getWidth();
-    mHeight = getHeight();
+    mWidth = getWidth ();
+    mHeight = getHeight ();
     String HighScore;
     String Name;
-    mPaint.setTextSize(mHeight * 0.05f);
-    mPaint.setColor(getResources().getColor(R.color.cBlack));
-    mPaint.setStyle(Paint.Style.FILL);
-    mPaint.setTextAlign(Paint.Align.CENTER);
+    mPaint.setTextSize (mHeight * 0.05f);
+    mPaint.setColor (getResources ().getColor (R.color.cBlack));
+    mPaint.setStyle (Paint.Style.FILL);
+    mPaint.setTextAlign (Paint.Align.CENTER);
 
-    canvas.drawText("High Scores",
-            (int) (mWidth / 2), (int)(mHeight / (Y_SCALE_FACTOR * 2)), mPaint);
+    canvas.drawText ("High Scores",
+      (int) (mWidth / 2), (int) (mHeight / (Y_SCALE_FACTOR * 2)), mPaint);
 
-    for (int i = 1; i <= 5; i++) {
-      try {
+    for (int i = 1; i <= 5; i++)
+    {
+      try
+      {
 
-        HighScore = mHighScores.getJSONObject(i - 1).getString("HighScore");
-        Name = mHighScores.getJSONObject(i - 1).getString("Name");
+        HighScore = mHighScores.getJSONObject (i - 1).getString ("HighScore");
+        Name = mHighScores.getJSONObject (i - 1).getString ("Name");
 
-        canvas.drawText(HighScore,
-                (int) (mWidth / X_SCALE_FACTOR), Y_INCREMENT * i
-                        + (int) (mHeight / Y_SCALE_FACTOR), mPaint);
-        canvas.drawText(Name, (int) (mWidth * 3 / X_SCALE_FACTOR),
-                Y_INCREMENT * i + (int) (mHeight / Y_SCALE_FACTOR), mPaint);
-      } catch (JSONException e) {
-        e.printStackTrace();
+        canvas.drawText (HighScore,
+          (int) (mWidth / X_SCALE_FACTOR), Y_INCREMENT * i
+            + (int) (mHeight / Y_SCALE_FACTOR), mPaint);
+        canvas.drawText (Name, (int) (mWidth * 3 / X_SCALE_FACTOR),
+          Y_INCREMENT * i + (int) (mHeight / Y_SCALE_FACTOR), mPaint);
+      } catch (JSONException e)
+      {
+        e.printStackTrace ();
       }
     }
-    Drawable back = getResources().getDrawable(R.drawable.backtomenu, null);
-    back.setBounds((mWidth - BACK_BUTTON_WIDTH) / 2, Y_INCREMENT * 5 + (int) (mHeight / Y_SCALE_FACTOR),
-            (mWidth - BACK_BUTTON_WIDTH) / 2 + BACK_BUTTON_WIDTH,
-            Y_INCREMENT * 5 + (int) (mHeight / Y_SCALE_FACTOR) + BACK_BUTTON_HEIGHT);
-    back.draw(canvas);
+    Drawable back = getResources ().getDrawable (R.drawable.backtomenu, null);
+    back.setBounds ((mWidth - BACK_BUTTON_WIDTH) / 2, Y_INCREMENT * 5 + (int) (mHeight / Y_SCALE_FACTOR),
+      (mWidth - BACK_BUTTON_WIDTH) / 2 + BACK_BUTTON_WIDTH,
+      Y_INCREMENT * 5 + (int) (mHeight / Y_SCALE_FACTOR) + BACK_BUTTON_HEIGHT);
+    back.draw (canvas);
   }
 
   @Override
-  public boolean onTouchEvent(MotionEvent event)
+  public boolean onTouchEvent (MotionEvent event)
   {
-    int x = (int) event.getX();
-    int y = (int) event.getY();
-    if (event.getAction() != MotionEvent.ACTION_DOWN) {
-      return super.onTouchEvent(event);
+    int x = (int) event.getX ();
+    int y = (int) event.getY ();
+    if (event.getAction () != MotionEvent.ACTION_DOWN)
+    {
+      return super.onTouchEvent (event);
     }
 
     if ((x >= (mWidth - BACK_BUTTON_WIDTH) / 2
-            && x <= (mWidth - BACK_BUTTON_WIDTH) / 2 + BACK_BUTTON_WIDTH)
-    && (y >= Y_INCREMENT * 5 + (int) (mHeight / Y_SCALE_FACTOR)
-            && y <= Y_INCREMENT * 5 + (int) (mHeight / Y_SCALE_FACTOR) + BACK_BUTTON_HEIGHT))
+      && x <= (mWidth - BACK_BUTTON_WIDTH) / 2 + BACK_BUTTON_WIDTH)
+      && (y >= Y_INCREMENT * 5 + (int) (mHeight / Y_SCALE_FACTOR)
+      && y <= Y_INCREMENT * 5 + (int) (mHeight / Y_SCALE_FACTOR) + BACK_BUTTON_HEIGHT))
     {
-      mcGame.onBackClicked();
+      mcGame.onBackClicked ();
     }
 
     return true;
   }
 
-  private void getHighScores()
+  private void getHighScores ()
   {
-    mcCompositeDisposable.add(mService.getHighScores()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<String>() {
-              @Override
-              public void accept(String response) throws Exception {
-                response = response.replace("\"", ""); //Returned response has ""x"" format
-                mHighScores = new JSONArray(response);
-              }
-            }));
+    mcCompositeDisposable.add (mService.getHighScores ()
+      .subscribeOn (Schedulers.io ())
+      .observeOn (AndroidSchedulers.mainThread ())
+      .subscribe (new Consumer<String> ()
+      {
+        @Override
+        public void accept (String response) throws Exception
+        {
+          response = response.replace ("\"", ""); //Returned response has ""x"" format
+          mHighScores = new JSONArray (response);
+        }
+      }));
   }
 }
 

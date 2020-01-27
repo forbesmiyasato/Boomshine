@@ -1,12 +1,13 @@
 package edu.pacificu.cs.group6Boomshine;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Defines the GameOverActivity class that contains display and
@@ -17,68 +18,70 @@ import androidx.appcompat.app.AppCompatActivity;
  * @since 1.26.2019
  */
 
-public class GameOverActivity extends AppCompatActivity {
+public class GameOverActivity extends AppCompatActivity
+{
 
-    TextView mPlayerScoreTextView;
-    Button mBtnPlayAgain;
-    private int mPlayerScore;
-    private String mPlayerName;
+  TextView mPlayerScoreTextView;
+  Button mBtnPlayAgain;
+  private int mPlayerScore;
+  private String mPlayerName;
 
-    /**
-     * Initializes member variables to default values.
-     * Extracts the player's overall score and name
-     * from the triggering Intent object.
-     *
-     * @param savedInstanceState A Bundle containing previously saved
-     *                           Activity state (un-used)
-     */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_over);
+  /**
+   * Initializes member variables to default values.
+   * Extracts the player's overall score and name
+   * from the triggering Intent object.
+   *
+   * @param savedInstanceState A Bundle containing previously saved
+   *                           Activity state (un-used)
+   */
+  @Override
+  protected void onCreate (Bundle savedInstanceState)
+  {
+    super.onCreate (savedInstanceState);
+    setContentView (R.layout.activity_game_over);
 
-        Intent tempIntent = getIntent();
+    Intent tempIntent = getIntent ();
 
-        mPlayerScore = tempIntent.getIntExtra("player_score", 0);
-        mPlayerName = tempIntent.getStringExtra("Username");
+    mPlayerScore = tempIntent.getIntExtra ("player_score", 0);
+    mPlayerName = tempIntent.getStringExtra ("player_name");
 
-        mPlayerScoreTextView = findViewById(R.id.textViewPlayerscoreFinal);
-        mBtnPlayAgain = findViewById(R.id.btnPlayAgain);
+    mPlayerScoreTextView = findViewById (R.id.textViewPlayerscoreFinal);
+    mBtnPlayAgain = findViewById (R.id.btnPlayAgain);
 
-        mPlayerScoreTextView.setText(Integer.toString(mPlayerScore));
-    }
+    mPlayerScoreTextView.setText (Integer.toString (mPlayerScore));
+  }
 
-    /**
-     * Event handler for the Play Again button.
-     *
-     * Uses the player name (if available) to redirect the user
-     * to the Game Menu screen
-     *
-     * @param view The view that triggered the event
-     */
+  /**
+   * Event handler for the Play Again button.
+   *
+   * Uses the player name (if available) to redirect the user
+   * to the Game Menu screen
+   *
+   * @param view The view that triggered the event
+   */
 
-    public void onPlayAgianClicked (View view)
+  public void onPlayAgianClicked (View view)
+  {
+    Intent playAgain = new Intent (this, BoomshineGame.class);
+    if (mPlayerName != null)
     {
-        Intent playAgain = new Intent(this, BoomshineGame.class);
-        if (mPlayerName != null)
-        {
-            playAgain.putExtra("Username", mPlayerName);
+      playAgain.putExtra ("player_name", mPlayerName);
 
-        }
-        startActivity (playAgain);
     }
+    startActivity (playAgain);
+  }
 
-    /**
-     * Event handler for the Quit button.
-     *
-     * Creates and starts an Intent that returns the user to the
-     * Main page. This is equivalent to logging out (if logged in)
-     *
-     * @param view The view that triggered the event
-     */
-    public void onQuitClicked (View view)
-    {
-        Intent quit = new Intent(this, MainActivity.class);
-        startActivity(quit);
-    }
+  /**
+   * Event handler for the Quit button.
+   *
+   * Creates and starts an Intent that returns the user to the
+   * Main page. This is equivalent to logging out (if logged in)
+   *
+   * @param view The view that triggered the event
+   */
+  public void onQuitClicked (View view)
+  {
+    Intent quit = new Intent (this, MainActivity.class);
+    startActivity (quit);
+  }
 }

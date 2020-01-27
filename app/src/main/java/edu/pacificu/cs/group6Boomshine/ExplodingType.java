@@ -10,6 +10,7 @@ package edu.pacificu.cs.group6Boomshine;
  * @since 1.25.2019
  */
 
-public enum ExplodingType {
-    NORMAL, SUPER, MULTI, ULTIMATE
+public enum ExplodingType
+{
+  NORMAL, SUPER, MULTI, ULTIMATE
 }

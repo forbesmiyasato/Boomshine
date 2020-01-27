@@ -20,7 +20,8 @@ import android.widget.ImageView;
  * @since 1.26.2019
  */
 
-public class PowerUpView extends ImageView {
+public class PowerUpView extends ImageView
+{
 
   private int PIC_WIDTH;
   private int PIC_HEIGHT;
@@ -40,10 +41,11 @@ public class PowerUpView extends ImageView {
   private int mHeight;
   private int mWidth;
 
-  public PowerUpView(Context context, Display display) {
-    super(context);
-    setFocusable(true); // make sure we get key events
-    mPaint = new Paint();
+  public PowerUpView (Context context, Display display)
+  {
+    super (context);
+    setFocusable (true); // make sure we get key events
+    mPaint = new Paint ();
     this.mcGameReference = (BoomshineGame) context;
 
   }
@@ -56,18 +58,19 @@ public class PowerUpView extends ImageView {
    */
 
   @Override
-  public void onDraw(Canvas canvas) {
+  public void onDraw (Canvas canvas)
+  {
     int picSpacing;
     int backMargin;
     int point_x;
     int point_width;
     int text_y;
-    Drawable buyButton = getResources().getDrawable(R.drawable.buy, null);
+    Drawable buyButton = getResources ().getDrawable (R.drawable.buy, null);
 
-    mHeight = getHeight();
-    mWidth = getWidth();
+    mHeight = getHeight ();
+    mWidth = getWidth ();
 
-    BACk_BUTTON_HEIGHT = (int) (mHeight / HEIGHT_SCALE_FACTOR  * 1.5);
+    BACk_BUTTON_HEIGHT = (int) (mHeight / HEIGHT_SCALE_FACTOR * 1.5);
     BACK_BUTTON_WIDTH = BACk_BUTTON_HEIGHT * 2;
     PIC_BUTTON_SPACING = (int) (mWidth / WIDTH_SCALE_FACTOR);
     PIC_WIDTH = (int) (PIC_BUTTON_SPACING * 1.5);
@@ -76,173 +79,181 @@ public class PowerUpView extends ImageView {
     PIC_Y_START = (int) (mHeight / HEIGHT_SCALE_FACTOR) * 3;
 
     text_y = PIC_Y_START + PIC_HEIGHT + (PIC_BUTTON_SPACING / 2);
-    point_x = (int)(mWidth / WIDTH_SCALE_FACTOR * 4);
+    point_x = (int) (mWidth / WIDTH_SCALE_FACTOR * 4);
     point_width = (int) (mWidth / WIDTH_SCALE_FACTOR * 2);
-    picSpacing = (getWidth() - PIC_WIDTH * 3) / 4;
-    backMargin = (getWidth() - BACK_BUTTON_WIDTH) / 2;
+    picSpacing = (getWidth () - PIC_WIDTH * 3) / 4;
+    backMargin = (getWidth () - BACK_BUTTON_WIDTH) / 2;
 
     //Check if can buy
-    bCanBuyMulti = mcGameReference.canBuyMulti();
-    bCanBuySuper = mcGameReference.canBuySuper();
-    bCanBuyUlti = mcGameReference.canBuyUlti();
+    bCanBuyMulti = mcGameReference.canBuyMulti ();
+    bCanBuySuper = mcGameReference.canBuySuper ();
+    bCanBuyUlti = mcGameReference.canBuyUlti ();
 
-    mPaint.setTextSize(mHeight * 0.05f);
-    mPaint.setColor(getResources().getColor(R.color.cBlack));
-    mPaint.setStyle(Paint.Style.FILL);
-    mPaint.setAlpha(255);
-    canvas.drawText("Points", getWidth() - point_x, 100, mPaint);
-    canvas.drawText(String.valueOf(mcGameReference.getPoints()),
-            getWidth() - point_width, 100, mPaint);
+    mPaint.setTextSize (mHeight * 0.05f);
+    mPaint.setColor (getResources ().getColor (R.color.cBlack));
+    mPaint.setStyle (Paint.Style.FILL);
+    mPaint.setAlpha (255);
+    canvas.drawText ("Points", getWidth () - point_x, 100, mPaint);
+    canvas.drawText (String.valueOf (mcGameReference.getPoints ()),
+      getWidth () - point_width, 100, mPaint);
 
     //Draw multi ball pic
-    Drawable multiBallPic = getResources().getDrawable(R.drawable.multiball,
-            null);
-    multiBallPic.setBounds(picSpacing, PIC_Y_START,
-            picSpacing + PIC_WIDTH,
-            PIC_Y_START + PIC_HEIGHT);
-    multiBallPic.draw(canvas);
+    Drawable multiBallPic = getResources ().getDrawable (R.drawable.multiball,
+      null);
+    multiBallPic.setBounds (picSpacing, PIC_Y_START,
+      picSpacing + PIC_WIDTH,
+      PIC_Y_START + PIC_HEIGHT);
+    multiBallPic.draw (canvas);
     //Draw multi ball amount
-    canvas.drawText(String.valueOf(mcGameReference.getPWMulti()), picSpacing,
-            text_y, mPaint);
+    canvas.drawText (String.valueOf (mcGameReference.getPWMulti ()), picSpacing,
+      text_y, mPaint);
     //Draw Buy button
-    buyButton.setBounds(picSpacing,
-            PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
-            picSpacing + PIC_WIDTH,
-            PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
-    buyButton.draw(canvas);
+    buyButton.setBounds (picSpacing,
+      PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
+      picSpacing + PIC_WIDTH,
+      PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
+    buyButton.draw (canvas);
     //If can't buy draw shade over it
-    if(!bCanBuyMulti) {
-      @SuppressLint("DrawAllocation")
-      Rect cantBuy = new Rect(picSpacing,
-              PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
-              picSpacing + PIC_WIDTH,
-              PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
-      mPaint.setColor(getResources().getColor(R.color.cGray));
-      mPaint.setStyle(Paint.Style.FILL);
-      mPaint.setAlpha(200);
-      canvas.drawRect(cantBuy, mPaint);
+    if (! bCanBuyMulti)
+    {
+      @SuppressLint ("DrawAllocation")
+      Rect cantBuy = new Rect (picSpacing,
+        PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
+        picSpacing + PIC_WIDTH,
+        PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
+      mPaint.setColor (getResources ().getColor (R.color.cGray));
+      mPaint.setStyle (Paint.Style.FILL);
+      mPaint.setAlpha (200);
+      canvas.drawRect (cantBuy, mPaint);
     }
     //Draw super ball pic
-    Drawable superBallPic = getResources().getDrawable(R.drawable.superball, null);
-    superBallPic.setBounds(picSpacing * 2 + PIC_WIDTH, PIC_Y_START,
-            PIC_WIDTH * 2 + picSpacing * 2,
-            PIC_Y_START + PIC_HEIGHT);
-    superBallPic.draw(canvas);
+    Drawable superBallPic = getResources ().getDrawable (R.drawable.superball, null);
+    superBallPic.setBounds (picSpacing * 2 + PIC_WIDTH, PIC_Y_START,
+      PIC_WIDTH * 2 + picSpacing * 2,
+      PIC_Y_START + PIC_HEIGHT);
+    superBallPic.draw (canvas);
     //Draw multi ball amount
-    mPaint.setColor(getResources().getColor(R.color.cBlack));
-    canvas.drawText(String.valueOf(mcGameReference.getPWSuper()), picSpacing * 2 + PIC_WIDTH,
-            text_y, mPaint);
+    mPaint.setColor (getResources ().getColor (R.color.cBlack));
+    canvas.drawText (String.valueOf (mcGameReference.getPWSuper ()), picSpacing * 2 + PIC_WIDTH,
+      text_y, mPaint);
     //Draw Buy button
-    buyButton.setBounds(picSpacing * 2 + PIC_WIDTH,
-            PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
-            PIC_WIDTH * 2 + picSpacing * 2,
-            PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
-    buyButton.draw(canvas);
+    buyButton.setBounds (picSpacing * 2 + PIC_WIDTH,
+      PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
+      PIC_WIDTH * 2 + picSpacing * 2,
+      PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
+    buyButton.draw (canvas);
     //If can't buy draw shade over it
-    if(!bCanBuySuper) {
-      @SuppressLint("DrawAllocation")
-      Rect cantBuy = new Rect(picSpacing * 2 + PIC_WIDTH,
-              PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
-              PIC_WIDTH * 2 + picSpacing * 2,
-              PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
-      mPaint.setColor(getResources().getColor(R.color.cGray));
-      mPaint.setStyle(Paint.Style.FILL);
-      mPaint.setAlpha(200);
-      canvas.drawRect(cantBuy, mPaint);
+    if (! bCanBuySuper)
+    {
+      @SuppressLint ("DrawAllocation")
+      Rect cantBuy = new Rect (picSpacing * 2 + PIC_WIDTH,
+        PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
+        PIC_WIDTH * 2 + picSpacing * 2,
+        PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
+      mPaint.setColor (getResources ().getColor (R.color.cGray));
+      mPaint.setStyle (Paint.Style.FILL);
+      mPaint.setAlpha (200);
+      canvas.drawRect (cantBuy, mPaint);
     }
     //Draw Ulti ball pic
-    Drawable ultiBallPic = getResources().getDrawable(R.drawable.ulti, null);
-    ultiBallPic.setBounds(PIC_WIDTH * 2 + picSpacing * 3, PIC_Y_START,
-            PIC_WIDTH * 3 + picSpacing * 3,
-            PIC_Y_START + PIC_HEIGHT);
-    ultiBallPic.draw(canvas);
+    Drawable ultiBallPic = getResources ().getDrawable (R.drawable.ulti, null);
+    ultiBallPic.setBounds (PIC_WIDTH * 2 + picSpacing * 3, PIC_Y_START,
+      PIC_WIDTH * 3 + picSpacing * 3,
+      PIC_Y_START + PIC_HEIGHT);
+    ultiBallPic.draw (canvas);
     //Draw multi ball amount
-    mPaint.setColor(getResources().getColor(R.color.cBlack));
-    canvas.drawText(String.valueOf(mcGameReference.getPWUlti()), PIC_WIDTH * 2 + picSpacing * 3,
-            text_y, mPaint);
+    mPaint.setColor (getResources ().getColor (R.color.cBlack));
+    canvas.drawText (String.valueOf (mcGameReference.getPWUlti ()), PIC_WIDTH * 2 + picSpacing * 3,
+      text_y, mPaint);
     //Draw Buy button
-    buyButton.setBounds(PIC_WIDTH * 2 + picSpacing * 3,
-            PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
-            PIC_WIDTH * 3 + picSpacing * 3,
-            PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
-    buyButton.draw(canvas);
+    buyButton.setBounds (PIC_WIDTH * 2 + picSpacing * 3,
+      PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
+      PIC_WIDTH * 3 + picSpacing * 3,
+      PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
+    buyButton.draw (canvas);
     //If can't buy draw shade over it
-    if(!bCanBuyUlti) {
-      @SuppressLint("DrawAllocation") Rect cantBuy = new Rect(PIC_WIDTH * 2 + picSpacing * 3,
-              PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
-              PIC_WIDTH * 3 + picSpacing * 3,
-              PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
-      mPaint.setColor(getResources().getColor(R.color.cGray));
-      mPaint.setStyle(Paint.Style.FILL);
-      mPaint.setAlpha(200);
-      canvas.drawRect(cantBuy, mPaint);
+    if (! bCanBuyUlti)
+    {
+      @SuppressLint ("DrawAllocation") Rect cantBuy = new Rect (PIC_WIDTH * 2 + picSpacing * 3,
+        PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING,
+        PIC_WIDTH * 3 + picSpacing * 3,
+        PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT);
+      mPaint.setColor (getResources ().getColor (R.color.cGray));
+      mPaint.setStyle (Paint.Style.FILL);
+      mPaint.setAlpha (200);
+      canvas.drawRect (cantBuy, mPaint);
     }
     //Draw back button
-    Drawable back = getResources().getDrawable(R.drawable.backtomenu, null);
-    back.setBounds(backMargin, getHeight() - 300,
-            backMargin + BACK_BUTTON_WIDTH,
-            getHeight() - 300 + BACk_BUTTON_HEIGHT);
-    back.draw(canvas);
+    Drawable back = getResources ().getDrawable (R.drawable.backtomenu, null);
+    back.setBounds (backMargin, getHeight () - 300,
+      backMargin + BACK_BUTTON_WIDTH,
+      getHeight () - 300 + BACk_BUTTON_HEIGHT);
+    back.draw (canvas);
 
-    if(bFirstRender)
+    if (bFirstRender)
     {
-      invalidate();
+      invalidate ();
       bFirstRender = false;
     }
   }
 
   @Override
-  public boolean onTouchEvent(MotionEvent event) {
-    int xPosition = (int) event.getX();
-    int yPosition = (int) event.getY();
-    int picSpacing = (getWidth() - PIC_WIDTH * 3) / 4;
-    int backMargin = (getWidth() - BACK_BUTTON_WIDTH) / 2;
+  public boolean onTouchEvent (MotionEvent event)
+  {
+    int xPosition = (int) event.getX ();
+    int yPosition = (int) event.getY ();
+    int picSpacing = (getWidth () - PIC_WIDTH * 3) / 4;
+    int backMargin = (getWidth () - BACK_BUTTON_WIDTH) / 2;
 
 
-    if (event.getAction() != MotionEvent.ACTION_DOWN) {
-      return super.onTouchEvent(event);
+    if (event.getAction () != MotionEvent.ACTION_DOWN)
+    {
+      return super.onTouchEvent (event);
     }
 
     //Check if back button is clicked
     if ((yPosition >= mHeight - 300 && yPosition <= mHeight - 300 + BACk_BUTTON_HEIGHT)
-    && (xPosition >= backMargin && xPosition <= backMargin + BACK_BUTTON_WIDTH))
+      && (xPosition >= backMargin && xPosition <= backMargin + BACK_BUTTON_WIDTH))
     {
-      mcGameReference.onBackClicked();
+      mcGameReference.onBackClicked ();
     }
 
     //Check if buy PWMulti is clicked
     if ((xPosition >= picSpacing && xPosition <= picSpacing + PIC_WIDTH)
-            && (yPosition >= (int) PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING
-            && yPosition <= PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT))
+      && (yPosition >= (int) PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING
+      && yPosition <= PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT))
     {
-      Log.d("Touch", "BUY MULTI");
-      if(bCanBuyMulti) {
-        mcGameReference.onMultiBuy();
+      Log.d ("Touch", "BUY MULTI");
+      if (bCanBuyMulti)
+      {
+        mcGameReference.onMultiBuy ();
       }
-      this.invalidate();
+      this.invalidate ();
     }
     //Check if buy PWSuper is clicked
     if ((xPosition >= picSpacing * 2 + PIC_WIDTH && xPosition <= PIC_WIDTH * 2 + picSpacing * 2)
-            && (yPosition >= (int) PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING
-            && yPosition <= PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT))
+      && (yPosition >= (int) PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING
+      && yPosition <= PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT))
     {
-      Log.d("Touch", "BUY SUPER");
-      if(bCanBuySuper) {
-        mcGameReference.onSuperBuy();
+      Log.d ("Touch", "BUY SUPER");
+      if (bCanBuySuper)
+      {
+        mcGameReference.onSuperBuy ();
       }
-      this.invalidate();
+      this.invalidate ();
     }
     //Check if buy PWSuper is clicked
     if ((xPosition >= PIC_WIDTH * 2 + picSpacing * 3 && xPosition <= PIC_WIDTH * 3 + picSpacing * 3)
-            && (yPosition >= (int) PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING
-            && yPosition <= PIC_Y_START + PIC_HEIGHT
-            + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT))
+      && (yPosition >= (int) PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING
+      && yPosition <= PIC_Y_START + PIC_HEIGHT
+      + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT))
     {
-      Log.d("Touch", "BUY SUPER");
-      if (bCanBuyUlti) {
-        mcGameReference.onUltiBuy();
+      Log.d ("Touch", "BUY SUPER");
+      if (bCanBuyUlti)
+      {
+        mcGameReference.onUltiBuy ();
       }
-      this.invalidate();
+      this.invalidate ();
     }
 
     return true;

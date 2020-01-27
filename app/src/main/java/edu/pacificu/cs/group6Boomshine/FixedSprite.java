@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.Display;
 import android.widget.ImageView;
 
@@ -29,7 +28,7 @@ public class FixedSprite extends ImageView
   private int mColor;
   private int mLastRadius = 0;
   private int mOpacityAlpha = 255;
-  private final int mOpacityDecrement = 5;
+
 
   /**
    * Constructor that initializes the values associated with the sprite.
@@ -40,18 +39,18 @@ public class FixedSprite extends ImageView
    * @param leftCoord the left coordinate of the sprite
    * @since 1.0
    */
-  public FixedSprite(Context context, Display display, int color,
-                     int topCoord, int leftCoord)
+  public FixedSprite (Context context, Display display, int color,
+                      int topCoord, int leftCoord)
   {
-    super(context);
+    super (context);
     mContext = context;
     mDisplay = display;
     mTopCoordinate = topCoord;
     mLeftCoordinate = leftCoord;
     mColor = color;
-    ++mCount;
-    mPaint = new Paint();
-    mPaint.setAntiAlias(true);
+    ++ mCount;
+    mPaint = new Paint ();
+    mPaint.setAntiAlias (true);
   }
 
   /**
@@ -60,26 +59,26 @@ public class FixedSprite extends ImageView
    * @param canvas the canvas to draw to
    * @since 1.0
    */
-  public void doDraw(Canvas canvas)
+  public void doDraw (Canvas canvas)
   {
-    if (mColor == getResources().getColor(R.color.coin))
+    if (mColor == getResources ().getColor (R.color.coin))
     {
-      mBitmapImage = BitmapFactory.decodeResource(getContext().getResources(),
-              R.drawable.coin);
-      canvas.drawBitmap(mBitmapImage, (this.mLeftCoordinate),
-              this.mTopCoordinate, null);
-      mRadius = mBitmapImage.getWidth();
+      mBitmapImage = BitmapFactory.decodeResource (getContext ().getResources (),
+        R.drawable.coin);
+      canvas.drawBitmap (mBitmapImage, (this.mLeftCoordinate),
+        this.mTopCoordinate, null);
+      mRadius = mBitmapImage.getWidth ();
     } else
     {
-      mPaint.setColor(mColor);
-      if (mRadius < mLastRadius && mOpacityAlpha >= mOpacityDecrement)
+      mPaint.setColor (mColor);
+      if (mRadius < mLastRadius)
       {
-        mOpacityAlpha = mOpacityAlpha - mOpacityDecrement;
+        mOpacityAlpha = mOpacityAlpha - 5;
       }
-      mPaint.setStyle(Paint.Style.FILL);
-      mPaint.setAlpha(mOpacityAlpha);
+      mPaint.setStyle (Paint.Style.FILL);
+      mPaint.setAlpha (mOpacityAlpha);
       mLastRadius = mRadius;
-      canvas.drawCircle(mLeftCoordinate, mTopCoordinate, mRadius, mPaint);
+      canvas.drawCircle (mLeftCoordinate, mTopCoordinate, mRadius, mPaint);
     }
 
   }
@@ -90,7 +89,7 @@ public class FixedSprite extends ImageView
    * @return the top y coordinate value
    * @since 1.0
    */
-  public int getTopCoordinate()
+  public int getTopCoordinate ()
   {
     return mTopCoordinate;
   }
@@ -101,18 +100,18 @@ public class FixedSprite extends ImageView
    * @return the left x coordinate value
    * @since 1.0
    */
-  public int getLeftCoordinate()
+  public int getLeftCoordinate ()
   {
     return mLeftCoordinate;
   }
 
   /**
-   * Retrieves the number of mcMovingSprites created.
+   * Retrieves the number of mMovingSprites created.
    *
-   * @return number of mcMovingSprites
+   * @return number of mMovingSprites
    * @since 1.0
    */
-  public int getCount()
+  public int getCount ()
   {
     return mCount;
   }

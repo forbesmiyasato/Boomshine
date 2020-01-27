@@ -15,122 +15,124 @@ import java.net.ContentHandler;
  * @since 1/24/2019
  */
 
-public class Level {
+public class Level
+{
 
-    private final int CIRCLE_MULTIPLIER = 5;
-    private final int SCORE_MULTIPLIER = 10;
-    private int mHitsRequired;
-    private int mTotalCircles;
-    private int mLevelNumber;
-    private int mLevelScore;
-    private int mCirclesHit;
+  private final int CIRCLE_MULTIPLIER = 5;
+  private final int SCORE_MULTIPLIER = 10;
+  private int mHitsRequired;
+  private int mTotalCircles;
+  private int mLevelNumber;
+  private int mLevelScore;
+  private int mCirclesHit;
 
-    /**
-     * Instantiates class variables to default values based
-     * on passed-in level number.
-     *
-     * @param levelNumber The desired level number
-     */
+  /**
+   * Instantiates class variables to default values based
+   * on passed-in level number.
+   *
+   * @param levelNumber The desired level number
+   */
 
-    Level (int levelNumber)
+  Level (int levelNumber)
+  {
+    this.mLevelNumber = levelNumber;
+    this.mLevelScore = 0;
+    this.mCirclesHit = 0;
+    this.mHitsRequired = mLevelNumber;
+    this.mTotalCircles = mLevelNumber * CIRCLE_MULTIPLIER;
+  }
+
+  /**
+   * Signals the current level is over. Calculates score
+   * and returns a boolean indicating level pass or fail
+   *
+   * @return True if the level was passed, otherwise false.
+   */
+
+  public boolean levelOver ()
+  {
+    calculateLevelScore ();
+    return this.mHitsRequired <= this.mCirclesHit;
+  }
+
+  /**
+   * Gets the calculated level score
+   *
+   * @return The current level score.
+   */
+
+  public int getLevelScore ()
+  {
+    return this.mLevelScore;
+  }
+
+  /**
+   * Sets the current level score to a value based on
+   * the total number of circles hit multiplied by the
+   * score modifier.
+   */
+
+  private void calculateLevelScore ()
+  {
+    this.mLevelScore = this.mCirclesHit * SCORE_MULTIPLIER;
+  }
+
+  /**
+   * Increases the count of total circles hit by one
+   */
+
+  public void incrememtCirclesHit (MediaPlayer mediaPlayer, Context context)
+  {
+    if (mediaPlayer != null)
     {
-        this.mLevelNumber = levelNumber;
-        this.mLevelScore = 0;
-        this.mCirclesHit = 0;
-        this.mHitsRequired = mLevelNumber;
-        this.mTotalCircles = mLevelNumber * CIRCLE_MULTIPLIER;
+      mediaPlayer.release ();
     }
+    mediaPlayer = MediaPlayer.create (context, R.raw.ball_hit);
+    mediaPlayer.start ();
 
-    /**
-     * Signals the current level is over. Calculates score
-     * and returns a boolean indicating level pass or fail
-     *
-     * @return True if the level was passed, otherwise false.
-     */
+    this.mCirclesHit++;
+  }
 
-    public boolean levelOver ()
-    {
-        calculateLevelScore();
-        return this.mHitsRequired <= this.mCirclesHit;
-    }
+  /**
+   * Handles moving from one level to another by
+   * incrementing the level and resetting level-specific
+   * values to defaults.
+   */
 
-    /**
-     * Gets the calculated level score
-     *
-     * @return The current level score.
-     */
+  public void nextLevel ()
+  {
+    this.mLevelNumber++;
+    this.mLevelScore = 0;
+    this.mCirclesHit = 0;
+    this.mHitsRequired = mLevelNumber;
+    this.mTotalCircles = mLevelNumber * CIRCLE_MULTIPLIER;
+  }
 
-    public int getLevelScore ()
-    {
-        return this.mLevelScore;
-    }
+  /**
+   * Retrieves the current level number
+   *
+   * @return The current level number
+   */
 
-    /**
-     * Sets the current level score to a value based on
-     * the total number of circles hit multiplied by the
-     * score modifier.
-     *
-     */
+  public int getLevelNumber ()
+  {
+    return this.mLevelNumber;
+  }
 
-    private void calculateLevelScore ()
-    {
-        this.mLevelScore = this.mCirclesHit * SCORE_MULTIPLIER;
-    }
+  /**
+   * Retrieves the current number of circles hit, the number
+   * of circles required, and the total number of circles
+   * in a formatted string
+   *
+   * @return A formatted string containing the circles hit,
+   * the hits required, and the total number of circles.
+   */
 
-    /**
-     * Increases the count of total circles hit by one
-     *
-     */
-
-    public void incrememtCirclesHit (MediaPlayer mediaPlayer, Context context)
-    {
-        if (mediaPlayer != null)
-        {
-            mediaPlayer.release();
-        }
-        mediaPlayer = MediaPlayer.create(context, R.raw.ball_hit);
-        mediaPlayer.start();
-
-        this.mCirclesHit++;
-    }
-
-    /**
-     * Handles moving from one level to another by
-     * incrementing the level and resetting level-specific
-     * values to defaults.
-     *
-     */
-
-    public void nextLevel () {
-        this.mLevelNumber++;
-        this.mLevelScore = 0;
-        this.mCirclesHit = 0;
-        this.mHitsRequired = mLevelNumber;
-        this.mTotalCircles = mLevelNumber * CIRCLE_MULTIPLIER;
-    }
-
-    /**
-     * Retrieves the current level number
-     *
-     * @return The current level number
-     */
-
-    public int getLevelNumber () {
-        return this.mLevelNumber;
-    }
-
-    /**
-     * Retrieves the current number of circles hit, the number
-     * of circles required, and the total number of circles
-     * in a formatted string
-     *
-     * @return A formatted string containing the circles hit,
-     * the hits required, and the total number of circles.
-     */
-
-    public String getHitInfo () {
-        String sHitInfo = "Hit: " + mCirclesHit + "/" + mHitsRequired + " from " + mTotalCircles;
-        calculateLevelScore();
-        return sHitInfo;
-    }
+  public String getHitInfo ()
+  {
+    String sHitInfo = "Hit: " + mCirclesHit + "/" + mHitsRequired +
+      " from " + mTotalCircles;
+    calculateLevelScore ();
+    return sHitInfo;
+  }
 }

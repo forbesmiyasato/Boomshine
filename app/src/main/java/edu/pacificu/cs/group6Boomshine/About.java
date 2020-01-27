@@ -14,20 +14,21 @@ import androidx.appcompat.app.AppCompatActivity;
  * @since 1.23.2019
  */
 
-public class About extends AppCompatActivity {
+public class About extends AppCompatActivity
+{
 
-    /**
-     * Overrides the super.onCreate method to define activity creation.
-     * Sets the content view to the About activity.
-     *
-     * @param savedInstanceState a bundle containing any saved state from a
-     *                           previous instance of this activity
-     */
+  /**
+   * Overrides the super.onCreate method to define activity creation.
+   * Sets the content view to the About activity.
+   *
+   * @param savedInstanceState a bundle containing any saved state from a
+   *                           previous instance of this activity
+   */
 
-    @Override
-    protected void onCreate (Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
-    }
+  @Override
+  protected void onCreate (Bundle savedInstanceState)
+  {
+    super.onCreate (savedInstanceState);
+    setContentView (R.layout.activity_about);
+  }
 }
