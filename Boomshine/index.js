@@ -99,7 +99,10 @@ app.post('/register', (req, res, next) => {
     });
 
     NewUser.save()
-        .then(() => res.json('User Added'))
+        .then(() => {
+        console.log("User added");
+        res.json('User Added');
+        })
         .catch(() => res.json('Username already chosen'))
 })
 
@@ -130,6 +133,7 @@ app.post('/login', (req, res, next) => {
 
 //Get user data
 app.get('/GetUserData', (req, res, next) => {
+    console.log("Getting user data");
     var Name = req.query.Name;
     User.findOne({ Name: Name }, function (err, user) {
         if (!user) {
@@ -167,7 +171,7 @@ app.post('/UpdateUserData', (req, res, next) => {
 
 //Get highscores
 app.get('/GetHighScore', (req, res, next) => {
-    console.log("Get")
+    console.log("Got High Scores")
     var Name = req.query.Name;
     User.find({}).select('Name HighScore -_id').sort({HighScore : 'descending'}).limit(5).then(response => {
         res.json(response);
