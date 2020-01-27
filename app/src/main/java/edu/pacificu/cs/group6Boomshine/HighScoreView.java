@@ -19,6 +19,15 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
+/**
+ * Defines the HighScoreView class that contains display and
+ * interaction logic for the High Score view.
+ *
+ * @author Forbes Miyasato
+ * @version 1.0
+ * @since 1.26.2019
+ */
+
 public class HighScoreView extends ImageView
 {
   private Paint mPaint;
@@ -52,7 +61,7 @@ public class HighScoreView extends ImageView
   }
 
   /**
-   * Draw method that is repeatedly called for animation
+   * Draw method that is called to display the high score view
    *
    * @param canvas used to host the draw calls
    * @since 1.0
