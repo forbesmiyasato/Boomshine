@@ -4,9 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.Display;
 import android.widget.ImageView;
 
@@ -17,7 +15,8 @@ import android.widget.ImageView;
  * @author Computer Science, Pacific University.
  * @version 1.0
  */
-public class FixedSprite extends ImageView {
+public class FixedSprite extends ImageView
+{
   protected Bitmap mBitmapImage;
   protected Display mDisplay;
   protected int mTopCoordinate;
@@ -27,6 +26,9 @@ public class FixedSprite extends ImageView {
   private Paint mPaint;
   protected int mRadius;
   private int mColor;
+  private int mLastRadius = 0;
+  private int mOpacityAlpha = 255;
+
 
   /**
    * Constructor that initializes the values associated with the sprite.
@@ -38,7 +40,8 @@ public class FixedSprite extends ImageView {
    * @since 1.0
    */
   public FixedSprite(Context context, Display display, int color,
-                     int topCoord, int leftCoord) {
+                     int topCoord, int leftCoord)
+  {
     super(context);
     mContext = context;
     mDisplay = display;
@@ -56,16 +59,25 @@ public class FixedSprite extends ImageView {
    * @param canvas the canvas to draw to
    * @since 1.0
    */
-  public void doDraw(Canvas canvas) {
-    if (mColor == getResources().getColor(R.color.coin)) {
+  public void doDraw(Canvas canvas)
+  {
+    if (mColor == getResources().getColor(R.color.coin))
+    {
       mBitmapImage = BitmapFactory.decodeResource(getContext().getResources(),
               R.drawable.coin);
       canvas.drawBitmap(mBitmapImage, (this.mLeftCoordinate),
               this.mTopCoordinate, null);
-      mRadius = mBitmapImage.getWidth ();
-//      Log.d("ONDRAW", String.valueOf(mRadius));
-    } else {
+      mRadius = mBitmapImage.getWidth();
+    } else
+    {
       mPaint.setColor(mColor);
+      if (mRadius < mLastRadius)
+      {
+        mOpacityAlpha = mOpacityAlpha - 5;
+      }
+      mPaint.setStyle(Paint.Style.FILL);
+      mPaint.setAlpha(mOpacityAlpha);
+      mLastRadius = mRadius;
       canvas.drawCircle(mLeftCoordinate, mTopCoordinate, mRadius, mPaint);
     }
 
@@ -77,7 +89,8 @@ public class FixedSprite extends ImageView {
    * @return the top y coordinate value
    * @since 1.0
    */
-  public int getTopCoordinate() {
+  public int getTopCoordinate()
+  {
     return mTopCoordinate;
   }
 
@@ -87,7 +100,8 @@ public class FixedSprite extends ImageView {
    * @return the left x coordinate value
    * @since 1.0
    */
-  public int getLeftCoordinate() {
+  public int getLeftCoordinate()
+  {
     return mLeftCoordinate;
   }
 
@@ -97,7 +111,8 @@ public class FixedSprite extends ImageView {
    * @return number of mMovingSprites
    * @since 1.0
    */
-  public int getCount() {
+  public int getCount()
+  {
     return mCount;
   }
 

@@ -46,8 +46,6 @@ public class BoomshineGame extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    Log.d("GAME", "ONCREATE CALLED");
-
     WindowManager window = getWindowManager();
     mDisplay = window.getDefaultDisplay();
 
@@ -83,7 +81,6 @@ public class BoomshineGame extends AppCompatActivity {
 
   @Override
   protected void onStop() {
-    Log.d("GAME", "ONSTOP CALLED");
     if (mName != null) {
       updateUserData();
     }
