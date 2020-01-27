@@ -142,7 +142,7 @@ public class BoomshineView extends ImageView {
       }
       if (cCollidedMovingCircle != null) {
         mExplodingSprites.add(cCollidedMovingCircle);
-        mLevel.incrememtCirclesHit();
+        mLevel.incrememtCirclesHit(mcMediaPlayer, mContext);
         mMovingSprites.remove(cCollidedMovingCircle);
       }
 

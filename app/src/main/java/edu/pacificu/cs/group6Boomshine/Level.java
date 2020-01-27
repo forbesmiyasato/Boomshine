@@ -1,5 +1,10 @@
 package edu.pacificu.cs.group6Boomshine;
 
+import android.content.Context;
+import android.media.MediaPlayer;
+
+import java.net.ContentHandler;
+
 /**
  * Defines the Level class that maintains information regarding
  * the current level. This class determines the total number of circles
@@ -77,8 +82,15 @@ public class Level {
      *
      */
 
-    public void incrememtCirclesHit ()
+    public void incrememtCirclesHit (MediaPlayer mediaPlayer, Context context)
     {
+        if (mediaPlayer != null)
+        {
+            mediaPlayer.release();
+        }
+        mediaPlayer = MediaPlayer.create(context, R.raw.ball_hit);
+        mediaPlayer.start();
+
         this.mCirclesHit++;
     }
 
