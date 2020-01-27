@@ -107,9 +107,9 @@ public class FixedSprite extends ImageView
   }
 
   /**
-   * Retrieves the number of mMovingSprites created.
+   * Retrieves the number of mcMovingSprites created.
    *
-   * @return number of mMovingSprites
+   * @return number of mcMovingSprites
    * @since 1.0
    */
   public int getCount()

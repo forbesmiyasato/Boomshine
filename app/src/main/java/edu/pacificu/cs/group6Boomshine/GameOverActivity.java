@@ -1,13 +1,12 @@
 package edu.pacificu.cs.group6Boomshine;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Defines the GameOverActivity class that contains display and
@@ -41,7 +40,7 @@ public class GameOverActivity extends AppCompatActivity {
         Intent tempIntent = getIntent();
 
         mPlayerScore = tempIntent.getIntExtra("player_score", 0);
-        mPlayerName = tempIntent.getStringExtra("player_name");
+        mPlayerName = tempIntent.getStringExtra("Username");
 
         mPlayerScoreTextView = findViewById(R.id.textViewPlayerscoreFinal);
         mBtnPlayAgain = findViewById(R.id.btnPlayAgain);
@@ -63,7 +62,7 @@ public class GameOverActivity extends AppCompatActivity {
         Intent playAgain = new Intent(this, BoomshineGame.class);
         if (mPlayerName != null)
         {
-            playAgain.putExtra("player_name", mPlayerName);
+            playAgain.putExtra("Username", mPlayerName);
 
         }
         startActivity (playAgain);

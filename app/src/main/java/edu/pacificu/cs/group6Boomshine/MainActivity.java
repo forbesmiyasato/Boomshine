@@ -3,7 +3,6 @@ package edu.pacificu.cs.group6Boomshine;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,17 +40,12 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity
 {
-  private Display mDisplay;
-  private BoomshineView mGraphicsView;
-
-  EditText mLoginUsername;
-  EditText mLoginPassword;
-  String mName;
-  TextView mCreateAccount;
-
-  CompositeDisposable mcCompositeDisposable;
-
-  private HttpService mService;
+  private EditText mcLoginUsername;
+  private EditText mcLoginPassword;
+  private String mcName;
+  private TextView mcCreateAccount;
+  private CompositeDisposable mcCompositeDisposable;
+  private HttpService mcService;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -59,21 +53,20 @@ public class MainActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
 
     WindowManager window = getWindowManager();
-    mDisplay = window.getDefaultDisplay();
 
     setContentView(R.layout.activity_main);
 
     //Init service
     mcCompositeDisposable = new CompositeDisposable();
     Retrofit retrofitClient = RetrofitClient.getInstance();
-    mService = retrofitClient.create(HttpService.class);
+    mcService = retrofitClient.create(HttpService.class);
 
     //Init view
-    mLoginPassword = findViewById(R.id.login_password);
-    mLoginUsername = findViewById(R.id.login_username);
-    mCreateAccount = findViewById(R.id.create_account);
+    mcLoginPassword = findViewById(R.id.login_password);
+    mcLoginUsername = findViewById(R.id.login_username);
+    mcCreateAccount = findViewById(R.id.create_account);
 
-    mCreateAccount.setOnClickListener(new View.OnClickListener()
+    mcCreateAccount.setOnClickListener(new View.OnClickListener()
     {
       @Override
       public void onClick(View view)
@@ -130,7 +123,8 @@ public class MainActivity extends AppCompatActivity
    */
   public void createAccountClicked()
   {
-    final View registerLayout = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_register, null);
+    final View registerLayout = LayoutInflater.from(MainActivity.this)
+            .inflate(R.layout.activity_register, null);
 
     new MaterialStyledDialog.Builder(MainActivity.this)
             .setIcon(R.drawable.ic_account)
@@ -152,8 +146,10 @@ public class MainActivity extends AppCompatActivity
               @Override
               public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
               {
-                MaterialEditText editRegisterName = registerLayout.findViewById(R.id.register_username);
-                MaterialEditText editRegisterPassword = registerLayout.findViewById(R.id.register_password);
+                MaterialEditText editRegisterName = registerLayout
+                        .findViewById(R.id.register_username);
+                MaterialEditText editRegisterPassword = registerLayout
+                        .findViewById(R.id.register_password);
 
                 if (TextUtils.isEmpty(editRegisterName.getText().toString()))
                 {
@@ -183,8 +179,8 @@ public class MainActivity extends AppCompatActivity
    */
   private void registerUser(String username, String password)
   {
-    mName = username;
-    mcCompositeDisposable.add(mService.registerUser(username, password)
+    mcName = username;
+    mcCompositeDisposable.add(mcService.registerUser(username, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<String>()
@@ -200,7 +196,7 @@ public class MainActivity extends AppCompatActivity
                 {
                   Intent cIntent = new Intent(MainActivity.this,
                           BoomshineGame.class);
-                  cIntent.putExtra("Username", mName);
+                  cIntent.putExtra("Username", mcName);
                   startActivity(cIntent);
                 }
               }
@@ -226,8 +222,8 @@ public class MainActivity extends AppCompatActivity
    */
   public void loginClicked(View cView)
   {
-    loginUser(mLoginUsername.getText().toString(),
-            mLoginPassword.getText().toString());
+    loginUser(mcLoginUsername.getText().toString(),
+            mcLoginPassword.getText().toString());
   }
 
   /**
@@ -246,11 +242,12 @@ public class MainActivity extends AppCompatActivity
     }
     if (TextUtils.isEmpty(password))
     {
-      Toast.makeText(this, "Password cannot be empty", Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, "Password cannot be empty",
+              Toast.LENGTH_SHORT).show();
       return;
     }
-    mName = username;
-    mcCompositeDisposable.add(mService.loginUser(username, password)
+    mcName = username;
+    mcCompositeDisposable.add(mcService.loginUser(username, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<String>()
@@ -266,7 +263,7 @@ public class MainActivity extends AppCompatActivity
                 {
                   Intent cIntent = new Intent(MainActivity.this,
                           BoomshineGame.class);
-                  cIntent.putExtra("Username", mName);
+                  cIntent.putExtra("Username", mcName);
                   startActivity(cIntent);
                 }
               }
