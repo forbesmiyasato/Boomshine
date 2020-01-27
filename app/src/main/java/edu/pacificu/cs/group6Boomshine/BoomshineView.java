@@ -24,6 +24,8 @@ import java.util.Random;
 //@SuppressLint("AppCompatCustomView")
 public class BoomshineView extends ImageView
 {
+  //View variables
+  private final int SCALE_BY_TWO = 2;
   private final int MAX_LEVEL_ATTEMPTS = 3;
   private final int CIRCLE_LEVEL_MULTIPLIER = 5;
   final int BALL_SCALE_FACTOR = 60;
@@ -35,7 +37,7 @@ public class BoomshineView extends ImageView
   private double mDifficultyScale;
   private int mHeight;
   private int mWidth;
-  private boolean firstClick = true;
+  private boolean mbFirstClick = true;
   private boolean firstRender = true;
   private Context mcContext;
   private Display mcDisplay;
@@ -53,7 +55,6 @@ public class BoomshineView extends ImageView
   private int mUserMultiPowerups;
   private int mUserSuperPowerups;
   private int mUserUltraPowerups;
-
   /**
    * Constructor that initializes the BoomshineView
    *
@@ -91,6 +92,18 @@ public class BoomshineView extends ImageView
   @Override
   public void onDraw(Canvas canvas)
   {
+    //Constants for drawing components on view
+    final int POSITION_FIFTY = 50;
+    final int POSITION_HUNDRED = 100;
+    final int POSITION_TEN = 10;
+    final int SCALE_FOUR = 4;
+    final int SCALE_EIGHT = 8;
+    final int SCALE_FIFTEEN = 15;
+    final String sLevel = "Level: ";
+    final String sAttempts = "Attempts: ";
+    final String sTotalScore = "Total Score: ";
+    final String sPoints = "Points: ";
+    final String sSlash = " / ";
     if (!mGameEnd)
     {
       mUserMultiPowerups = ((BoomshineGame) mcContext).getPWMulti();
@@ -140,9 +153,10 @@ public class BoomshineView extends ImageView
         cMovingSprite.move();
         cMovingSprite.hitBound();
         cMovingSprite.doDraw(canvas);
-        for (ExplodingBoundedMovingCircle explodingSprite : mcExplodingSprites)
+        for (ExplodingBoundedMovingCircle cExplodingSprite
+                : mcExplodingSprites)
         {
-          if (cMovingSprite.collide(explodingSprite))
+          if (cMovingSprite.collide(cExplodingSprite))
           {
             cCollidedMovingCircle = cMovingSprite;
           }
@@ -162,11 +176,10 @@ public class BoomshineView extends ImageView
 
       if (cCollidedCoin != null)
       {
-//        mcLevel.incrememtCirclesHit();
         mcCoinSprites.remove(cCollidedCoin);
       }
 
-      if (!firstClick && mcExplodingSprites.isEmpty())
+      if (!mbFirstClick && mcExplodingSprites.isEmpty())
       {
         if (mcLevel.levelOver())
         {
@@ -179,17 +192,23 @@ public class BoomshineView extends ImageView
 
       //Paint Score on screen
       mcPaint.setColor(getResources().getColor(R.color.cWhite));
-      setTextSizeForWidth(mcPaint, mWidth / 4, mcLevel.getHitInfo());
+      setTextSizeForWidth(mcPaint, mWidth / SCALE_FOUR, mcLevel.getHitInfo());
       //mcPaint.setTextSize(50);
-      canvas.drawText(mcLevel.getHitInfo(), 10, 50, mcPaint);
-      canvas.drawText("Level: " + mCurrentLevel, mWidth - 8 * (mWidth / 15), 50, mcPaint);
-      canvas.drawText("Attempts: " + (mNumAttempts + 1) + " / " + MAX_LEVEL_ATTEMPTS,
-              mWidth - (mWidth / 4), 50, mcPaint);
+      canvas.drawText(mcLevel.getHitInfo(), POSITION_TEN,
+              POSITION_FIFTY, mcPaint);
+      canvas.drawText(sLevel + mCurrentLevel, mWidth - SCALE_EIGHT *
+              (mWidth / SCALE_FIFTEEN), POSITION_FIFTY, mcPaint);
+      canvas.drawText(sAttempts + (mNumAttempts + 1) + sSlash
+                      + MAX_LEVEL_ATTEMPTS,
+              mWidth - (mWidth / SCALE_FOUR), POSITION_FIFTY, mcPaint);
 
-      canvas.drawText("Total Score: " + mTotalScore, 10, mHeight - 50, mcPaint);
-      canvas.drawText("Points: " + mcGameReference.getPoints(), 10, mHeight - 100, mcPaint);
+      canvas.drawText(sTotalScore + mTotalScore, POSITION_TEN,
+              mHeight - POSITION_FIFTY, mcPaint);
+      canvas.drawText(sPoints + mcGameReference.getPoints(), POSITION_TEN,
+              mHeight - POSITION_HUNDRED, mcPaint);
 
-      mcIconHandler.drawIcons(canvas, mUserMultiPowerups, mUserUltraPowerups, mUserSuperPowerups);
+      mcIconHandler.drawIcons(canvas, mUserMultiPowerups, mUserUltraPowerups,
+              mUserSuperPowerups);
 
       super.onDraw(canvas);
       invalidate();
@@ -229,9 +248,9 @@ public class BoomshineView extends ImageView
     }
 
     //If first click, check if selected power up or placed ball
-    //doesn't disable click behavior (setting firstClick to false) until
+    //doesn't disable click behavior (setting mbFirstClick to false) until
     //player places ball on screen.
-    if (firstClick)
+    if (mbFirstClick)
     {
       color = getRandomColor();
 
@@ -262,11 +281,11 @@ public class BoomshineView extends ImageView
         }
         mcExplodingSprites.addAll(mcFactory.create(meType, getContext(),
                 getDisplay(), color, (int) event.getY() +
-                        DEFAULT_BALL_RADIUS / 2,
-                (int) event.getX() + DEFAULT_BALL_RADIUS / 2,
+                        DEFAULT_BALL_RADIUS / SCALE_BY_TWO,
+                (int) event.getX() + DEFAULT_BALL_RADIUS / SCALE_BY_TWO,
                 0, 0, mHeight,
                 0, mWidth, DEFAULT_BALL_RADIUS));
-        firstClick = false;
+        mbFirstClick = false;
       }
     }
 
@@ -302,9 +321,9 @@ public class BoomshineView extends ImageView
     for (int i = 0; i < level * CIRCLE_LEVEL_MULTIPLIER; i++)
     {
       color = getRandomColor();
-      topBound = cRandom.nextInt(mHeight - DEFAULT_BALL_RADIUS * 2)
+      topBound = cRandom.nextInt(mHeight - DEFAULT_BALL_RADIUS * SCALE_BY_TWO)
               + DEFAULT_BALL_RADIUS;
-      leftBound = cRandom.nextInt(mWidth - DEFAULT_BALL_RADIUS * 2)
+      leftBound = cRandom.nextInt(mWidth - DEFAULT_BALL_RADIUS * SCALE_BY_TWO)
               + DEFAULT_BALL_RADIUS;
       int speed = CIRCLE_SPEED;
 
@@ -334,16 +353,17 @@ public class BoomshineView extends ImageView
 
     for (int i = 0; i < level; i++)
     {
-      topBound = cRandom.nextInt(mHeight - DEFAUlT_COIN_WIDTH * 2)
+      topBound = cRandom.nextInt(mHeight - DEFAUlT_COIN_WIDTH * SCALE_BY_TWO)
               + DEFAUlT_COIN_WIDTH;
-      leftBound = cRandom.nextInt(mWidth - DEFAUlT_COIN_WIDTH * 2)
+      leftBound = cRandom.nextInt(mWidth - DEFAUlT_COIN_WIDTH * SCALE_BY_TWO)
               + DEFAUlT_COIN_WIDTH;
       int speed = COIN_SPEED;
 
       ExplodingBoundedMovingCircle cNew
               = new ExplodingBoundedMovingCircle(ExplodingType.NORMAL,
-              mcContext, mcDisplay, color, topBound - DEFAUlT_COIN_WIDTH / 2,
-              leftBound - DEFAUlT_COIN_WIDTH / 2, speed, 0,
+              mcContext, mcDisplay, color,
+              topBound - DEFAUlT_COIN_WIDTH / SCALE_BY_TWO,
+              leftBound - DEFAUlT_COIN_WIDTH / SCALE_BY_TWO, speed, 0,
               mHeight, 0,
               mWidth, 0);
       mcCoinSprites.add(cNew);
@@ -355,8 +375,9 @@ public class BoomshineView extends ImageView
    */
   public int getRandomColor()
   {
+    final int FIVE_COLORS = 5;
     Random cRandom = new Random();
-    int randomColor = cRandom.nextInt(5);
+    int randomColor = cRandom.nextInt(FIVE_COLORS);
     int color = 0;
     switch (randomColor)
     {
@@ -426,7 +447,7 @@ public class BoomshineView extends ImageView
   private void resetLevelFlags()
   {
     firstRender = true;
-    firstClick = true;
+    mbFirstClick = true;
     mcMovingSprites.clear();
     mcExplodingSprites.clear();
     mcCoinSprites.clear();
@@ -434,7 +455,13 @@ public class BoomshineView extends ImageView
     mcIconHandler.resetIcons();
   }
 
-
+  /**
+   * Makes the text size responsive based on the canvas width
+   *
+   * @param paint the paint object we use to paint the text
+   * @param desiredWidth The desired width for the text
+   * @param text The text we want to render on the view
+   */
   private static void setTextSizeForWidth(Paint paint, float desiredWidth,
                                           String text)
   {
@@ -442,7 +469,8 @@ public class BoomshineView extends ImageView
     // Pick a reasonably large value for the test. Larger values produce
     // more accurate results, but may cause problems with hardware
     // acceleration. But there are workarounds for that, too; refer to
-    // http://stackoverflow.com/questions/6253528/font-size-too-large-to-fit-in-cache
+    // http://stackoverflow.com/questions/6253528
+    // /font-size-too-large-to-fit-in-cache
     final float testTextSize = 48f;
 
     // Get the bounds of the text, using our testTextSize.

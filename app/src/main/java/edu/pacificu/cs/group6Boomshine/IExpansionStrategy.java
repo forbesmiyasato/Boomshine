@@ -11,22 +11,23 @@ package edu.pacificu.cs.group6Boomshine;
  */
 
 
-public interface IExpansionStrategy {
-    /**
-     * Defines a handleExploding method that must be defined by classes that
-     * implement this interface.
-     *
-     * @return an int value representing the current explosion modifier
-     */
+public interface IExpansionStrategy
+{
+  /**
+   * Defines a handleExploding method that must be defined by classes that
+   * implement this interface.
+   *
+   * @return an int value representing the current explosion modifier
+   */
 
-    int handleExploding ();
+  int handleExploding ();
 
-    /**
-     * Defines a getRadiusMultiplier method that must be defined by classes that
-     * implement this interface.
-     *
-     * @return an int value representing the radius multiplier for the strategy
-     */
+  /**
+   * Defines a getRadiusMultiplier method that must be defined by classes that
+   * implement this interface.
+   *
+   * @return an int value representing the radius multiplier for the strategy
+   */
 
-    int getRadiusMultiplier();
+  int getRadiusMultiplier ();
 }

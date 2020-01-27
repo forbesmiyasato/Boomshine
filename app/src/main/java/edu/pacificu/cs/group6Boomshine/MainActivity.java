@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,47 +39,46 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity
 {
+  private final String sUSERNAME = "Username";
   private EditText mcLoginUsername;
   private EditText mcLoginPassword;
-  private String mcName;
+  private String msName;
   private TextView mcCreateAccount;
   private CompositeDisposable mcCompositeDisposable;
   private HttpService mcService;
 
   @Override
-  protected void onCreate(Bundle savedInstanceState)
+  protected void onCreate (Bundle savedInstanceState)
   {
-    super.onCreate(savedInstanceState);
+    super.onCreate (savedInstanceState);
 
-    WindowManager window = getWindowManager();
-
-    setContentView(R.layout.activity_main);
+    setContentView (R.layout.activity_main);
 
     //Init service
-    mcCompositeDisposable = new CompositeDisposable();
-    Retrofit retrofitClient = RetrofitClient.getInstance();
-    mcService = retrofitClient.create(HttpService.class);
+    mcCompositeDisposable = new CompositeDisposable ();
+    Retrofit retrofitClient = RetrofitClient.getInstance ();
+    mcService = retrofitClient.create (HttpService.class);
 
     //Init view
-    mcLoginPassword = findViewById(R.id.login_password);
-    mcLoginUsername = findViewById(R.id.login_username);
-    mcCreateAccount = findViewById(R.id.create_account);
+    mcLoginPassword = findViewById (R.id.login_password);
+    mcLoginUsername = findViewById (R.id.login_username);
+    mcCreateAccount = findViewById (R.id.create_account);
 
-    mcCreateAccount.setOnClickListener(new View.OnClickListener()
+    mcCreateAccount.setOnClickListener (new View.OnClickListener ()
     {
       @Override
-      public void onClick(View view)
+      public void onClick (View view)
       {
-        createAccountClicked();
+        createAccountClicked ();
       }
     });
   }
 
   @Override
-  protected void onStop()
+  protected void onStop ()
   {
-    mcCompositeDisposable.clear();
-    super.onStop();
+    mcCompositeDisposable.clear ();
+    super.onStop ();
   }
 
   /**
@@ -92,19 +90,19 @@ public class MainActivity extends AppCompatActivity
    */
 
   @Override
-  public boolean onCreateOptionsMenu(Menu menu)
+  public boolean onCreateOptionsMenu (Menu menu)
   {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.menu, menu);
+    MenuInflater inflater = getMenuInflater ();
+    inflater.inflate (R.menu.menu, menu);
     return true;
   }
 
   @Override
-  public boolean onOptionsItemSelected(MenuItem item)
+  public boolean onOptionsItemSelected (MenuItem item)
   {
-    if (item.getItemId() == R.id.menuAbout)
+    if (item.getItemId () == R.id.menuAbout)
     {
-      onAbout();
+      onAbout ();
     }
     return true;
   }
@@ -112,62 +110,62 @@ public class MainActivity extends AppCompatActivity
   /**
    * Starts a new About Activity when the user presses the about button.
    */
-  public void onAbout()
+  public void onAbout ()
   {
-    startActivity(new Intent(this,
-            About.class));
+    startActivity (new Intent (this,
+      About.class));
   }
 
   /**
    * Inflates the register layout when create account is clicked
    */
-  public void createAccountClicked()
+  public void createAccountClicked ()
   {
-    final View registerLayout = LayoutInflater.from(MainActivity.this)
-            .inflate(R.layout.activity_register, null);
+    final View registerLayout = LayoutInflater.from
+            (MainActivity.this).inflate (R.layout.activity_register, null);
 
-    new MaterialStyledDialog.Builder(MainActivity.this)
-            .setIcon(R.drawable.ic_account)
-            .setTitle("REGISTRATION")
-            .setDescription("Please fill all fields")
-            .setCustomView(registerLayout)
-            .setNegativeText("CANCEL")
-            .onNegative(new MaterialDialog.SingleButtonCallback()
-            {
-              @Override
-              public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
-              {
-                dialog.dismiss();
-              }
-            })
-            .setPositiveText("REGISTER")
-            .onPositive(new MaterialDialog.SingleButtonCallback()
-            {
-              @Override
-              public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
-              {
-                MaterialEditText editRegisterName = registerLayout
-                        .findViewById(R.id.register_username);
-                MaterialEditText editRegisterPassword = registerLayout
-                        .findViewById(R.id.register_password);
+    new MaterialStyledDialog.Builder (MainActivity.this)
+      .setIcon (R.drawable.ic_account)
+      .setTitle ("REGISTRATION")
+      .setDescription ("Please fill all fields")
+      .setCustomView (registerLayout)
+      .setNegativeText ("CANCEL")
+      .onNegative (new MaterialDialog.SingleButtonCallback ()
+      {
+        @Override
+        public void onClick (@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+        {
+          dialog.dismiss ();
+        }
+      })
+      .setPositiveText ("REGISTER")
+      .onPositive (new MaterialDialog.SingleButtonCallback ()
+      {
+        @Override
+        public void onClick (@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+        {
+          MaterialEditText editRegisterName = registerLayout.findViewById
+                  (R.id.register_username);
+          MaterialEditText editRegisterPassword = registerLayout.findViewById
+                  (R.id.register_password);
 
-                if (TextUtils.isEmpty(editRegisterName.getText().toString()))
-                {
-                  Toast.makeText(MainActivity.this, "Name cannot be empty",
-                          Toast.LENGTH_SHORT).show();
-                  return;
-                }
-                if (TextUtils.isEmpty(editRegisterPassword.getText().toString()))
-                {
-                  Toast.makeText(MainActivity.this, "Password cannot be empty",
-                          Toast.LENGTH_SHORT).show();
-                  return;
-                }
+          if (TextUtils.isEmpty (editRegisterName.getText ().toString ()))
+          {
+            Toast.makeText (MainActivity.this, "Name cannot be empty",
+              Toast.LENGTH_SHORT).show ();
+            return;
+          }
+          if (TextUtils.isEmpty (editRegisterPassword.getText ().toString ()))
+          {
+            Toast.makeText (MainActivity.this, "Password cannot be empty",
+              Toast.LENGTH_SHORT).show ();
+            return;
+          }
 
-                registerUser(editRegisterName.getText().toString(),
-                        editRegisterPassword.getText().toString());
-              }
-            }).show();
+          registerUser (editRegisterName.getText ().toString (),
+            editRegisterPassword.getText ().toString ());
+        }
+      }).show ();
   }
 
   /**
@@ -177,30 +175,31 @@ public class MainActivity extends AppCompatActivity
    * @param username The user's username
    * @param password The user's password
    */
-  private void registerUser(String username, String password)
+  private void registerUser (String username, String password)
   {
-    mcName = username;
-    mcCompositeDisposable.add(mcService.registerUser(username, password)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<String>()
-            {
-              @Override
-              public void accept(String response) throws Exception
-              {
-                //Returned response has ""x"" format
-                Toast.makeText(MainActivity.this, "" + response,
-                        Toast.LENGTH_SHORT).show();
-                response = response.replace("\"", "");
-                if (response.equals("User Added"))
-                {
-                  Intent cIntent = new Intent(MainActivity.this,
-                          BoomshineGame.class);
-                  cIntent.putExtra("Username", mcName);
-                  startActivity(cIntent);
-                }
-              }
-            }));
+    final String sSUCCESS = "User Added";
+    msName = username;
+    mcCompositeDisposable.add (mcService.registerUser (username, password)
+      .subscribeOn (Schedulers.io ())
+      .observeOn (AndroidSchedulers.mainThread ())
+      .subscribe (new Consumer<String> ()
+      {
+        @Override
+        public void accept (String response) throws Exception
+        {
+          //Returned response has ""x"" format
+          Toast.makeText (MainActivity.this, "" + response,
+            Toast.LENGTH_SHORT).show ();
+          response = response.replace ("\"", "");
+          if (response.equals (sSUCCESS))
+          {
+            Intent cIntent = new Intent (MainActivity.this,
+              BoomshineGame.class);
+            cIntent.putExtra (sUSERNAME, msName);
+            startActivity (cIntent);
+          }
+        }
+      }));
   }
 
   /**
@@ -209,10 +208,10 @@ public class MainActivity extends AppCompatActivity
    *
    * @param cView The view clicked
    */
-  public void playAsGuestClicked(View cView)
+  public void playAsGuestClicked (View cView)
   {
-    startActivity(new Intent(this,
-            BoomshineGame.class));
+    startActivity (new Intent (this,
+      BoomshineGame.class));
   }
 
   /**
@@ -220,10 +219,10 @@ public class MainActivity extends AppCompatActivity
    *
    * @param cView The view clicked
    */
-  public void loginClicked(View cView)
+  public void loginClicked (View cView)
   {
-    loginUser(mcLoginUsername.getText().toString(),
-            mcLoginPassword.getText().toString());
+    loginUser (mcLoginUsername.getText ().toString (),
+      mcLoginPassword.getText ().toString ());
   }
 
   /**
@@ -233,40 +232,42 @@ public class MainActivity extends AppCompatActivity
    * @param username The user's username
    * @param password The user's password
    */
-  private void loginUser(String username, String password)
+  private void loginUser (String username, String password)
   {
-    if (TextUtils.isEmpty(username))
+    final String sSUCCESS = "Login Success";
+    if (TextUtils.isEmpty (username))
     {
-      Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
+      Toast.makeText (this, "Name cannot be empty",
+              Toast.LENGTH_SHORT).show ();
       return;
     }
-    if (TextUtils.isEmpty(password))
+    if (TextUtils.isEmpty (password))
     {
-      Toast.makeText(this, "Password cannot be empty",
-              Toast.LENGTH_SHORT).show();
+      Toast.makeText (this, "Password cannot be empty",
+              Toast.LENGTH_SHORT).show ();
       return;
     }
-    mcName = username;
-    mcCompositeDisposable.add(mcService.loginUser(username, password)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<String>()
-            {
-              @Override
-              public void accept(String response) throws Exception
-              {
-                //Returned response has ""x"" format
-                response = response.replace("\"", "");
-                Toast.makeText(MainActivity.this, "" + response,
-                        Toast.LENGTH_SHORT).show();
-                if (response.equals("Login Success"))
-                {
-                  Intent cIntent = new Intent(MainActivity.this,
-                          BoomshineGame.class);
-                  cIntent.putExtra("Username", mcName);
-                  startActivity(cIntent);
-                }
-              }
-            }));
+    msName = username;
+    mcCompositeDisposable.add (mcService.loginUser (username, password)
+      .subscribeOn (Schedulers.io ())
+      .observeOn (AndroidSchedulers.mainThread ())
+      .subscribe (new Consumer<String> ()
+      {
+        @Override
+        public void accept (String response) throws Exception
+        {
+          //Returned response has ""x"" format
+          response = response.replace ("\"", "");
+          Toast.makeText (MainActivity.this, "" + response,
+            Toast.LENGTH_SHORT).show ();
+          if (response.equals (sSUCCESS))
+          {
+            Intent cIntent = new Intent (MainActivity.this,
+              BoomshineGame.class);
+            cIntent.putExtra (sUSERNAME, msName);
+            startActivity (cIntent);
+          }
+        }
+      }));
   }
 }

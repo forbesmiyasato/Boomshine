@@ -31,19 +31,19 @@ import retrofit2.Retrofit;
 
 public class BoomshineGame extends AppCompatActivity
 {
-
   private static final int MULTI_PRICE = 10;
   private static final int SUPER_PRICE = 20;
   private static final int ULTI_PRICE = 50;
+  private final String sUsername = "Username";
   private CompositeDisposable mcCompositeDisposable;
-  private HttpService mService;
-  private Display mDisplay;
+  private HttpService mcService;
+  private Display mcDisplay;
   private BoomshineView mcAnimatedView;
-  private PowerUpView mPowerUpView;
-  private HighScoreView mHighScoreView;
+  private PowerUpView mcPowerUpView;
+  private HighScoreView mcHighScoreView;
   //User data
-  private JSONObject mUserData;
-  private String mName;
+  private JSONObject mcUserData;
+  private String mcName;
   private int mHighScore = 0;
   private int mPoints = 0;
   private int mPWSuper = 0;
@@ -63,34 +63,34 @@ public class BoomshineGame extends AppCompatActivity
     super.onCreate(savedInstanceState);
 
     WindowManager window = getWindowManager();
-    mDisplay = window.getDefaultDisplay();
+    mcDisplay = window.getDefaultDisplay();
 
-    mPowerUpView = new PowerUpView(this, mDisplay);
-    mcAnimatedView = new BoomshineView(this, mDisplay);
+    mcPowerUpView = new PowerUpView(this, mcDisplay);
+    mcAnimatedView = new BoomshineView(this, mcDisplay);
     mcAnimatedView.setBackgroundColor(Color.BLACK);
-    mHighScoreView = new HighScoreView(this);
+    mcHighScoreView = new HighScoreView(this);
     setContentView(R.layout.activity_boomshine_game);
 
     //Init service
     mcCompositeDisposable = new CompositeDisposable();
     Retrofit retrofitClient = RetrofitClient.getInstance();
-    mService = retrofitClient.create(HttpService.class);
+    mcService = retrofitClient.create(HttpService.class);
 
     //Get user info
     Intent cIntent = getIntent();
 
-    String username = cIntent.getStringExtra("Username");
-    String maintainUsername = cIntent.getStringExtra("Username");
+    String username = cIntent.getStringExtra(sUsername);
+    String maintainUsername = cIntent.getStringExtra(sUsername);
     if (maintainUsername != null)
     {
-      mName = maintainUsername;
+      mcName = maintainUsername;
     } else
     {
-      mName = username;
+      mcName = username;
     }
-    if (mName != null)
+    if (mcName != null)
     {
-      getUserData(mName);
+      getUserData(mcName);
     }
   }
 
@@ -100,7 +100,7 @@ public class BoomshineGame extends AppCompatActivity
   @Override
   protected void onStop()
   {
-    if (mName != null)
+    if (mcName != null)
     {
       updateUserData();
     }
@@ -130,30 +130,35 @@ public class BoomshineGame extends AppCompatActivity
    */
   private void getUserData(String username)
   {
-    mcCompositeDisposable.add(mService.getUserData(username)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<String>()
-            {
-              @Override
-              public void accept(String response) throws Exception
-              {
-                //Returned response has ""x"" format
-                response = response.replace("\"", "");
-                mUserData = new JSONObject(response);
-                try
-                {
-                  mHighScore = (mUserData.getInt("HighScore"));
-                  mPoints = (mUserData.getInt("Points"));
-                  mPWSuper = (mUserData.getInt("PWSuper"));
-                  mPWMulti = (mUserData.getInt("PWMulti"));
-                  mPWUlti = (mUserData.getInt("PWUltimate"));
-                } catch (JSONException e)
-                {
-                  e.printStackTrace();
-                }
-              }
-            }));
+    final String sHighScore = "HighScore";
+    final String sPoints = "Points";
+    final String sPWSuper = "PWSuper";
+    final String sPWMulti = "PWMulti";
+    final String sPWUltimate = "PwUltimate";
+    mcCompositeDisposable.add(mcService.getUserData(username)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(new Consumer<String>()
+      {
+        @Override
+        public void accept(String response) throws Exception
+        {
+          //Returned response has ""x"" format
+          response = response.replace("\"", "");
+          mcUserData = new JSONObject(response);
+          try
+          {
+            mHighScore = (mcUserData.getInt(sHighScore));
+            mPoints = (mcUserData.getInt(sPoints));
+            mPWSuper = (mcUserData.getInt(sPWSuper));
+            mPWMulti = (mcUserData.getInt(sPWMulti));
+            mPWUlti = (mcUserData.getInt(sPWUltimate));
+          } catch (JSONException e)
+          {
+            e.printStackTrace();
+          }
+        }
+      }));
   }
 
   /**
@@ -161,11 +166,11 @@ public class BoomshineGame extends AppCompatActivity
    */
   private void updateUserData()
   {
-    mcCompositeDisposable.add(mService.updateUser(mName,
-            mHighScore, mPoints, mPWMulti, mPWSuper, mPWUlti)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe());
+    mcCompositeDisposable.add(mcService.updateUser(mcName,
+      mHighScore, mPoints, mPWMulti, mPWSuper, mPWUlti)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe());
   }
 
   /**
@@ -175,7 +180,7 @@ public class BoomshineGame extends AppCompatActivity
    */
   public void onPowerupsClicked(View cView)
   {
-    setContentView(mPowerUpView);
+    setContentView(mcPowerUpView);
   }
 
   /**
@@ -185,7 +190,7 @@ public class BoomshineGame extends AppCompatActivity
    */
   public void onHighScoresClicked(View cView)
   {
-    setContentView(mHighScoreView);
+    setContentView(mcHighScoreView);
   }
 
   /**
@@ -350,12 +355,13 @@ public class BoomshineGame extends AppCompatActivity
   public void onGameOver(int totalScore, int userMultiPowerups,
                          int userSuperPowerups, int userUltraPowerups)
   {
+    final String sPlayerScore = "player_score";
     Intent gameOverIntent = new Intent(BoomshineGame.this,
-            GameOverActivity.class);
-    gameOverIntent.putExtra("player_score", totalScore);
-    if (mName != null)
+      GameOverActivity.class);
+    gameOverIntent.putExtra(sPlayerScore, totalScore);
+    if (mcName != null)
     {
-      gameOverIntent.putExtra("Username", mName);
+      gameOverIntent.putExtra(sUsername, mcName);
     }
 
     if (getHighScore() < totalScore)

@@ -23,7 +23,7 @@ class handleExplodingUltra implements IExpansionStrategy
    */
 
   @Override
-  public int handleExploding()
+  public int handleExploding ()
   {
     return SPEED_MULTIPLIER;
   }
@@ -36,7 +36,7 @@ class handleExplodingUltra implements IExpansionStrategy
    */
 
   @Override
-  public int getRadiusMultiplier()
+  public int getRadiusMultiplier ()
   {
     return RADIUS_MULTIPLIER;
   }

@@ -19,7 +19,9 @@ import java.util.ArrayList;
 
 public class IconHandler
 {
-
+  private final int Y_AXIS_BUFFER = 150;
+  private final int X_AXIS_DIVISOR = 15;
+  private final int X_AXIS_SPACING = 2;
   private int mWidth;
   private int mHeight;
   private ArrayList<IconRectangle> mcIcons;
@@ -41,8 +43,10 @@ public class IconHandler
     IconRectangle cIconRect;
 
 
-    for (ExplodingType eType : ExplodingType.values()) {
-      if (eType != ExplodingType.NORMAL) {
+    for (ExplodingType eType : ExplodingType.values())
+    {
+      if (eType != ExplodingType.NORMAL)
+      {
         cIconRect = new IconRectangle(eType, context);
         mcIcons.add(cIconRect);
       }
@@ -54,44 +58,57 @@ public class IconHandler
    * and calls each IconRectangle's draw function passing in the canvas
    * argument.
    *
-   * @param canvas            The Canvas object reference to draw the IconRectangle's to
+   * @param canvas            The Canvas object reference to draw the
+   *                          IconRectangle's to
    * @param userMultiPowerups The current number of Multi ball power ups
    * @param userUltraPowerups The current number of Ultimate ball power ups
    * @param userSuperPowerups The current number of Super ball power ups
    */
-  public void drawIcons(Canvas canvas, int userMultiPowerups, int userUltraPowerups,
-                        int userSuperPowerups)
+  public void drawIcons(Canvas canvas, int userMultiPowerups,
+                        int userUltraPowerups, int userSuperPowerups)
   {
     mWidth = canvas.getWidth();
     mHeight = canvas.getHeight();
     int numCurrent;
     int inc = 0;
 
-    for (IconRectangle cIconRect : mcIcons) {
-      if (!cIconRect.isSet()) {
-        int left = mWidth - (mWidth / 15) * (inc + 2);
-        int top = mHeight - 150;
-        int right = (mWidth - (mWidth / 15) * (inc + 2)) + cIconRect.getWidth();
-        int bottom = (mHeight - 150) + cIconRect.getHeight();
+    for (IconRectangle cIconRect : mcIcons)
+    {
+      if (!cIconRect.isSet())
+      {
+        int left = mWidth - (mWidth / X_AXIS_DIVISOR) * (inc + X_AXIS_SPACING);
+        int top = mHeight - Y_AXIS_BUFFER;
+        int right = (mWidth - (mWidth / X_AXIS_DIVISOR) * (inc + X_AXIS_SPACING)) +
+                cIconRect.getWidth();
+        int bottom = (mHeight - Y_AXIS_BUFFER) + cIconRect.getHeight();
 
         cIconRect.setRect(left, top, right, bottom);
         inc += 2;
 
-        if (left < mcIconPanel.left) {
-          mcIconPanel.set(left, mcIconPanel.top, mcIconPanel.right, mcIconPanel.bottom);
+        if (left < mcIconPanel.left)
+        {
+          mcIconPanel.set(left, mcIconPanel.top, mcIconPanel.right,
+                  mcIconPanel.bottom);
         }
-        if (right > mcIconPanel.right) {
-          mcIconPanel.set(mcIconPanel.left, mcIconPanel.top, right, mcIconPanel.bottom);
+        if (right > mcIconPanel.right)
+        {
+          mcIconPanel.set(mcIconPanel.left, mcIconPanel.top, right,
+                  mcIconPanel.bottom);
         }
-        if (top < mcIconPanel.top) {
-          mcIconPanel.set(mcIconPanel.left, top, mcIconPanel.right, mcIconPanel.bottom);
+        if (top < mcIconPanel.top)
+        {
+          mcIconPanel.set(mcIconPanel.left, top, mcIconPanel.right,
+                  mcIconPanel.bottom);
         }
-        if (bottom > mcIconPanel.bottom) {
-          mcIconPanel.set(mcIconPanel.left, mcIconPanel.top, mcIconPanel.right, bottom);
+        if (bottom > mcIconPanel.bottom)
+        {
+          mcIconPanel.set(mcIconPanel.left, mcIconPanel.top,
+                  mcIconPanel.right, bottom);
         }
       }
 
-      switch (cIconRect.getExplodingType()) {
+      switch (cIconRect.getExplodingType())
+      {
         case MULTI:
           cIconRect.setNum(userMultiPowerups);
           break;
@@ -115,7 +132,8 @@ public class IconHandler
 
   public void resetIcons()
   {
-    for (IconRectangle cIconRect : mcIcons) {
+    for (IconRectangle cIconRect : mcIcons)
+    {
       cIconRect.reset();
     }
   }
@@ -132,8 +150,10 @@ public class IconHandler
 
   public boolean checkIconBounds(int xTouchPos, int yTouchPos)
   {
-    return xTouchPos > this.mcIconPanel.left && xTouchPos < this.mcIconPanel.right &&
-            yTouchPos < this.mcIconPanel.bottom && yTouchPos > this.mcIconPanel.top;
+    return xTouchPos > this.mcIconPanel.left &&
+            xTouchPos < this.mcIconPanel.right &&
+            yTouchPos < this.mcIconPanel.bottom &&
+            yTouchPos > this.mcIconPanel.top;
   }
 
   /**
@@ -153,22 +173,25 @@ public class IconHandler
 
   public ExplodingType checkPress(int xTouchPos, int yTouchPos)
   {
-    IconRectangle temp = null;
+
     ExplodingType cReturnType = ExplodingType.NORMAL;
 
-    for (IconRectangle cIconRect : mcIcons) {
-      if (cIconRect.checkPress(xTouchPos, yTouchPos) && (cIconRect.getCount() > 0)) {
+    for (IconRectangle cIconRect : mcIcons)
+    {
+      if (cIconRect.checkPress(xTouchPos, yTouchPos) && (cIconRect.getCount() > 0))
+      {
         mcLastSelected = cIconRect;
         cReturnType = cIconRect.getExplodingType();
       }
     }
 
-    for (IconRectangle cIconRect : mcIcons) {
-      if (cIconRect != mcLastSelected) {
+    for (IconRectangle cIconRect : mcIcons)
+    {
+      if (cIconRect != mcLastSelected)
+      {
         cIconRect.reset();
       }
     }
-
     return cReturnType;
   }
 }

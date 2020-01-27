@@ -17,68 +17,71 @@ import androidx.appcompat.app.AppCompatActivity;
  * @since 1.26.2019
  */
 
-public class GameOverActivity extends AppCompatActivity {
+public class GameOverActivity extends AppCompatActivity
+{
+  private final String sUsername = "Username";
+  TextView mcPlayerScoreTextView;
+  Button mcBtnPlayAgain;
+  private int mPlayerScore;
+  private String mcPlayerName;
 
-    TextView mPlayerScoreTextView;
-    Button mBtnPlayAgain;
-    private int mPlayerScore;
-    private String mPlayerName;
+  /**
+   * Initializes member variables to default values.
+   * Extracts the player's overall score and name
+   * from the triggering Intent object.
+   *
+   * @param savedInstanceState A Bundle containing previously saved
+   *                           Activity state (un-used)
+   */
+  @Override
+  protected void onCreate (Bundle savedInstanceState)
+  {
+    final String sPlayerScore = "player_score";
+    super.onCreate (savedInstanceState);
+    setContentView (R.layout.activity_game_over);
 
-    /**
-     * Initializes member variables to default values.
-     * Extracts the player's overall score and name
-     * from the triggering Intent object.
-     *
-     * @param savedInstanceState A Bundle containing previously saved
-     *                           Activity state (un-used)
-     */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_over);
+    Intent tempIntent = getIntent ();
 
-        Intent tempIntent = getIntent();
+    mPlayerScore = tempIntent.getIntExtra (sPlayerScore, 0);
+    mcPlayerName = tempIntent.getStringExtra (sUsername);
 
-        mPlayerScore = tempIntent.getIntExtra("player_score", 0);
-        mPlayerName = tempIntent.getStringExtra("Username");
+    mcPlayerScoreTextView = findViewById (R.id.textViewPlayerscoreFinal);
+    mcBtnPlayAgain = findViewById (R.id.btnPlayAgain);
 
-        mPlayerScoreTextView = findViewById(R.id.textViewPlayerscoreFinal);
-        mBtnPlayAgain = findViewById(R.id.btnPlayAgain);
+    mcPlayerScoreTextView.setText (Integer.toString (mPlayerScore));
+  }
 
-        mPlayerScoreTextView.setText(Integer.toString(mPlayerScore));
-    }
+  /**
+   * Event handler for the Play Again button.
+   *
+   * Uses the player name (if available) to redirect the user
+   * to the Game Menu screen
+   *
+   * @param view The view that triggered the event
+   */
 
-    /**
-     * Event handler for the Play Again button.
-     *
-     * Uses the player name (if available) to redirect the user
-     * to the Game Menu screen
-     *
-     * @param view The view that triggered the event
-     */
-
-    public void onPlayAgianClicked (View view)
+  public void onPlayAgianClicked (View view)
+  {
+    Intent cPlayAgain = new Intent (this, BoomshineGame.class);
+    if (mcPlayerName != null)
     {
-        Intent playAgain = new Intent(this, BoomshineGame.class);
-        if (mPlayerName != null)
-        {
-            playAgain.putExtra("Username", mPlayerName);
+      cPlayAgain.putExtra (sUsername, mcPlayerName);
 
-        }
-        startActivity (playAgain);
     }
+    startActivity (cPlayAgain);
+  }
 
-    /**
-     * Event handler for the Quit button.
-     *
-     * Creates and starts an Intent that returns the user to the
-     * Main page. This is equivalent to logging out (if logged in)
-     *
-     * @param view The view that triggered the event
-     */
-    public void onQuitClicked (View view)
-    {
-        Intent quit = new Intent(this, MainActivity.class);
-        startActivity(quit);
-    }
+  /**
+   * Event handler for the Quit button.
+   *
+   * Creates and starts an Intent that returns the user to the
+   * Main page. This is equivalent to logging out (if logged in)
+   *
+   * @param view The view that triggered the event
+   */
+  public void onQuitClicked (View view)
+  {
+    Intent cQuit = new Intent (this, MainActivity.class);
+    startActivity (cQuit);
+  }
 }
