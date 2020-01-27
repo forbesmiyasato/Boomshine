@@ -30,6 +30,15 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
+/**
+ * Defines the GameOverActivity class that contains display and
+ * interaction logic for the Game Over screen.
+ *
+ * @author Forbes Miyasato
+ * @version 1.0
+ * @since 1.26.2019
+ */
+
 public class MainActivity extends AppCompatActivity
 {
   private Display mDisplay;

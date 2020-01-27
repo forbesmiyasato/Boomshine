@@ -11,6 +11,15 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
+/**
+ * Defines the PowerUpView class that contains display and
+ * interaction logic for the power up view.
+ *
+ * @author Forbes Miyasato
+ * @version 1.0
+ * @since 1.26.2019
+ */
+
 public class PowerUpView extends ImageView {
 
   private int PIC_WIDTH;
@@ -18,7 +27,6 @@ public class PowerUpView extends ImageView {
   private int PIC_Y_START;
   private int PIC_BUTTON_SPACING;
   private int BUY_BUTTON_HEIGHT;
-  private int BUY_BUTTON_WIDTH;
   private int BACk_BUTTON_HEIGHT;
   private int BACK_BUTTON_WIDTH;
   private final double HEIGHT_SCALE_FACTOR = 10.22; //100px for 1022px height
@@ -28,7 +36,7 @@ public class PowerUpView extends ImageView {
   private boolean bCanBuyUlti;
   private boolean bFirstRender = true;
   private Paint mPaint;
-  private final BoomshineGame mcGame;
+  private final BoomshineGame mcGameReference;
   private int mHeight;
   private int mWidth;
 
@@ -36,7 +44,7 @@ public class PowerUpView extends ImageView {
     super(context);
     setFocusable(true); // make sure we get key events
     mPaint = new Paint();
-    this.mcGame = (BoomshineGame) context;
+    this.mcGameReference = (BoomshineGame) context;
 
   }
 
@@ -63,7 +71,6 @@ public class PowerUpView extends ImageView {
     BACK_BUTTON_WIDTH = BACk_BUTTON_HEIGHT * 2;
     PIC_BUTTON_SPACING = (int) (mWidth / WIDTH_SCALE_FACTOR);
     PIC_WIDTH = (int) (PIC_BUTTON_SPACING * 1.5);
-    BUY_BUTTON_WIDTH = PIC_WIDTH;
     BUY_BUTTON_HEIGHT = BACk_BUTTON_HEIGHT / 3;
     PIC_HEIGHT = PIC_WIDTH;
     PIC_Y_START = (int) (mHeight / HEIGHT_SCALE_FACTOR) * 3;
@@ -75,25 +82,27 @@ public class PowerUpView extends ImageView {
     backMargin = (getWidth() - BACK_BUTTON_WIDTH) / 2;
 
     //Check if can buy
-    bCanBuyMulti = mcGame.canBuyMulti();
-    bCanBuySuper = mcGame.canBuySuper();
-    bCanBuyUlti = mcGame.canBuyUlti();
+    bCanBuyMulti = mcGameReference.canBuyMulti();
+    bCanBuySuper = mcGameReference.canBuySuper();
+    bCanBuyUlti = mcGameReference.canBuyUlti();
 
     mPaint.setTextSize(mHeight * 0.05f);
     mPaint.setColor(getResources().getColor(R.color.cBlack));
     mPaint.setStyle(Paint.Style.FILL);
     mPaint.setAlpha(255);
     canvas.drawText("Points", getWidth() - point_x, 100, mPaint);
-    canvas.drawText(String.valueOf(mcGame.getPoints()), getWidth() - point_width, 100, mPaint);
+    canvas.drawText(String.valueOf(mcGameReference.getPoints()),
+            getWidth() - point_width, 100, mPaint);
 
     //Draw multi ball pic
-    Drawable multiBallPic = getResources().getDrawable(R.drawable.multiball, null);
+    Drawable multiBallPic = getResources().getDrawable(R.drawable.multiball,
+            null);
     multiBallPic.setBounds(picSpacing, PIC_Y_START,
             picSpacing + PIC_WIDTH,
             PIC_Y_START + PIC_HEIGHT);
     multiBallPic.draw(canvas);
     //Draw multi ball amount
-    canvas.drawText(String.valueOf(mcGame.getPWMulti()), picSpacing,
+    canvas.drawText(String.valueOf(mcGameReference.getPWMulti()), picSpacing,
             text_y, mPaint);
     //Draw Buy button
     buyButton.setBounds(picSpacing,
@@ -121,7 +130,7 @@ public class PowerUpView extends ImageView {
     superBallPic.draw(canvas);
     //Draw multi ball amount
     mPaint.setColor(getResources().getColor(R.color.cBlack));
-    canvas.drawText(String.valueOf(mcGame.getPWSuper()), picSpacing * 2 + PIC_WIDTH,
+    canvas.drawText(String.valueOf(mcGameReference.getPWSuper()), picSpacing * 2 + PIC_WIDTH,
             text_y, mPaint);
     //Draw Buy button
     buyButton.setBounds(picSpacing * 2 + PIC_WIDTH,
@@ -149,7 +158,7 @@ public class PowerUpView extends ImageView {
     ultiBallPic.draw(canvas);
     //Draw multi ball amount
     mPaint.setColor(getResources().getColor(R.color.cBlack));
-    canvas.drawText(String.valueOf(mcGame.getPWUlti()), PIC_WIDTH * 2 + picSpacing * 3,
+    canvas.drawText(String.valueOf(mcGameReference.getPWUlti()), PIC_WIDTH * 2 + picSpacing * 3,
             text_y, mPaint);
     //Draw Buy button
     buyButton.setBounds(PIC_WIDTH * 2 + picSpacing * 3,
@@ -198,7 +207,7 @@ public class PowerUpView extends ImageView {
     if ((yPosition >= mHeight - 300 && yPosition <= mHeight - 300 + BACk_BUTTON_HEIGHT)
     && (xPosition >= backMargin && xPosition <= backMargin + BACK_BUTTON_WIDTH))
     {
-      mcGame.onBackClicked();
+      mcGameReference.onBackClicked();
     }
 
     //Check if buy PWMulti is clicked
@@ -208,7 +217,7 @@ public class PowerUpView extends ImageView {
     {
       Log.d("Touch", "BUY MULTI");
       if(bCanBuyMulti) {
-        mcGame.onMultiBuy();
+        mcGameReference.onMultiBuy();
       }
       this.invalidate();
     }
@@ -219,18 +228,19 @@ public class PowerUpView extends ImageView {
     {
       Log.d("Touch", "BUY SUPER");
       if(bCanBuySuper) {
-        mcGame.onSuperBuy();
+        mcGameReference.onSuperBuy();
       }
       this.invalidate();
     }
     //Check if buy PWSuper is clicked
     if ((xPosition >= PIC_WIDTH * 2 + picSpacing * 3 && xPosition <= PIC_WIDTH * 3 + picSpacing * 3)
             && (yPosition >= (int) PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING
-            && yPosition <= PIC_Y_START + PIC_HEIGHT + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT))
+            && yPosition <= PIC_Y_START + PIC_HEIGHT
+            + PIC_BUTTON_SPACING + BUY_BUTTON_HEIGHT))
     {
       Log.d("Touch", "BUY SUPER");
       if (bCanBuyUlti) {
-        mcGame.onUltiBuy();
+        mcGameReference.onUltiBuy();
       }
       this.invalidate();
     }

@@ -9,7 +9,7 @@ import java.util.Random;
  * Defines the MovingSprite class which maintains the specifics of a sprite
  * including its location, size, and bitmap.
  *
- * @author Computer Science, Pacific University.
+ * @author Computer Science, Pacific University. Forbes, Thomas
  *
  * @version 1.0
  */
@@ -74,12 +74,18 @@ public class MovingSprite extends FixedSprite
     mLeftCoordinate = leftCoordinate;
   }
 
+  /**
+   * Moves the sprite/ball
+   */
   public void move ()
   {
-    setTopCoordinate(getTopCoordinate() + (mSpeed != 0 ? mDy : 0)); //TODO ASK
+    setTopCoordinate(getTopCoordinate() + (mSpeed != 0 ? mDy : 0));
     setLeftCoordinate(getLeftCoordinate() + (mSpeed != 0 ? mDx : 0));
   }
 
+  /**
+   * Gives the ball/sprite a random direction to move in
+   */
   public void randomDirection() {
     mAngle = cRandom.nextDouble() * ANGLE;
 
