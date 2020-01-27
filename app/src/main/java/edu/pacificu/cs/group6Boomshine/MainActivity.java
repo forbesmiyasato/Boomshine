@@ -122,7 +122,8 @@ public class MainActivity extends AppCompatActivity
   public void createAccountClicked ()
   {
     final View registerLayout = LayoutInflater.from
-            (MainActivity.this).inflate (R.layout.activity_register, null);
+            (MainActivity.this).inflate (R.layout.activity_register,
+            null);
 
     new MaterialStyledDialog.Builder (MainActivity.this)
       .setIcon (R.drawable.ic_account)
@@ -133,7 +134,8 @@ public class MainActivity extends AppCompatActivity
       .onNegative (new MaterialDialog.SingleButtonCallback ()
       {
         @Override
-        public void onClick (@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+        public void onClick (@NonNull MaterialDialog dialog,
+                             @NonNull DialogAction which)
         {
           dialog.dismiss ();
         }
@@ -142,7 +144,8 @@ public class MainActivity extends AppCompatActivity
       .onPositive (new MaterialDialog.SingleButtonCallback ()
       {
         @Override
-        public void onClick (@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+        public void onClick (@NonNull MaterialDialog dialog,
+                             @NonNull DialogAction which)
         {
           MaterialEditText editRegisterName = registerLayout.findViewById
                   (R.id.register_username);
@@ -151,13 +154,15 @@ public class MainActivity extends AppCompatActivity
 
           if (TextUtils.isEmpty (editRegisterName.getText ().toString ()))
           {
-            Toast.makeText (MainActivity.this, "Name cannot be empty",
+            Toast.makeText (MainActivity.this,
+                    "Name cannot be empty",
               Toast.LENGTH_SHORT).show ();
             return;
           }
           if (TextUtils.isEmpty (editRegisterPassword.getText ().toString ()))
           {
-            Toast.makeText (MainActivity.this, "Password cannot be empty",
+            Toast.makeText (MainActivity.this,
+                    "Password cannot be empty",
               Toast.LENGTH_SHORT).show ();
             return;
           }

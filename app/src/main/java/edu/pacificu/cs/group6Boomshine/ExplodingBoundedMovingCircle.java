@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.Display;
 
 /**
- * Creates an ExplodingBoundedMovingCircle class that extends a BoundedMovingSprite.
+ * Creates an ExplodingBoundedMovingCircle class that extends a
+ * BoundedMovingSprite.
  * Defines a BoundedMovingSprite that has "explosion" resizing behavior.
- * Exploding behavior is defined by the ExplodingStrategy (defined by the ExplodingType)
- * and is modified by power ups when available.
+ * Exploding behavior is defined by the ExplodingStrategy
+ * (defined by the ExplodingType) and is modified by power ups when
+ * available.
  *
  * @author Forbes Miyasato & Thomas Robasciotti
  * @version 1.0
