@@ -19,7 +19,9 @@ import java.util.ArrayList;
 
 public class IconHandler
 {
-
+  private final int Y_AXIS_BUFFER = 150;
+  private final int X_AXIS_DIVISOR = 15;
+  private final int X_AXIS_SPACING = 2;
   private int mWidth;
   private int mHeight;
   private ArrayList<IconRectangle> mcIcons;
@@ -73,11 +75,11 @@ public class IconHandler
     {
       if (! cIconRect.isSet ())
       {
-        int left = mWidth - (mWidth / 15) * (inc + 2);
-        int top = mHeight - 150;
-        int right = (mWidth - (mWidth / 15) * (inc + 2)) +
+        int left = mWidth - (mWidth / X_AXIS_DIVISOR) * (inc + X_AXIS_SPACING);
+        int top = mHeight - Y_AXIS_BUFFER;
+        int right = (mWidth - (mWidth / X_AXIS_DIVISOR) * (inc + X_AXIS_SPACING)) +
           cIconRect.getWidth ();
-        int bottom = (mHeight - 150) + cIconRect.getHeight ();
+        int bottom = (mHeight - Y_AXIS_BUFFER) + cIconRect.getHeight ();
 
         cIconRect.setRect (left, top, right, bottom);
         inc += 2;

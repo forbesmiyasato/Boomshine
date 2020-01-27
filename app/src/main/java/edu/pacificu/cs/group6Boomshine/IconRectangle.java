@@ -76,7 +76,6 @@ public class IconRectangle
         break;
       default:
         break;
-
     }
 
   }

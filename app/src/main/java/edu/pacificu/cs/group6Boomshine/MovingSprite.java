@@ -42,7 +42,6 @@ public class MovingSprite extends FixedSprite
   /**
    * Sets the value of the top y coordinate.
    *
-   * @return the top y coordinate value
    * @since 1.0
    */
   public void setTopCoordinate (int topCoordinate)
@@ -53,7 +52,6 @@ public class MovingSprite extends FixedSprite
   /**
    * Sets the value of the left x coordinate.
    *
-   * @return the left x coordinate value
    * @since 1.0
    */
   public void setLeftCoordinate (int leftCoordinate)

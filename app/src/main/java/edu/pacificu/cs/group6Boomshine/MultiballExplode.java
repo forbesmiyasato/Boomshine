@@ -19,6 +19,7 @@ import java.util.Random;
 public class MultiballExplode
 {
 
+  private final int RADIUS_MULTIPLIER = 2;
   /**
    * Generates an ArrayList of ExplodingBoundedMovingCircles with
    * required Multi Ball behavior.
@@ -52,10 +53,10 @@ public class MultiballExplode
     display.getRectSize (cDisplaySize);
 
     int randomXCoord = cRandom.nextInt (cDisplaySize.width () -
-      BoomshineView.DEFAULT_BALL_RADIUS * 2) +
+      BoomshineView.DEFAULT_BALL_RADIUS * RADIUS_MULTIPLIER) +
       BoomshineView.DEFAULT_BALL_RADIUS;
     int randomYCoord = cRandom.nextInt (cDisplaySize.height () -
-      BoomshineView.DEFAULT_BALL_RADIUS * 2) +
+      BoomshineView.DEFAULT_BALL_RADIUS * RADIUS_MULTIPLIER) +
       BoomshineView.DEFAULT_BALL_RADIUS;
 
     cRetList.add (new ExplodingBoundedMovingCircle (eType, context, display,
