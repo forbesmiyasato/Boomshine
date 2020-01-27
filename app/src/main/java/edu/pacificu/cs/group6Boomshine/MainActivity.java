@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity
   @Override
   public boolean onOptionsItemSelected(MenuItem item)
   {
-    if (item.getItemId() == R.id.menuAbout) {
+    if (item.getItemId() == R.id.menuAbout)
+    {
       onAbout();
     }
     return true;
@@ -115,6 +116,9 @@ public class MainActivity extends AppCompatActivity
             About.class));
   }
 
+  /**
+   * Inflates the register layout when create account is clicked
+   */
   public void createAccountClicked()
   {
     final View registerLayout = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_register, null);
@@ -142,24 +146,36 @@ public class MainActivity extends AppCompatActivity
                 MaterialEditText editRegisterName = registerLayout.findViewById(R.id.register_username);
                 MaterialEditText editRegisterPassword = registerLayout.findViewById(R.id.register_password);
 
-                if (TextUtils.isEmpty(editRegisterName.getText().toString())) {
-                  Toast.makeText(MainActivity.this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(editRegisterName.getText().toString()))
+                {
+                  Toast.makeText(MainActivity.this, "Name cannot be empty",
+                          Toast.LENGTH_SHORT).show();
                   return;
                 }
-                if (TextUtils.isEmpty(editRegisterPassword.getText().toString())) {
-                  Toast.makeText(MainActivity.this, "Password cannot be empty", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(editRegisterPassword.getText().toString()))
+                {
+                  Toast.makeText(MainActivity.this, "Password cannot be empty",
+                          Toast.LENGTH_SHORT).show();
                   return;
                 }
 
-                registerUser(editRegisterName.getText().toString(), editRegisterPassword.getText().toString());
+                registerUser(editRegisterName.getText().toString(),
+                        editRegisterPassword.getText().toString());
               }
             }).show();
   }
 
-  private void registerUser(String name, String password)
+  /**
+   * Makes an http request to the server to register the user, if successful
+   * redirect the user to the game menu activity
+   *
+   * @param username The user's username
+   * @param password The user's password
+   */
+  private void registerUser(String username, String password)
   {
-    mName = name;
-    mcCompositeDisposable.add(mService.registerUser(name, password)
+    mName = username;
+    mcCompositeDisposable.add(mService.registerUser(username, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<String>()
@@ -167,9 +183,12 @@ public class MainActivity extends AppCompatActivity
               @Override
               public void accept(String response) throws Exception
               {
-                Toast.makeText(MainActivity.this, "" + response, Toast.LENGTH_SHORT).show();
-                response = response.replace("\"", ""); //Returned response has ""x"" format
-                if (response.equals("User Added")) {
+                //Returned response has ""x"" format
+                Toast.makeText(MainActivity.this, "" + response,
+                        Toast.LENGTH_SHORT).show();
+                response = response.replace("\"", "");
+                if (response.equals("User Added"))
+                {
                   Intent cIntent = new Intent(MainActivity.this,
                           BoomshineGame.class);
                   cIntent.putExtra("Username", mName);
@@ -179,29 +198,50 @@ public class MainActivity extends AppCompatActivity
             }));
   }
 
+  /**
+   * Starts a new About Activity when the user presses the
+   * play as guest button.
+   *
+   * @param cView The view clicked
+   */
   public void playAsGuestClicked(View cView)
   {
     startActivity(new Intent(this,
             BoomshineGame.class));
   }
 
+  /**
+   * Logs in the user when the login button is clicked
+   *
+   * @param cView The view clicked
+   */
   public void loginClicked(View cView)
   {
-    loginUser(mLoginUsername.getText().toString(), mLoginPassword.getText().toString());
+    loginUser(mLoginUsername.getText().toString(),
+            mLoginPassword.getText().toString());
   }
 
-  private void loginUser(String name, String password)
+  /**
+   * Makes an http request to the server to login the user, if successful
+   * redirect the user to the game menu activity
+   *
+   * @param username The user's username
+   * @param password The user's password
+   */
+  private void loginUser(String username, String password)
   {
-    if (TextUtils.isEmpty(name)) {
+    if (TextUtils.isEmpty(username))
+    {
       Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
       return;
     }
-    if (TextUtils.isEmpty(password)) {
+    if (TextUtils.isEmpty(password))
+    {
       Toast.makeText(this, "Password cannot be empty", Toast.LENGTH_SHORT).show();
       return;
     }
-    mName = name;
-    mcCompositeDisposable.add(mService.loginUser(name, password)
+    mName = username;
+    mcCompositeDisposable.add(mService.loginUser(username, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<String>()
@@ -209,9 +249,12 @@ public class MainActivity extends AppCompatActivity
               @Override
               public void accept(String response) throws Exception
               {
-                Toast.makeText(MainActivity.this, "" + response, Toast.LENGTH_SHORT).show();
-                response = response.replace("\"", ""); //Returned response has ""x"" format
-                if (response.equals("Login Success")) {
+                //Returned response has ""x"" format
+                response = response.replace("\"", "");
+                Toast.makeText(MainActivity.this, "" + response,
+                        Toast.LENGTH_SHORT).show();
+                if (response.equals("Login Success"))
+                {
                   Intent cIntent = new Intent(MainActivity.this,
                           BoomshineGame.class);
                   cIntent.putExtra("Username", mName);
